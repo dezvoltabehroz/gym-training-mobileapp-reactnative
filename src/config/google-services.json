@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "929459102958",
+    "project_id": "dhobi-uncle",
+    "storage_bucket": "dhobi-uncle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929459102958:android:338bd8063d11c57c293fff",
+        "android_client_info": {
+          "package_name": "com.infinitybits.dhobiuncle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "929459102958-vd36hmdog9nuqrnrqjp67lhsejmnejc7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.infinitybits.dhobiuncle",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "929459102958-4arbgpufia94rno2f65tjmi4hc28iimk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-1zGpd4BwZh_4dqhtL9bA2u4Ov15wJuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "929459102958-4arbgpufia94rno2f65tjmi4hc28iimk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
