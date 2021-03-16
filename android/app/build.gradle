@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.educogym"
+        applicationId "com.infinitybits.educogym"
         multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
