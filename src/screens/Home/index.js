@@ -186,7 +186,7 @@ export default class Home extends Component {
 
     render() {
         let datesWhitelist = [{
-            start: moment().subtract(3, "days"),
+            start:new Date(),
             end: moment().add(3, 'months')  // total 4 days enabled
         }];
         var d = new Date();
@@ -282,7 +282,7 @@ export default class Home extends Component {
                                 </View>
                                 :
                                 <FlatList
-                                    contentContainerStyle={{ paddingBottom: 150 }}
+                                    contentContainerStyle={{ marginBottom: 150 }}
                                     data={this.state.allslots}
                                     showsVerticalScrollIndicator={false}
                                     ItemSeparatorComponent={this._renderSeparator}

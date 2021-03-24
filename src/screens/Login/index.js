@@ -35,16 +35,19 @@ class Login extends Component {
     }
 
     // ============== func_HandleLogin - Function Will allow user to get login ==============
-    func_HandleLogin = () => {
+    func_HandleLogin = async () => {
         const { replace, navigate } = this.props.navigation;
         const { email, password, submit, resetEmail } = this.state;
 
 
-        if (this.isEmailValid(email) && submit && email) {
-
-            replace("Main")
+        if (this.isEmailValid(email) && submit && email && password) {
+            let userData = {
+                email: email,
+                password: password
+            }
+            // replace("Main")
             // this.setState({ resetModal: false, submit: false })
-            // await this.props.authActions.userLogin(userData, replace);
+            await this.props.authActions.userLogin(userData, replace);
         }
         else {
             this.setState({ submit: true })
@@ -167,7 +170,7 @@ class Login extends Component {
                                 submit && resetEmail.length && !this.isEmailValid(resetEmail) ? <Text style={[styles.errorText]}>Email is invalid</Text> : null
                             }
                         </View>
-                        <View style={{ alignItems: 'flex-end', margin: '5%',}}>
+                        <View style={{ alignItems: 'flex-end', margin: '5%', }}>
                             <View style={{ flexDirection: "row", }}>
                                 <ClearButton title='Cancel ' onPress={() => { this.setState({ resetModal: false, submit: false, resetEmail: "" }) }} />
                                 <View style={{ width: 15 }}></View>

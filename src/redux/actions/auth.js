@@ -48,8 +48,8 @@ const getUserProfile = (userData, navigate) => {
                     //         await dispatch(notificationActions.getNotification(responseData.data.userData[0]));
                     //     }
                     // });
-                    await dispatch(setUserProfile(responseData.data.result, navigate))
-                    AsyncStorage.setItem('USER', JSON.stringify(responseData.data.result))
+                    await dispatch(setUserProfile(responseData.data.data, navigate))
+                    AsyncStorage.setItem('USER', JSON.stringify(responseData.data.data))
                     // navigate('Main');
                     dispatch({ type: LOADING_SUCCESS, loading: false })
                     // else {
@@ -303,6 +303,7 @@ const removeUser = (navigate) => {
 };
 
 const userLogin = (userData, navigate) => {
+    console.log("userData ", userData)
     return (dispatch) => {
         let loading = true;
         if (loading) {
@@ -310,10 +311,15 @@ const userLogin = (userData, navigate) => {
         }
         AuthServices.userLogin(userData)
             .then(async (responseData) => {
+
+                console.log("responseData : ", responseData)
                 if (responseData.data.success) {
-                    await requestUserPermission(responseData.data.result, dispatch, navigate)
-                    AsyncStorage.setItem('TOKEN', JSON.stringify(responseData.data.result.access_token))
-                    AsyncStorage.setItem('Email', JSON.stringify(userData))
+                    // await requestUserPermission(responseData.data.data, dispatch, navigate)
+                    await AsyncStorage.setItem('TOKEN', JSON.stringify(responseData.data.data.token))
+                    await AsyncStorage.setItem('Email', JSON.stringify(userData))
+                    await dispatch({ type: USER_LOGIN_SUCCESS, userData: responseData.data.data, loading: !loading })
+                    // dispatch(getUserProfile(responseData.data.userData[0], navigate))
+                    navigate("Main")
                 }
                 else {
                     Alert.alert(responseData.data.msg)
@@ -354,7 +360,7 @@ const requestUserPermission = async function (data, dispatch, navigate) {
     //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
     // if (enabled) {
-    //     getFcmToken(data, dispatch, navigate);
+    getFcmToken(data, dispatch, navigate);
     // } else {
     //     console.log('Authorization status:', authStatus);
     // }
@@ -372,7 +378,7 @@ const getFcmToken = async (userData, dispatch, navigate) => {
     //     AuthServices.addFcmToken(data)
     //         .then((res) => {
     //             if (res.data.success) {
-    //                 dispatch(getUserProfile(userData, navigate))
+    dispatch(getUserProfile(userData, navigate))
     //             }
 
     //         }).catch((err) => console.log(err))
