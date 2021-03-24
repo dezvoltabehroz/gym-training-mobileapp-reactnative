@@ -6,9 +6,15 @@ import moment from "moment";
 import Modal from 'react-native-modal'
 import SignOut from '../../assets/svg/signout.svg';
 import { Icon } from '../../components';
+import { ProfileServices } from '../../services';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-export default class Bookings extends Component {
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { authActions } from '../../redux/actions/auth';
+import { ActivityIndicator } from 'react-native';
+
+class Bookings extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,7 +50,21 @@ export default class Bookings extends Component {
             ],
             unBookModal: false,
             item: null,
+            loading: true
         }
+    }
+
+    componentDidMount = () => {
+        let userData = {
+            id: this.props.user.userData.id,
+            token: this.props.user.userData.token
+        }
+        ProfileServices.getlistAllBookings(userData)
+            .then((response) => {
+                if (response.data.success) {
+                    this.setState({ bookings: response.data.data, loading: false })
+                }
+            })
     }
 
     _renderSeparator = () => {
@@ -63,7 +83,7 @@ export default class Bookings extends Component {
                     <View style={styles.contentRowStyle}>
                         <View>
                             <Text style={styles.timeTextStyle}>{moment(`${time} ${item.time}`).format("HH:mm a")}</Text>
-                            <Text style={styles.timeTextStyle}>GMT{item.gmt}</Text>
+                            <Text style={styles.timeTextStyle}>GMT{"+1:00"}</Text>
                             <Text style={styles.darkTextStyle}>({item.slotTime}mins)</Text>
                         </View>
                         <View style={styles.bookingContainer}>
@@ -81,21 +101,27 @@ export default class Bookings extends Component {
     }
 
     render() {
+        const { loading } = this.state;
         return (
             <>
-                <View style={styles.container}>
-                    <View style={{ flex: 0.1, marginTop: "5%" }}>
-                        <View style={styles.headingContainer}>
-                            <View>
-                                <Text style={styles.headingTextStyle}>Bookings</Text>
-                            </View>
-                            <View>
-                                <Text style={styles.dateTextStyle}>Jan 10 - Jan 16 (Week 3)</Text>
+                { loading ?
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                        <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
+                    </View>
+                    :
+                    <View style={styles.container}>
+                        <View style={{ flex: 0.1, marginTop: "5%" }}>
+                            <View style={styles.headingContainer}>
+                                <View>
+                                    <Text style={styles.headingTextStyle}>Bookings</Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.dateTextStyle}>Jan 10 - Jan 16 (Week 3)</Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                    <View style={{ flex: 0.9, }}>
-                        {/* <View style={styles.headingContainer}>
+                        <View style={{ flex: 0.9, }}>
+                            {/* <View style={styles.headingContainer}>
                         <View>
                             <Text style={styles.headingTextStyle}>Bookings</Text>
                         </View>
@@ -104,22 +130,23 @@ export default class Bookings extends Component {
                         </View>
                     </View> */}
 
-                        {
-                            this.state.bookings.length == 0 ?
-                                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                    <Text style={styles.darkTextStyle}>No bookings at the moment :(</Text>
-                                </View>
-                                :
-                                <FlatList
-                                    contentContainerStyle={{ paddingBottom: 80 }}
-                                    data={this.state.bookings}
-                                    showsVerticalScrollIndicator={false}
-                                    ItemSeparatorComponent={this._renderSeparator}
-                                    renderItem={({ item }) => this._renderItems(item)}
-                                    keyExtractor={item => item} />}
-                    </View>
+                            {
+                                this.state.bookings.length == 0 ?
+                                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                        <Text style={styles.darkTextStyle}>No bookings at the moment :(</Text>
+                                    </View>
+                                    :
+                                    <FlatList
+                                        contentContainerStyle={{ paddingBottom: 80 }}
+                                        data={this.state.bookings}
+                                        showsVerticalScrollIndicator={false}
+                                        ItemSeparatorComponent={this._renderSeparator}
+                                        renderItem={({ item }) => this._renderItems(item)}
+                                        keyExtractor={item => item} />}
+                        </View>
 
-                </View>
+                    </View>
+                }
                 <Modal isVisible={this.state.unBookModal}>
                     <View style={{ backgroundColor: "white", borderRadius: 8, marginHorizontal: '2.5%', marginBottom: 2, }}>
                         <View style={{ marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
@@ -144,3 +171,15 @@ export default class Bookings extends Component {
             </>)
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        user: state.authReducer || {}
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        authActions: bindActionCreators(authActions, dispatch),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Bookings)

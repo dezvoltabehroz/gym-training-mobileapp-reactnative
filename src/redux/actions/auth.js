@@ -23,7 +23,7 @@ const setUserProfile = (userData, navigate) => {
         let token = await AsyncStorage.getItem('TOKEN')
         let data = JSON.parse(token)
         if (userData) {
-            dispatch({ type: USER_LOGIN_SUCCESS, userData: userData, userToken: data, loading: false });
+            await dispatch({ type: USER_LOGIN_SUCCESS, userData: userData, userToken: data, loading: false });
             if (navigate != null)
                 navigate('Main');
         }
@@ -38,9 +38,9 @@ const getUserProfile = (userData, navigate) => {
         }
         AuthServices.getUserProfile(userData)
             .then(async (responseData) => {
-                if (responseData.data.success != 'undefined' && responseData.data.success == false) {
-                    dispatch(removeUser(navigate));
-                    dispatch({ type: LOADING_SUCCESS, loading: !loading })
+                if (responseData.data.success) {
+                    await AsyncStorage.setItem('USER', JSON.stringify(responseData.data.data))
+                    await dispatch(setUserProfile(responseData.data.data, navigate))
                 }
                 else {
                     // socket.on("updateNotification", async ({ receiver_id }) => {
@@ -48,10 +48,11 @@ const getUserProfile = (userData, navigate) => {
                     //         await dispatch(notificationActions.getNotification(responseData.data.userData[0]));
                     //     }
                     // });
-                    await dispatch(setUserProfile(responseData.data.data, navigate))
-                    AsyncStorage.setItem('USER', JSON.stringify(responseData.data.data))
+
+                    dispatch(removeUser(navigate));
+                    dispatch({ type: LOADING_SUCCESS, loading: !loading })
                     // navigate('Main');
-                    dispatch({ type: LOADING_SUCCESS, loading: false })
+                    // dispatch({ type: LOADING_SUCCESS, loading: false })
                     // else {
                     //     Alert.alert(responseData.data.message)
                     //     dispatch({ type: LOADING_SUCCESS, loading: !loading })
@@ -315,6 +316,7 @@ const userLogin = (userData, navigate) => {
                 console.log("responseData : ", responseData)
                 if (responseData.data.success) {
                     // await requestUserPermission(responseData.data.data, dispatch, navigate)
+                    await AsyncStorage.setItem('USER', JSON.stringify(responseData.data.data))
                     await AsyncStorage.setItem('TOKEN', JSON.stringify(responseData.data.data.token))
                     await AsyncStorage.setItem('Email', JSON.stringify(userData))
                     await dispatch({ type: USER_LOGIN_SUCCESS, userData: responseData.data.data, loading: !loading })

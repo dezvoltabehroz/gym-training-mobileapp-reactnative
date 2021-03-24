@@ -6,3 +6,6 @@ export const HomeServices = _Home;
 
 import _Orders from './orders';
 export const OrdersServices = _Orders;
+
+import _Profile from './profile';
+export const ProfileServices = _Profile;
