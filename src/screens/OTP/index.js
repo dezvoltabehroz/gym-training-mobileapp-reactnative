@@ -80,6 +80,7 @@ class OTP extends Component {
     render() {
         const { code, submit, buttonLoading } = this.state;
         const { email } = this.props.route.params;
+        console.log(this.props.route.params.code)
         return (
             <View>
                 <ImageBackground resizeMode="cover" style={styles.backgroundStyle} source={require('../../assets/images/verification.png')}>
