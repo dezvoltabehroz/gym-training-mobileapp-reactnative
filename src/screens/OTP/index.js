@@ -25,7 +25,6 @@ class OTP extends Component {
     // ============== func_HandleSubmitVerificationCode - Function Will allow user to verify the code to reset his/her password ==============
     func_HandleSubmitVerificationCode = () => {
         this.setState({ buttonLoading: true })
-        console.log(this.props.route.params.code)
         if (this.state.submit) {
             if (this.state.code == this.props.route.params.code) {
                 AuthServices.verifyCodeForResetPass(this.state.code)
@@ -80,7 +79,6 @@ class OTP extends Component {
     render() {
         const { code, submit, buttonLoading } = this.state;
         const { email } = this.props.route.params;
-        console.log(this.props.route.params.code)
         return (
             <View>
                 <ImageBackground resizeMode="cover" style={styles.backgroundStyle} source={require('../../assets/images/verification.png')}>
