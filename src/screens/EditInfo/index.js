@@ -4,7 +4,7 @@ import { Input, ColorButton, Icon } from '../../components';
 import styles from './style';
 import CodeInput from 'react-native-confirmation-code-input';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
-import { AuthServices } from '../../services';
+import { AuthServices, ProfileServices } from '../../services';
 import Logo from '../../assets/svg/logo.svg';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
@@ -17,22 +17,39 @@ import Email from '../../assets/svg/email_icon.svg'
 import Phone from '../../assets/svg/phone_icon.svg'
 import themeStyle from '../../assets/styles/theme.style';
 import buttonStyle from '../../components/Button/style';
-class OTP extends Component {
+class EditInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
             code: '',
             submit: false,
-            email: "johndoe@gmail.com",
-            name: 'John Doe',
-            phone: '+923456789000',
+            email: this.props.user.userData.email,
+            name: this.props.user.userData.full_name,
+            phone: this.props.user.userData.phone,
+            buttonLoading: false
         };
     }
 
     // ============== func_HandleSubmitVerificationCode - Function Will allow user to verify the code to reset his/her password ==============
     func_HandleSubmitVerificationCode = () => {
-        if (this.state.submit) {
-            this.props.navigation.replace('NewPassword',)
+        this.setState({ buttonLoading: true })
+        if (this.state.submit && this.state.phone && this.isNameValid(this.state.name) && this.isPhoneValid(this.state.phone)) {
+            let userData = {
+                id: this.props.user.userData.id,
+                name: this.state.name,
+                phone: this.state.phone,
+                token: this.props.user.userData.token
+            }
+            ProfileServices.changeProfileDetail(userData)
+                .then((response) => {
+                    if (response.data.success) {
+                        this.props.authActions.getUserProfile(userData)
+                        Alert.alert(response.data.message)
+                        this.setState({ buttonLoading: false })
+                    }
+                })
+        } else {
+            this.setState({ buttonLoading: false })
         }
         // const { password, userData, phoneAuthSnapshot } = this.props.route.params;
         // if (password) {
@@ -70,7 +87,8 @@ class OTP extends Component {
         // this.props.authActions.sendVerificationCode(userData, this.props.navigation.replace)
     }
     isPhoneValid = (phone) => {
-        return /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/.test(phone)
+        // return /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/.test(phone)
+        return /^\+?[0-9]{3}-?[0-9]{6,12}$/.test(phone)
     }
 
     isNameValid(name) {
@@ -78,7 +96,7 @@ class OTP extends Component {
     }
     render() {
         const { code, submit } = this.state;
-        const { email, phone, name } = this.state;
+        const { email, phone, name, buttonLoading } = this.state;
         return (
             <View style={{ flex: 1, backgroundColor: themeStyle.COLOR_WHITE }}>
                 <KeyboardAwareScrollView>
@@ -141,7 +159,7 @@ class OTP extends Component {
 
                         </TouchableOpacity>
                         <View style={{ flex: 0.2, alignItems: 'flex-end', marginTop: '15%', marginHorizontal: "5%" }}>
-                            <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Update Info' onPress={() => this.setState({ submit: true }, () => this.func_HandleSubmitVerificationCode())} />
+                            <Button loading={buttonLoading} titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Update Info' onPress={() => this.setState({ submit: true }, () => this.func_HandleSubmitVerificationCode())} />
                         </View>
                     </View>
                 </KeyboardAwareScrollView>
@@ -160,4 +178,4 @@ const mapDispatchToProps = dispatch => {
         authActions: bindActionCreators(authActions, dispatch),
     };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(OTP)
+export default connect(mapStateToProps, mapDispatchToProps)(EditInfo)

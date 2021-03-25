@@ -41,7 +41,16 @@ const Api = {
             "pause_request_id": userData.pause_request_id
         }, configToken(userData.token))
     },
-
+    changeProfileDetail: function (userData) {
+        return axiosInstance.post('profile/changeProfileDetail', {
+            "id": userData.id,
+            "phone": userData.phone,
+            "name": userData.name
+        }, configToken(userData.token))
+    },
+    getAboutUs: function (token) {
+        return axiosInstance.get('profile/aboutUs', configToken(token))
+    },
 };
 
 export default Api;

@@ -23,9 +23,9 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: "johndoe@gmail.com",
-            name: 'John Doe',
-            phone: '+923456789000',
+            email: this.props.user.userData.email,
+            name: this.props.user.userData.full_name,
+            phone: this.props.user.userData.phone,
             changePassword: false,
             updateContactInfo: false,
             password: "",
@@ -175,11 +175,6 @@ class Profile extends Component {
                                     onChangeText={(phone) => this.setState({ phone })}
                                     placeholder="" />
                             </View>
-                            {
-                                phone.length && !this.isPhoneValid(phone) ? <Text style={[styles.errorText]}>Phone is invalid </Text> : null
-                            }
-
-
                         </View>
                         <View style={{ alignItems: 'flex-end', marginHorizontal: "5%" }}>
                             <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Sign Out' onPress={() => this.setState({ signOutModal: true })} />
