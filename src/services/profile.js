@@ -51,6 +51,12 @@ const Api = {
     getAboutUs: function (token) {
         return axiosInstance.get('profile/aboutUs', configToken(token))
     },
+    cancelBookings: function (userData) {
+        return axiosInstance.post('profile/cancelBookings', {
+            "id": userData.id,
+            "booking_id": userData.booking_id
+        }, configToken(userData.token))
+    },
 };
 
 export default Api;

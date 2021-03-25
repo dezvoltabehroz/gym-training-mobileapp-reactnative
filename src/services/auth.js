@@ -50,15 +50,6 @@ const Api = {
             "id": userData.id
         }, configToken(userData.token))
     },
-    updateUserProfile: function (userData) {
-        return axiosInstance.put('buyer/updatecustomer', {
-            "id": userData.id,
-            "city": `${userData.city}`,
-            "address": `${userData.address}`,
-            "phone": `${userData.phone}`,
-            "fullName": `${userData.fullName}`
-        }, configToken(userData.token))
-    },
     resetpasswordmail: function (email) {
         return axiosInstance.post('registration/forgetPassword', {
             "email": email
@@ -74,7 +65,14 @@ const Api = {
             "id": userData.id,
             "new_password": userData.new_password
         }, config)
-    }
+    },
+    changePassword: function (userData) {
+        return axiosInstance.post('registration/changePassword', {
+            "id": userData.id,
+            "current_password": userData.current_password,
+            "new_password": userData.new_password
+        }, configToken(userData.token))
+    },
 
 
 };

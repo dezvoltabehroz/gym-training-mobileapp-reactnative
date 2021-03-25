@@ -50,7 +50,8 @@ class Bookings extends Component {
             ],
             unBookModal: false,
             item: null,
-            loading: true
+            loading: true,
+            buttonLoading: false
         }
     }
 
@@ -100,8 +101,24 @@ class Bookings extends Component {
         )
     }
 
+    handleCancelBooking = () => {
+        this.setState({ buttonLoading: true })
+        let userData = {
+            id: this.props.user.userData.id,
+            token: this.props.user.userData.token,
+            booking_id: this.state.item.id
+        }
+        ProfileServices.cancelBookings(userData)
+            .then((response) => {
+                if (response.data.success) {
+                    this.setState({ bookings: this.state.bookings.filter((item) => item != this.state.item), buttonLoading: false, unBookModal: false, item: null })
+                }
+            })
+
+    }
+
     render() {
-        const { loading } = this.state;
+        const { loading, buttonLoading } = this.state;
         return (
             <>
                 { loading ?
@@ -159,11 +176,9 @@ class Bookings extends Component {
                             <TouchableOpacity onPress={() => this.setState({ unBookModal: false })} style={{ flex: 1, height: 54, borderBottomLeftRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: "#77777B" }}>
                                 <Text style={{ fontSize: 16, fontFamily: 'Montserrat-Medium', fontWeight: "normal", textAlign: "center", color: "#FFF" }} >No</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {
-                                this.setState({ bookings: this.state.bookings.filter((item) => item != this.state.item), unBookModal: false })
-
-                            }} style={{ flex: 1, height: 54, borderBottomRightRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: THEME.PRIMARY_BACKGROUND_COLOR }}>
-                                <Text style={{ fontSize: 16, fontFamily: 'Montserrat-Medium', fontWeight: "normal", textAlign: "center", color: "#FFF" }} >Yes</Text>
+                            <TouchableOpacity onPress={() => { this.handleCancelBooking() }}
+                                style={{ flex: 1, height: 54, borderBottomRightRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: THEME.PRIMARY_BACKGROUND_COLOR }}>
+                                {buttonLoading ? <ActivityIndicator color={"white"} /> : <Text style={{ fontSize: 16, fontFamily: 'Montserrat-Medium', fontWeight: "normal", textAlign: "center", color: "#FFF" }} >Yes</Text>}
                             </TouchableOpacity>
                         </View>
                     </View>
