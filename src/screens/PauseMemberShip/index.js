@@ -13,7 +13,13 @@ import { Button } from 'react-native-elements'
 import buttonStyle from '../../components/Button/style';
 import Modal from "react-native-modal";
 import { Icon } from '../../components';
-export default class PauseMemberShip extends Component {
+import { ProfileServices } from '../../services';
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { authActions } from '../../redux/actions/auth';
+import { ActivityIndicator } from 'react-native';
+
+class PauseMemberShip extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -86,7 +92,9 @@ export default class PauseMemberShip extends Component {
                     value: "4 Week",
                 }
             ],
-            cancelRequest:false
+            cancelRequest: false,
+            buttonLoading: false,
+            reason: ""
 
         }
     }
@@ -177,6 +185,21 @@ export default class PauseMemberShip extends Component {
         );
     };
 
+    handleCancelRequest = () => {
+        this.setState({ buttonLoading: true })
+        const { item } = this.props.route.params;
+        let userData = {
+            token: this.props.user.userData.token,
+            pause_request_id: item.id
+        }
+        ProfileServices.cancelRequestPauseMembership(userData)
+            .then((response) => {
+                if (response.data.success) {
+                    this.setState({ buttonLoading: false })
+                    this.props.navigation.goBack();
+                }
+            })
+    }
 
     render() {
         const secondIndicatorStyles = {
@@ -205,7 +228,7 @@ export default class PauseMemberShip extends Component {
             currentStepLabelColor: themeStyle.PRIMARY_BACKGROUND_COLOR,
         };
         const { item } = this.props.route.params;
-        const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, data } = this.state;
+        const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, reason, buttonLoading } = this.state;
         return (
             <>
                 <View style={styles.container}>
@@ -236,7 +259,7 @@ export default class PauseMemberShip extends Component {
                                         <Text style={styles.userDetailTextStyle}>{"Membership Type:"}</Text>
                                     </View>
                                     <View>
-                                        <Text style={styles.userDetailTextStyle}>{item.memberShipType}</Text>
+                                        <Text style={styles.userDetailTextStyle}>{item.membership_type}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.memberShipContentRowStyle}>
@@ -244,7 +267,7 @@ export default class PauseMemberShip extends Component {
                                         <Text style={styles.userDetailTextStyle}>{"Pause Duration:"}</Text>
                                     </View>
                                     <View>
-                                        <Text style={styles.userDetailTextStyle}>{item.duration}</Text>
+                                        <Text style={styles.userDetailTextStyle}>{item.days}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.memberShipContentRowStyle}>
@@ -252,7 +275,7 @@ export default class PauseMemberShip extends Component {
                                         <Text style={styles.userDetailTextStyle}>{"Start Date:"}</Text>
                                     </View>
                                     <View>
-                                        <Text style={styles.userDetailTextStyle}>{moment(item.startDate).format("MMM DD,YYYY")}</Text>
+                                        <Text style={styles.userDetailTextStyle}>{moment(item.pause_start).format("MMM DD,YYYY")}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.memberShipContentRowStyle}>
@@ -260,13 +283,15 @@ export default class PauseMemberShip extends Component {
                                         <Text style={styles.userDetailTextStyle}>{"End Date:"}</Text>
                                     </View>
                                     <View>
-                                        <Text style={styles.userDetailTextStyle}>{moment(item.startDate).add(7, "days").format("MMM DD,YYYY")}</Text>
+                                        <Text style={styles.userDetailTextStyle}>{moment(item.pause_end).format("MMM DD,YYYY")}</Text>
                                     </View>
                                 </View>
                                 <View style={{ marginTop: "5%" }}>
                                     <Input
                                         placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
                                         multiline={true}
+                                        value={reason}
+                                        editable={false}
                                         containerStyle={styles.containerStyle}
                                         placeholderTextColor={'#77777B'}
                                         inputContainerStyle={styles.inputContainerStyle}
@@ -282,7 +307,7 @@ export default class PauseMemberShip extends Component {
                 </View>
                 <Modal isVisible={this.state.cancelRequest}>
                     <View style={{ backgroundColor: "white", borderRadius: 8, marginHorizontal: '2.5%', marginBottom: 2, }}>
-                    <View style={{ marginHorizontal: "5%", marginTop: '5%', alignItems: "center",transform:[{ rotateY: '180deg' }] }}>
+                        <View style={{ marginHorizontal: "5%", marginTop: '5%', alignItems: "center", transform: [{ rotateY: '180deg' }] }}>
                             <Icon.Ionicons name={"ios-reload-circle-outline"} color={themeStyle.PRIMARY_BACKGROUND_COLOR} size={50} />
                         </View>
                         <View style={{ marginHorizontal: '5%', marginTop: '3.5%' }}>
@@ -293,8 +318,11 @@ export default class PauseMemberShip extends Component {
                             <TouchableOpacity onPress={() => this.setState({ cancelRequest: false })} style={{ flex: 1, height: 54, borderBottomLeftRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: "#77777B" }}>
                                 <Text style={{ fontSize: 16, fontFamily: 'Montserrat-Medium', fontWeight: "normal", textAlign: "center", color: "#FFF" }} >No</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={{ flex: 1, height: 54, borderBottomRightRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: themeStyle.PRIMARY_BACKGROUND_COLOR }}>
-                                <Text style={{ fontSize: 16, fontFamily: 'Montserrat-Medium', fontWeight: "normal", textAlign: "center", color: "#FFF" }} >Yes</Text>
+                            <TouchableOpacity onPress={() => this.handleCancelRequest()} style={{ flex: 1, height: 54, borderBottomRightRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: themeStyle.PRIMARY_BACKGROUND_COLOR }}>
+                                {buttonLoading ?
+                                    <ActivityIndicator color={'white'} />
+                                    :
+                                    <Text style={{ fontSize: 16, fontFamily: 'Montserrat-Medium', fontWeight: "normal", textAlign: "center", color: "#FFF" }} >Yes</Text>}
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -303,3 +331,15 @@ export default class PauseMemberShip extends Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        user: state.authReducer || {}
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        authActions: bindActionCreators(authActions, dispatch),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(PauseMemberShip)
