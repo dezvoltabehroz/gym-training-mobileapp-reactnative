@@ -110,7 +110,6 @@ class PauseHistory extends Component {
     };
 
     handleConfirm = (selectedDate) => {
-        console.log()
         var date = moment(selectedDate).format('YYYY-MM-DD')
         var dob = (selectedDate.getYear() + 1900);
         dob += "-";

@@ -24,7 +24,6 @@ class About extends Component {
         this.setState({ loading: true })
         ProfileServices.getAboutUs(this.props.user.userData.token)
             .then(res => {
-                console.log(res.data.data)
                 this.setState({
                     website: res.data.data.website,
                     city: res.data.data.city_country,

@@ -64,7 +64,6 @@ class MemberShip extends Component {
     }
 
     componentDidMount = () => {
-        console.log("this.props.navigation : ", this.props.navigation)
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.getMemberShipDetail()
         });
@@ -99,7 +98,6 @@ class MemberShip extends Component {
     };
 
     handleConfirm = (selectedDate) => {
-        console.log()
         var date = moment(selectedDate).format('YYYY-MM-DD')
         var dob = (selectedDate.getYear() + 1900);
         dob += "-";
@@ -113,7 +111,6 @@ class MemberShip extends Component {
     };
 
     handleRequestPause = () => {
-        console.log(selectedDuration)
         this.setState({ buttonLoading: true })
         const { date, selectedDuration, reason, memberId } = this.state;
         let userData = {
@@ -249,7 +246,6 @@ class MemberShip extends Component {
                                         }}
                                         dropDownStyle={{ backgroundColor: 'white' }}
                                         onChangeItem={(item) => {
-                                            console.log(item)
                                             this.setState({
                                                 selectedDuration: item, item: item.value, index: item.value,
                                             })

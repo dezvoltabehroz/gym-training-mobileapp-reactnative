@@ -134,7 +134,6 @@ class PauseMemberShip extends Component {
     };
 
     handleConfirm = (selectedDate) => {
-        console.log()
         var date = moment(selectedDate).format('YYYY-MM-DD')
         var dob = (selectedDate.getYear() + 1900);
         dob += "-";
@@ -168,7 +167,6 @@ class PauseMemberShip extends Component {
         }
     };
     renderLabel = (params: any) => {
-        console.log(params.position, params.label, params.currentPosition)
         return (
             <View style={{ width: 70 }}>
                 <Text

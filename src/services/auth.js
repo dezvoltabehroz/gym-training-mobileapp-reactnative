@@ -45,7 +45,6 @@ const Api = {
         }, configToken(userData.token))
     },
     getUserProfile: function (userData) {
-        console.log("userData.id : ", userData.id)
         return axiosInstance.post(`registration/refreshToken`, {
             "id": userData.id
         }, configToken(userData.token))

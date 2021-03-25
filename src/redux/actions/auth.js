@@ -295,16 +295,13 @@ const phoneVerifyCode = (userData, navigate) => {
 
 const removeUser = (navigate) => {
     return async (dispatch) => {
+        dispatch({ type: USER_LOGOUT_SUCCESS })
         await navigate('Auth')
         await AsyncStorage.removeItem('USER');
-        await AsyncStorage.removeItem('CART_ITEMS');
-        dispatch({ type: USER_LOGOUT_SUCCESS })
-        dispatch({ type: CART_SUCCESS, cart: [] })
     }
 };
 
 const userLogin = (userData, navigate) => {
-    console.log("userData ", userData)
     return (dispatch) => {
         let loading = true;
         if (loading) {
@@ -312,8 +309,6 @@ const userLogin = (userData, navigate) => {
         }
         AuthServices.userLogin(userData)
             .then(async (responseData) => {
-
-                console.log("responseData : ", responseData)
                 if (responseData.data.success) {
                     // await requestUserPermission(responseData.data.data, dispatch, navigate)
                     await AsyncStorage.setItem('USER', JSON.stringify(responseData.data.data))

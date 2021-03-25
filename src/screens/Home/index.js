@@ -194,7 +194,6 @@ export default class Home extends Component {
         var day = d.getDay();
 
         var weekOfMonth = Math.ceil((date + 6 - day) / 7);
-        console.log(weekOfMonth);
         const { item, index } = this.state;
         return (
             <>
