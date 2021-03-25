@@ -19,7 +19,7 @@ class About extends Component {
             loading: true,
         }
     }
-    
+
     componentDidMount = () => {
         this.setState({ loading: true })
         ProfileServices.getAboutUs(this.props.user.userData.token)
@@ -27,6 +27,7 @@ class About extends Component {
                 console.log(res.data.data)
                 this.setState({
                     website: res.data.data.website,
+                    city: res.data.data.city_country,
                     contents: res.data.data.content,
                     email: res.data.data.email,
                     developed_by: res.data.data.developed_by,
@@ -66,7 +67,7 @@ class About extends Component {
                                         <View style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginTop: '2.5%' }}>
                                             <Icon.FontAwesome5 name="map-marker-alt" color="#5F6365" size={20} />
                                             <View style={{ width: 5 }}></View>
-                                            <Text style={styles.aboutcontentStyle}> {'Local Store'}</Text>
+                                            <Text style={styles.aboutcontentStyle}> {this.state.city}</Text>
                                         </View>
                                         <View style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginTop: '2.5%' }}>
                                             <Icon.FontAwesome name="phone" color="#5F6365" size={20} />
