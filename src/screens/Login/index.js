@@ -68,9 +68,15 @@ class Login extends Component {
         const { email, password, submit, resetEmail } = this.state;
         const { replace, navigate } = this.props.navigation;
         if (this.isEmailValid(resetEmail) && submit && resetEmail) {
+            AuthServices.resetpasswordmail(resetEmail)
+                .then((res) => {
+                    if (res.data.success) {
+                        navigate("OTP", { email: resetEmail, code: res.data.data })
+                        this.setState({ resetModal: false, submit: false, resetEmail: "" })
+                    }
+                })
+                .catch((err) => { console.log(err) })
 
-            navigate("OTP", { email: resetEmail })
-            this.setState({ resetModal: false, submit: false, resetEmail: "" })
             // await this.props.authActions.userLogin(userData, replace);
         }
         else {
