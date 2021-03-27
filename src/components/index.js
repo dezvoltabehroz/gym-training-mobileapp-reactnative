@@ -19,5 +19,8 @@ export const Pickup = _Pickup;
 import _Payment from './Payment';
 export const Payment = _Payment;
 
+import _CustomSlider from './CustomSlider/index';
+export const CustomSlider = _CustomSlider;
+
 import _ColorButton from './Button/ColorButton';
 export const ColorButton = _ColorButton;

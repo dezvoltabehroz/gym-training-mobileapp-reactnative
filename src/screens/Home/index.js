@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from './style';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from "moment";
-import { Icon } from '../../components';
+import { Icon, CustomSlider } from '../../components';
 import DropDownPicker from 'react-native-dropdown-picker';
 import themeStyle from '../../assets/styles/theme.style';
 import Block from '../../assets/svg/block.svg';
@@ -114,9 +114,11 @@ export default class Home extends Component {
                         }
                     ],
                 }
-            ]
+            ],
+            multiSliderValues: [4, 5],
         }
     }
+
 
     _renderSeparator = () => {
         return (
@@ -184,17 +186,23 @@ export default class Home extends Component {
             </>)
     }
 
+    multiSliderValueCallback = (values) => {
+        // debugger;
+        console.log("values, =========>", values)
+        this.setState({ multiSliderValues: values })
+    }
+
     render() {
         let datesWhitelist = [{
-            start:new Date(),
+            start: moment(),
             end: moment().add(3, 'months')  // total 4 days enabled
         }];
         var d = new Date();
-        var date = d.getDate();
-        var day = d.getDay();
+        var dated = d.getDate();
+        var dayd = d.getDay();
 
-        var weekOfMonth = Math.ceil((date + 6 - day) / 7);
-        const { item, index } = this.state;
+        var weekOfMonth = Math.ceil((dated + 6 - dayd) / 7);
+        const { item, index, date } = this.state;
         return (
             <>
                 <View style={styles.container}>
@@ -204,12 +212,12 @@ export default class Home extends Component {
                                 scrollable
                                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                                 daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: themeStyle.PRIMARY_BACKGROUND_COLOR }}
-                                style={{ height: 100,  paddingBottom: 10 }}
+                                style={{ height: 100, paddingBottom: 10 }}
                                 calendarHeaderStyle={{ color: 'black' }}
                                 calendarColor={'#fffff'}
-                                headerText={`${moment(date).format("MMMM")} (${weekOfMonth} week)\n${moment(date).format('dddd, DD MMM')} (6:00am - 6:20pm)`}
-                                selectedDate={new Date()}
-                                onDateSelected={() => { }}
+                                headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (6:00am - 6:20pm)`}
+                                selectedDate={moment()}
+                                // onDateSelected={(date) => { console.log(date); }}
                                 dateNumberStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
                                 dateNameStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
                                 highlightDateNumberStyle={{ color: 'white' }}
@@ -230,6 +238,15 @@ export default class Home extends Component {
                                 <View>
                                     <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>3:00pm GTM+01</Text>
                                 </View>
+                            </View>
+                            <View >
+                                <CustomSlider
+                                    min={1}
+                                    max={12}
+                                    LRpadding={40}
+                                    callback={this.multiSliderValueCallback}
+                                    single={false}
+                                />
                             </View>
                         </View>
 
@@ -256,7 +273,7 @@ export default class Home extends Component {
                                     onClose={() => this.setState({ dropdownOpen: false })}
                                     onOpen={() => this.setState({ dropdownOpen: true })}
                                     containerStyle={{ height: 40, width: 140, marginBottom: this.state.dropdownOpen ? '50%' : 0 }}
-                                    globalTextStyle={{ color: "#d3d3d3", fontSize: 12, fontFamily: "Montserrat-Medium" }}
+                                    globalTextStyle={{ color: "#000000", fontSize: 12, fontFamily: "Montserrat-Medium" }}
                                     defaultValue={this.state.selectedSlots ? this.state.selectedSlots.label : ""}
                                     style={{ backgroundColor: 'white', marginTop: '5%' }}
                                     itemStyle={{
