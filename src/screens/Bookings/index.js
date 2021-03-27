@@ -124,6 +124,13 @@ class Bookings extends Component {
 
     render() {
         const { loading, buttonLoading } = this.state;
+        var d = new Date();
+        var dated = d.getDate();
+        var dayd = d.getDay();
+
+        var weekOfMonth = Math.ceil((dated + 6 - dayd) / 7);
+        var startOfWeek = moment().startOf('week').toDate();
+        var endOfWeek = moment().endOf('week').toDate();
         return (
             <>
                 { loading ?
@@ -138,7 +145,7 @@ class Bookings extends Component {
                                     <Text style={styles.headingTextStyle}>Bookings</Text>
                                 </View>
                                 <View>
-                                    <Text style={styles.dateTextStyle}>Jan 10 - Jan 16 (Week 3)</Text>
+                                    <Text style={styles.dateTextStyle}>{moment(startOfWeek).format('MMM DD')} - {moment(endOfWeek).format('MMM DD')} (Week {weekOfMonth})</Text>
                                 </View>
                             </View>
                         </View>
