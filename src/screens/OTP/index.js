@@ -103,8 +103,8 @@ class OTP extends Component {
                                     label={"Code"}
                                     placeholder="Enter your reset code"
                                     value={code}
+                                    keyboardType={"number-pad"}
                                     leftIcon={<Code height={12} width={12} />}
-                                    secureTextEntry={true}
                                     onChangeText={(code) => this.setState({ code })}
                                 />
 

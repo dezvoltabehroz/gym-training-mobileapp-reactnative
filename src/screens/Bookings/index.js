@@ -65,7 +65,11 @@ class Bookings extends Component {
                 if (response.data.success) {
                     this.setState({ bookings: response.data.data, loading: false })
                 }
+                else {
+                    this.setState({ bookings: [], loading: false })
+                }
             })
+            .catch((err) => { console.log(err); this.setState({ bookings: [], loading: false }) })
     }
 
     _renderSeparator = () => {
@@ -76,20 +80,21 @@ class Bookings extends Component {
     }
 
     _renderItems = (item) => {
+        console.log(item)
         const time = moment().format("YYYY-MM-DD")
         return (
             <View style={{ marginHorizontal: '5%', }}>
-                <Text style={styles.timeTextStyle} >{moment(item.date).format('dddd, DD MMM')}</Text>
+                <Text style={styles.timeTextStyle} >{moment(item.booking_date).format('dddd, DD MMM')}</Text>
                 <View style={styles.contentContainer}>
                     <View style={styles.contentRowStyle}>
                         <View>
-                            <Text style={styles.timeTextStyle}>{moment(`${time} ${item.time}`).format("HH:mm a")}</Text>
+                            <Text style={styles.timeTextStyle}>{moment(`${time} ${item.booking_start_time}`).format("HH:mm a")}</Text>
                             <Text style={styles.timeTextStyle}>GMT{"+1:00"}</Text>
-                            <Text style={styles.darkTextStyle}>({item.slotTime}mins)</Text>
+                            <Text style={styles.darkTextStyle}>({moment.duration(`${item.booking_time_duration}`).asMinutes()}mins)</Text>
                         </View>
                         <View style={styles.bookingContainer}>
                             <Text style={[styles.textStyle, { textAlign: "center" }]}>{"No. of booking\non this slot"}</Text>
-                            <Text style={styles.textStyle} >{item.bookedSlot} / 4</Text>
+                            <Text style={styles.textStyle} >{item.booked_slots} / 4</Text>
                         </View>
                         <TouchableOpacity onPress={() => this.setState({ unBookModal: true, item: item })} style={styles.buttonContainer}>
                             <Text style={styles.darkTextStyle}>Unbook</Text>
