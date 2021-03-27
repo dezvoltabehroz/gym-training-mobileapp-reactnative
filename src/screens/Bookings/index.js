@@ -149,7 +149,7 @@ class Bookings extends Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={{ flex: 0.9, }}>
+                        <View style={{ flex: 0.9,paddingBottom: 80 }}>
                             {/* <View style={styles.headingContainer}>
                         <View>
                             <Text style={styles.headingTextStyle}>Bookings</Text>

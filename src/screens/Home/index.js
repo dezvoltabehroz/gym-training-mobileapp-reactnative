@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import styles from './style';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from "moment";
@@ -206,121 +206,121 @@ export default class Home extends Component {
         return (
             <>
                 <View style={styles.container}>
-                    <View style={{}}>
-                        <View style={styles.upperContainer}>
-                            <CalendarStrip
-                                scrollable
-                                calendarAnimation={{ type: 'sequence', duration: 30 }}
-                                daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: themeStyle.PRIMARY_BACKGROUND_COLOR }}
-                                style={{ height: 100, paddingBottom: 10 }}
-                                calendarHeaderStyle={{ color: 'black' }}
-                                calendarColor={'#fffff'}
-                                headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (6:00am - 6:20pm)`}
-                                selectedDate={moment()}
-                                // onDateSelected={(date) => { console.log(date); }}
-                                dateNumberStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
-                                dateNameStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
-                                highlightDateNumberStyle={{ color: 'white' }}
-                                highlightDateNameStyle={{ color: 'white' }}
-                                disabledDateNameStyle={{ color: 'grey' }}
-                                disabledDateNumberStyle={{ color: 'grey' }}
-                                datesWhitelist={datesWhitelist}
-                                // dayComponentHeight={40}
-                                // datesBlacklist={datesBlacklist}
-                                iconLeft={null}
-                                iconRight={null}
-                            // iconContainer={{ flex: 0.1 }}
-                            />
-                            <View style={styles.headingContainer}>
-                                <View>
-                                    <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>10:00am GTM+01</Text>
-                                </View>
-                                <View>
-                                    <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>3:00pm GTM+01</Text>
-                                </View>
-                            </View>
-                            <View >
-                                <CustomSlider
-                                    min={1}
-                                    max={12}
-                                    LRpadding={40}
-                                    callback={this.multiSliderValueCallback}
-                                    single={false}
-                                />
-                            </View>
-                        </View>
-
+                    <View style={styles.upperContainer}>
+                        <CalendarStrip
+                            scrollable
+                            calendarAnimation={{ type: 'sequence', duration: 30 }}
+                            daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: themeStyle.PRIMARY_BACKGROUND_COLOR }}
+                            style={{ height: 100, paddingBottom: 10 }}
+                            calendarHeaderStyle={{ color: 'black' }}
+                            calendarColor={'#fffff'}
+                            headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (6:00am - 6:20pm)`}
+                            selectedDate={moment()}
+                            // onDateSelected={(date) => { console.log(date); }}
+                            dateNumberStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
+                            dateNameStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
+                            highlightDateNumberStyle={{ color: 'white' }}
+                            highlightDateNameStyle={{ color: 'white' }}
+                            disabledDateNameStyle={{ color: 'grey' }}
+                            disabledDateNumberStyle={{ color: 'grey' }}
+                            datesWhitelist={datesWhitelist}
+                            // dayComponentHeight={40}
+                            // datesBlacklist={datesBlacklist}
+                            iconLeft={null}
+                            iconRight={null}
+                        // iconContainer={{ flex: 0.1 }}
+                        />
                         <View style={styles.headingContainer}>
                             <View>
-                                <Text style={styles.headingTextStyle}>Booking Slots</Text>
+                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>10:00am GTM+01</Text>
                             </View>
                             <View>
-                                <DropDownPicker
-                                    items={[
-                                        {
-                                            id: 1,
-                                            label: "All Slots",
-                                            value: "All Slots",
-                                        },
-                                        {
-                                            id: 2,
-                                            label: "Available Slots",
-                                            value: "Available Slots",
-                                        }
-                                    ]}
-                                    arrowColor="#d3d3d3"
-                                    placeholder="All slots"
-                                    onClose={() => this.setState({ dropdownOpen: false })}
-                                    onOpen={() => this.setState({ dropdownOpen: true })}
-                                    containerStyle={{ height: 40, width: 140, marginBottom: this.state.dropdownOpen ? '50%' : 0 }}
-                                    globalTextStyle={{ color: "#000000", fontSize: 12, fontFamily: "Montserrat-Medium" }}
-                                    defaultValue={this.state.selectedSlots ? this.state.selectedSlots.label : ""}
-                                    style={{ backgroundColor: 'white', marginTop: '5%' }}
-                                    itemStyle={{
-                                        justifyContent: 'center'
-                                    }}
-                                    dropDownStyle={{ backgroundColor: 'white' }}
-                                    onChangeItem={(item) => this.setState({
-                                        selectedSlots: item.value, available: item.id == 2 ? true : false, slots: item.id == 1 ? true : false,
-                                    })}
-                                />
+                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>3:00pm GTM+01</Text>
                             </View>
+                        </View>
+                        <View >
+                            <CustomSlider
+                                min={1}
+                                max={12}
+                                LRpadding={40}
+                                callback={this.multiSliderValueCallback}
+                                single={false}
+                            />
                         </View>
                     </View>
 
-                    <View style={{}}>
 
-
-                        {this.state.slots ?
-                            this.state.allslots.length == 0 ?
-                                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                    <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
-                                </View>
-                                :
-                                <FlatList
-                                    contentContainerStyle={{ marginBottom: 150 }}
-                                    data={this.state.allslots}
-                                    showsVerticalScrollIndicator={false}
-                                    ItemSeparatorComponent={this._renderSeparator}
-                                    renderItem={({ item, index }) => this._renderItems(item, index)}
-                                    keyExtractor={item => item} /> :
-                            null}
-                        {this.state.available ?
-                            this.state.availableSolts.length == 0 ?
-                                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                    <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
-                                </View>
-                                :
-                                <FlatList
-                                    contentContainerStyle={{ paddingBottom: 150 }}
-                                    data={this.state.availableSolts}
-                                    showsVerticalScrollIndicator={false}
-                                    ItemSeparatorComponent={this._renderSeparator}
-                                    renderItem={({ item, index }) => this._renderItems(item, index)}
-                                    keyExtractor={item => item} /> :
-                            null}
+                    <View style={styles.headingContainer}>
+                        <View>
+                            <Text style={styles.headingTextStyle}>Booking Slots</Text>
+                        </View>
+                        <View>
+                            <DropDownPicker
+                                items={[
+                                    {
+                                        id: 1,
+                                        label: "All Slots",
+                                        value: "All Slots",
+                                    },
+                                    {
+                                        id: 2,
+                                        label: "Available Slots",
+                                        value: "Available Slots",
+                                    }
+                                ]}
+                                arrowColor="#d3d3d3"
+                                placeholder="All slots"
+                                onClose={() => this.setState({ dropdownOpen: false })}
+                                onOpen={() => this.setState({ dropdownOpen: true })}
+                                containerStyle={{ height: 40, width: 140, marginBottom: this.state.dropdownOpen ? '50%' : 0 }}
+                                globalTextStyle={{ color: "#000000", fontSize: 12, fontFamily: "Montserrat-Medium" }}
+                                defaultValue={this.state.selectedSlots ? this.state.selectedSlots.label : ""}
+                                style={{ backgroundColor: 'white', marginTop: '5%' }}
+                                itemStyle={{
+                                    justifyContent: 'center'
+                                }}
+                                dropDownStyle={{ backgroundColor: 'white' }}
+                                onChangeItem={(item) => this.setState({
+                                    selectedSlots: item.value, available: item.id == 2 ? true : false, slots: item.id == 1 ? true : false,
+                                })}
+                            />
+                        </View>
                     </View>
+                    <ScrollView >
+                        <View style={{ paddingBottom: 10 }}>
+
+
+                            {this.state.slots ?
+                                this.state.allslots.length == 0 ?
+                                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                        <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
+                                    </View>
+                                    :
+                                    <FlatList
+                                        data={this.state.allslots}
+                                        showsVerticalScrollIndicator={false}
+                                        ItemSeparatorComponent={this._renderSeparator}
+                                        renderItem={({ item, index }) => this._renderItems(item, index)}
+                                        keyExtractor={item => item} /> :
+                                null}
+                            {this.state.available ?
+                                this.state.availableSolts.length == 0 ?
+                                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                        <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
+                                    </View>
+                                    :
+                                    <FlatList
+                                        data={this.state.availableSolts}
+                                        showsVerticalScrollIndicator={false}
+                                        ItemSeparatorComponent={this._renderSeparator}
+                                        renderItem={({ item, index }) => this._renderItems(item, index)}
+                                        keyExtractor={item => item} /> :
+                                null}
+                        </View>
+                    </ScrollView>
+
                 </View>
+
                 <Modal isVisible={this.state.unBookModal}>
                     <View style={{ backgroundColor: "white", borderRadius: 8, marginHorizontal: '2.5%', marginBottom: 2, }}>
                         <View style={{ marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
