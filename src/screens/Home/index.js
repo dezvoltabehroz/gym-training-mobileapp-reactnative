@@ -214,7 +214,7 @@ export default class Home extends Component {
                             style={{ height: 100, paddingBottom: 10 }}
                             calendarHeaderStyle={{ color: 'black' }}
                             calendarColor={'#fffff'}
-                            headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (6:00am - 6:20pm)`}
+                            headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (9:00am - 6:00pm)`}
                             selectedDate={moment()}
                             // onDateSelected={(date) => { console.log(date); }}
                             dateNumberStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
@@ -232,10 +232,10 @@ export default class Home extends Component {
                         />
                         <View style={styles.headingContainer}>
                             <View>
-                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>10:00am GTM+01</Text>
+                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>09:00am GTM+01</Text>
                             </View>
                             <View>
-                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>3:00pm GTM+01</Text>
+                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>6:00pm GTM+01</Text>
                             </View>
                         </View>
                         <View >
