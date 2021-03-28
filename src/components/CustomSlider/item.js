@@ -31,7 +31,7 @@ export class Item extends Component {
     }
 
     checkActive = () => {
-        if (this.props.value >= 4 && this.props.value <= 8)
+        if (this.props.value >= this.props.first && this.props.value <= this.props.second)
             return true
         else
             return false

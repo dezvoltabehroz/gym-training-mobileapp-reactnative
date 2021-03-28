@@ -27,7 +27,7 @@ export default class CustomSlider extends Component {
                     <MultiSlider
                         trackStyle={{ backgroundColor: '#D3D3D3' }}
                         selectedStyle={{ backgroundColor: "#00B4E5" }}
-                        values={this.props.single ? [this.state.multiSliderValue[1]] : [this.state.multiSliderValue[0]+3, this.state.multiSliderValue[1]-3]}
+                        values={this.props.single ? [this.state.multiSliderValue[1]] : [this.state.multiSliderValue[0], this.state.multiSliderValue[1]]}
                         sliderLength={Dimensions.get('window').width * 0.69}
                         onValuesChange={this.multiSliderValuesChange}
                         min={this.props.min}
