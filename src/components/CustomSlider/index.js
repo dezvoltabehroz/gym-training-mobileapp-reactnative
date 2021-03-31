@@ -92,7 +92,7 @@ export default class CustomSlider extends Component {
              second : values[1],
          }) 
         }
-         //this.props.callback(values)
+         this.props.callback(values)
      }
  
      renderScale=()=> {

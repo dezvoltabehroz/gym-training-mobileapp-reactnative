@@ -114,6 +114,9 @@ class MemberShip extends Component {
     handleRequestPause = () => {
         this.setState({ buttonLoading: true })
         const { date, selectedDuration, reason, memberId } = this.state;
+        // if(date&&selectedDuration&&reason&&memberId){
+
+        // }
         let userData = {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
@@ -123,7 +126,7 @@ class MemberShip extends Component {
                     : selectedDuration.value == "2  Week" ? moment(date).add(14, "days").format('YYYY-MM-DD')
                         : selectedDuration.value == "3 Week" ? moment(date).add(21, "days").format('YYYY-MM-DD')
                             : selectedDuration.value == "4 Week" ? moment(date).add(28, "days").format('YYYY-MM-DD') :
-                                null,
+                                moment(date).add(7, "days").format('YYYY-MM-DD'),
             reason: reason,
             member_id: memberId
         }

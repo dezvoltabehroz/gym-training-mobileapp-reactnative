@@ -32,7 +32,7 @@ class ResetPassword extends Component {
     }
 
     isPasswordValid(password) {
-        return /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(password)
+        return /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,16}$/.test(password)
     }
 
     handleChangePassword = () => {
@@ -87,7 +87,7 @@ class ResetPassword extends Component {
                                     placeholder="Enter your new password" />
                                 {
                                     password.length && !this.isPasswordValid(password) ?
-                                        <Text style={[styles.errorText, { marginVertical: '2%' }]}>Password must be 8 letters along which must contain one special character, one capital, and one digit</Text> : null
+                                        <Text style={[styles.errorText, { marginVertical: '2%' }]}>Password must be 8 letters along which must contain one capital letter, and one digit</Text> : null
                                 }
 
                             </View>
