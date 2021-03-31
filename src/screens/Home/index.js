@@ -249,7 +249,8 @@ class Home extends Component {
         var end = moment(`${time} 18:00:00`);
         var duration = moment.duration(end.diff(now));
         var hours = duration.asHours();
-        console.log(hours)
+        console.log(hours);
+        let resetSlider = null;
         const { item, index, date, startingHour, loading, listloading } = this.state;
         return (
             <>
@@ -272,6 +273,7 @@ class Home extends Component {
                                 selectedDate={date}
                                 onDateSelected={(date) => {
                                     this.setState({ listloading: true, date, multiSliderValues: [] }, () => {
+                                        this.resetSlider();
                                         let userData = {
                                             id: this.props.user.userData.id,
                                             token: this.props.user.userData.token,
@@ -312,7 +314,7 @@ class Home extends Component {
                                 <CustomSlider
                                     min={1}
                                     max={hours}
-                                    // resetValue={(reset,Va)}
+                                    resetValue={(reset) => this.resetSlider = reset}
                                     LRpadding={40}
                                     callback={this.multiSliderValueCallback}
                                     single={false}

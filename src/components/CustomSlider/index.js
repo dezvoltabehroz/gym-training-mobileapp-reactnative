@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import { CustomMarker } from '../CustomeMarker/index';
 import { Item } from './item';
+import moment from 'moment';
 
 export default class CustomSlider extends Component {
 
@@ -15,6 +16,11 @@ export default class CustomSlider extends Component {
             value: [this.props.array]
         }
     }
+
+    componentDidMount = () => {
+        this.props.resetValue(this.handleResetValues)
+    }
+
 
     render() {
         return (
@@ -80,34 +86,45 @@ export default class CustomSlider extends Component {
     //     return items;
     // }
 
+
+    handleResetValues = () => {
+        this.setState({
+            multiSliderValue: [this.props.min, this.props.max],
+            first: this.props.min,
+            second: this.props.max
+        });
+    }
+
+
     multiSliderValuesChange = values => {
-        if(this.props.single ){
-         this.setState({
-             second : values[0],
-         })  
-        }else{
-         this.setState({
-             multiSliderValue: values,
-             first : values[0],
-             second : values[1],
-         }) 
+        if (this.props.single) {
+            this.setState({
+                second: values[0],
+            })
+        } else {
+            this.setState({
+                multiSliderValue: values,
+                first: values[0],
+                second: values[1],
+            })
         }
-         this.props.callback(values)
-     }
- 
-     renderScale=()=> {
-         const items = [];
-         for (let i=this.props.min; i <= this.props.max; i++) {
-             items.push(
-                 <Item 
-                     value = {i}
-                     first = {this.state.first}
-                     second = {this.state.second}
-                 />
-             );
-         }
-         return items;
-     }
+        this.props.callback(values)
+    }
+
+    renderScale = () => {
+
+        const items = [];
+        for (let i = this.props.min; i <= this.props.max; i++) {
+            items.push(
+                <Item
+                    value={i}
+                    first={this.state.first}
+                    second={this.state.second}
+                />
+            );
+        }
+        return items;
+    }
 }
 
 const styles = StyleSheet.create({
@@ -120,7 +137,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: Dimensions.get('window').width * 0.725,
         flexDirection: 'row',
-        flexWrap:"wrap",
+        flexWrap: "wrap",
         // alignItems: 'center',
         justifyContent: 'space-between',
         bottom: -10,
