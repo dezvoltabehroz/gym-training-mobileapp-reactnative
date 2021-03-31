@@ -243,9 +243,9 @@ class MemberShip extends Component {
                                                 value: "4 Week",
                                             }
                                         ]}
-                                        arrowColor="#d3d3d3"
+                                        arrowColor="#000000"
                                         placeholder="Select week"
-                                        globalTextStyle={{ color: "#d3d3d3", fontSize: 12, fontFamily: "Montserrat-Medium" }}
+                                        globalTextStyle={{ color: "#000000", fontSize: 12, fontFamily: "Montserrat-Medium" }}
                                         defaultValue={this.state.selectedDuration ? this.state.selectedDuration.label : ""}
                                         containerStyle={{ height: 40 }}
                                         style={{ backgroundColor: 'white', marginTop: '5%' }}

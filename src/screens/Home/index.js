@@ -271,7 +271,7 @@ class Home extends Component {
                                 headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (9:00am - 6:00pm)`}
                                 selectedDate={date}
                                 onDateSelected={(date) => {
-                                    this.setState({ listloading: true, date }, () => {
+                                    this.setState({ listloading: true, date, multiSliderValues: [] }, () => {
                                         let userData = {
                                             id: this.props.user.userData.id,
                                             token: this.props.user.userData.token,

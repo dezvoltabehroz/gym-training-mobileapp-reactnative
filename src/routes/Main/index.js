@@ -40,19 +40,21 @@ function MainRoutes(props) {
                     fontSize: 12
                 }
             }}
-
             initialRouteName="Home" >
             <Tabs.Screen name="Home" component={HomeRoutes} options={{
+
                 swipeEnabled: false,
                 tabBarIcon: ({ focused, color, size }) => (
                     focused ?
                         <WhiteHome />
                         :
                         <Home />
-                )
+                ),
+                unmountOnBlur: true,
             }} />
             <Tabs.Screen name="Bookings" component={BookingRoutes} options={{
                 swipeEnabled: false,
+                unmountOnBlur: true,
                 tabBarIcon: ({ focused, color, size }) => (
                     focused ?
                         <WhiteBooking />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import THEME from '../../assets/styles/theme.style';
 import styles from './style';
 import moment from "moment";
@@ -18,36 +18,7 @@ class Bookings extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bookings: [
-                {
-                    date: "2021-03-12",
-                    time: "11:00:00",
-                    slotTime: 20,
-                    gmt: "+1:00",
-                    bookedSlot: "0"
-                },
-                {
-                    date: "2021-03-13",
-                    time: "11:00:00",
-                    slotTime: 20,
-                    gmt: "+1:00",
-                    bookedSlot: "0"
-                },
-                {
-                    date: "2021-03-14",
-                    time: "11:00:00",
-                    slotTime: 20,
-                    gmt: "+1:00",
-                    bookedSlot: "0"
-                },
-                {
-                    date: "2021-03-15",
-                    time: "11:00:00",
-                    slotTime: 20,
-                    gmt: "+1:00",
-                    bookedSlot: "0"
-                }
-            ],
+            bookings: [],
             unBookModal: false,
             item: null,
             loading: true,
@@ -149,7 +120,7 @@ class Bookings extends Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={{ flex: 0.9,paddingBottom: 80 }}>
+                        <View style={{ flex: 0.9, paddingBottom: 80 }}>
                             {/* <View style={styles.headingContainer}>
                         <View>
                             <Text style={styles.headingTextStyle}>Bookings</Text>
@@ -166,6 +137,14 @@ class Bookings extends Component {
                                     </View>
                                     :
                                     <FlatList
+                                        refreshControl={
+                                            <RefreshControl
+                                                refreshing={this.state.loading}
+                                                onRefresh={() => this.componentDidMount()}
+                                                tintColor={THEME.COLOR_WHITE}
+                                                colors={[THEME.PRIMARY_COLOR]}
+                                            />
+                                        }
                                         contentContainerStyle={{ paddingBottom: 80 }}
                                         data={this.state.bookings}
                                         showsVerticalScrollIndicator={false}

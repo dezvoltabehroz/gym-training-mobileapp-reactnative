@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import styles from './style';
 import moment from "moment";
 import Dot from '../../assets/svg/greydot.svg';
@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { authActions } from '../../redux/actions/auth';
 import { ActivityIndicator } from 'react-native';
+import THEME from '../../assets/styles/theme.style';
 
 class PauseMemberShip extends Component {
     constructor(props) {
@@ -238,7 +239,14 @@ class PauseMemberShip extends Component {
                         </View>
                     </View>
                     <View style={{ flex: 0.9, }}>
-                        <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
+                        <ScrollView refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.loading}
+                                onRefresh={() => this.componentDidMount()}
+                                tintColor={THEME.COLOR_WHITE}
+                                colors={[THEME.PRIMARY_COLOR]}
+                            />
+                        } contentContainerStyle={{ paddingBottom: 80 }}>
                             <StepIndicator
                                 stepCount={3}
                                 customStyles={secondIndicatorStyles}
@@ -265,7 +273,7 @@ class PauseMemberShip extends Component {
                                         <Text style={styles.userDetailTextStyle}>{"Pause Duration:"}</Text>
                                     </View>
                                     <View>
-                                        <Text style={styles.userDetailTextStyle}>{item.days}</Text>
+                                        <Text style={styles.userDetailTextStyle}>{item.days / 7} Week</Text>
                                     </View>
                                 </View>
                                 <View style={styles.memberShipContentRowStyle}>

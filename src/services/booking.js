@@ -12,7 +12,6 @@ let configToken = (token) => {
 }
 const Api = {
     getBookings: function (userData) {
-        console.log("userData :===", userData)
         return axiosInstance.post('booking/getBookings', {
             id: userData.id,
             date: userData.date,
