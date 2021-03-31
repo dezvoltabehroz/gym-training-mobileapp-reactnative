@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from './style';
 import User from "../../assets/svg/user_image.svg"
 import { Icon } from '../../components';
@@ -10,8 +10,12 @@ import THEME from '../../assets/styles/theme.style';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DropDownPicker from 'react-native-dropdown-picker';
 import moment from "moment";
-import Calender from '../../assets/svg/calenderTime.svg'
-export default class MemberShip extends Component {
+import Calender from '../../assets/svg/calenderTime.svg';
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { authActions } from '../../redux/actions/auth';
+import { ProfileServices } from '../../services';
+class MemberShip extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,6 +29,7 @@ export default class MemberShip extends Component {
             pauseAvailed: 1,
             pauseMemberShip: false,
             date: new Date(),
+            loading: true,
             selectedDuration: [
                 {
 
@@ -34,26 +39,59 @@ export default class MemberShip extends Component {
                 {
                     id: 1,
                     label: "1 Week",
-                    value: "1 Week",
+                    value: "1",
                 },
                 {
                     id: 2,
                     label: "2 Week",
-                    value: "2 Week",
+                    value: "2",
                 },
                 {
                     id: 3,
                     label: "3 Week",
-                    value: "3 Week",
+                    value: "3",
                 },
                 {
                     id: 4,
                     label: "4 Week",
-                    value: "4 Week",
+                    value: "4",
                 }
-            ]
+            ],
+            reason: "",
+            buttonLoading: false
 
         }
+    }
+
+    componentDidMount = () => {
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.getMemberShipDetail()
+        });
+        this.getMemberShipDetail()
+    }
+
+    getMemberShipDetail = () => {
+        let userData = {
+            id: this.props.user.userData.id,
+            token: this.props.user.userData.token
+        }
+        ProfileServices.getMemberShipDetails(userData)
+            .then((response) => {
+                if (response.data.success) {
+                    this.setState({
+                        name: response.data.data.full_name,
+                        email: response.data.data.email,
+                        phone: response.data.data.phone,
+                        memberShipType: response.data.data.membership_type,
+                        memberId: response.data.data.member_id,
+                        validFrom: moment(response.data.data.membership_start_date).format("YY / MM"),
+                        validTo: moment(response.data.data.membership_end_date).format("YY / MM"),
+                        pauseAvailed: response.data.data.pause_count,
+                        loading: false
+                    })
+                }
+            }).catch((err) => console.log(err))
+
     }
 
     hideDatePicker = () => {
@@ -61,7 +99,6 @@ export default class MemberShip extends Component {
     };
 
     handleConfirm = (selectedDate) => {
-        console.log()
         var date = moment(selectedDate).format('YYYY-MM-DD')
         var dob = (selectedDate.getYear() + 1900);
         dob += "-";
@@ -74,58 +111,98 @@ export default class MemberShip extends Component {
         this.hideDatePicker();
     };
 
+    handleRequestPause = () => {
+        this.setState({ buttonLoading: true })
+        const { date, selectedDuration, reason, memberId } = this.state;
+        // if(date&&selectedDuration&&reason&&memberId){
+
+        // }
+        let userData = {
+            id: this.props.user.userData.id,
+            token: this.props.user.userData.token,
+            start_date: moment(date).format('YYYY-MM-DD'),
+            end_date:
+                selectedDuration.value == "1 Week" ? moment(date).add(7, "days").format('YYYY-MM-DD')
+                    : selectedDuration.value == "2  Week" ? moment(date).add(14, "days").format('YYYY-MM-DD')
+                        : selectedDuration.value == "3 Week" ? moment(date).add(21, "days").format('YYYY-MM-DD')
+                            : selectedDuration.value == "4 Week" ? moment(date).add(28, "days").format('YYYY-MM-DD') :
+                                moment(date).add(7, "days").format('YYYY-MM-DD'),
+            reason: reason,
+            member_id: memberId
+        }
+        ProfileServices.requestPauseMembership(userData)
+            .then((res) => {
+                if (res.data.success) {
+                    this.componentDidMount();
+                    this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false })
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     render() {
-        const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, data } = this.state;
+        var from = moment().format('YYYY-MM-DD')
+        var d = new Date(from);
+        d.setMonth(d.getMonth() + 1);
+        console.log(d)
+        const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, loading, reason, selectedDuration, buttonLoading } = this.state;
         return (
             <>
-                <View style={styles.container}>
-                    <View style={styles.memberShipContainer}>
-                        <View style={styles.memberShipContentRowStyle}>
-                            <View style={styles.memberShipContentRow}>
-                                <View >
-                                    <User />
-                                </View>
-                                <View style={{ marginLeft: 5 }}>
-                                    <Text style={styles.userDetailTextStyle}>{name}</Text>
-                                    <Text style={styles.userDetailTextStyle}>{email}</Text>
-                                    <Text style={styles.userDetailTextStyle}>{phone}</Text>
-                                </View>
-                            </View>
-                            <View>
-                                <Text style={styles.memberShipTypeTextStyle}>{memberShipType}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.memberShipIdContainer}>
-                            <Text style={styles.userDetailTextStyle}>Member ID : {memberId}</Text>
-                        </View>
-                        <View style={[styles.memberShipContentRowStyle, { marginTop: "5%" }]}>
-                            <View style={{ flexDirection: "row" }}>
-                                <Text style={styles.validityTextStyle}>{"VALID\nFROM"}</Text>
-                                <Text style={styles.userDetailTextStyle}>{validFrom}</Text>
-                            </View>
-                            <View style={{ flexDirection: "row" }}>
-                                <Text style={styles.validityTextStyle}>{"VALID\nTHRU"}</Text>
-                                <Text style={styles.userDetailTextStyle}>{validTo}</Text>
-                            </View>
-                        </View>
+                { loading ?
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                        <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                     </View>
-                    <View style={styles.pausedAvailedContainer}>
-                        <View style={styles.memberShipContentRowStyle}>
-                            <Text style={styles.userDetailTextStyle}>Paused Availed</Text>
-                            <Text style={styles.userDetailTextStyle}>{pauseAvailed}</Text>
+                    :
+                    <View style={styles.container}>
+                        <View style={styles.memberShipContainer}>
+                            <View style={styles.memberShipContentRowStyle}>
+                                <View style={styles.memberShipContentRow}>
+                                    <View >
+                                        <User />
+                                    </View>
+                                    <View style={{ marginLeft: 5 }}>
+                                        <Text style={styles.userDetailTextStyle}>{name}</Text>
+                                        <Text style={styles.userDetailTextStyle}>{email}</Text>
+                                        <Text style={styles.userDetailTextStyle}>{phone}</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                    <Text style={styles.memberShipTypeTextStyle}>{memberShipType}</Text>
+                                </View>
+                            </View>
+                            <View style={styles.memberShipIdContainer}>
+                                <Text style={styles.userDetailTextStyle}>Member ID : {memberId}</Text>
+                            </View>
+                            <View style={[styles.memberShipContentRowStyle, { marginTop: "5%" }]}>
+                                <View style={{ flexDirection: "row" }}>
+                                    <Text style={styles.validityTextStyle}>{"VALID\nFROM"}</Text>
+                                    <Text style={styles.userDetailTextStyle}>{validFrom}</Text>
+                                </View>
+                                <View style={{ flexDirection: "row" }}>
+                                    <Text style={styles.validityTextStyle}>{"VALID\nTHRU"}</Text>
+                                    <Text style={styles.userDetailTextStyle}>{validTo}</Text>
+                                </View>
+                            </View>
                         </View>
+                        <View style={styles.pausedAvailedContainer}>
+                            <View style={styles.memberShipContentRowStyle}>
+                                <Text style={styles.userDetailTextStyle}>Paused Availed</Text>
+                                <Text style={styles.userDetailTextStyle}>{pauseAvailed}</Text>
+                            </View>
 
-                    </View>
-                    <View style={styles.pausedHistoryContainer}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate("PauseHistory")} style={styles.memberShipContentRowStyle}>
-                            <Text style={styles.userDetailTextStyle}>Paused History</Text>
-                            <Icon.Entypo name={"chevron-right"} size={20} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ alignItems: 'flex-end', marginTop: '15%', marginHorizontal: "5%" }}>
-                        <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Pause Membership ' onPress={() => this.setState({ pauseMemberShip: true })} />
-                    </View>
-                </View >
+                        </View>
+                        <View style={styles.pausedHistoryContainer}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate("PauseHistory", { memberId })} style={styles.memberShipContentRowStyle}>
+                                <Text style={styles.userDetailTextStyle}>Paused History</Text>
+                                <Icon.Entypo name={"chevron-right"} size={20} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ alignItems: 'flex-end', marginTop: '15%', marginHorizontal: "5%" }}>
+                            <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Pause Membership ' onPress={() => this.setState({ pauseMemberShip: true })} />
+                        </View>
+                    </View >}
                 <Modal isVisible={this.state.pauseMemberShip}>
                     <View style={{ backgroundColor: "white", borderRadius: 8, marginHorizontal: '2.5%', marginBottom: 2, }}>
                         <View style={{ marginTop: "5%", marginHorizontal: "5%", alignItems: "flex-end" }}>
@@ -176,9 +253,11 @@ export default class MemberShip extends Component {
                                             justifyContent: 'center'
                                         }}
                                         dropDownStyle={{ backgroundColor: 'white' }}
-                                        onChangeItem={(item) => this.setState({
-                                            selectedDuration: item.value, item: item.value, index: item.value,
-                                        })}
+                                        onChangeItem={(item) => {
+                                            this.setState({
+                                                selectedDuration: item, item: item.value, index: item.value,
+                                            })
+                                        }}
                                     />
                                 </View>
                             </View>
@@ -189,14 +268,16 @@ export default class MemberShip extends Component {
                                 <Input
                                     placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
                                     multiline={true}
+                                    value={reason}
                                     containerStyle={styles.containerStyle}
                                     placeholderTextColor={'#77777B'}
+                                    onChangeText={(reason) => this.setState({ reason })}
                                     inputContainerStyle={styles.inputContainerStyle}
                                     inputStyle={styles.inputStyle} />
                             </View>
                         </View>
                         <View style={{ alignItems: 'flex-end', marginTop: '5%', marginHorizontal: "5%", paddingBottom: '5%' }}>
-                            <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Request Pause ' onPress={() => this.setState({ pauseMemberShip: true })} />
+                            <Button loading={buttonLoading} disabled={reason && selectedDuration.value && date ? false : true} titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Request Pause ' onPress={() => this.handleRequestPause()} />
                         </View>
                     </View>
                 </Modal>
@@ -204,6 +285,7 @@ export default class MemberShip extends Component {
                     isVisible={this.state.showDatePicker}
                     mode="date"
                     minimumDate={new Date()}
+                    maximumDate={d}
                     onConfirm={this.handleConfirm}
                     onCancel={this.hideDatePicker}
                 />
@@ -211,3 +293,15 @@ export default class MemberShip extends Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        user: state.authReducer || {}
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        authActions: bindActionCreators(authActions, dispatch),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(MemberShip)

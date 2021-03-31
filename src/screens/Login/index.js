@@ -31,20 +31,25 @@ class Login extends Component {
             email: "",
             password: "",
             resetEmail: "",
+            submit1: false,
+            sendLoading: false
         };
     }
 
     // ============== func_HandleLogin - Function Will allow user to get login ==============
-    func_HandleLogin = () => {
+    func_HandleLogin = async () => {
         const { replace, navigate } = this.props.navigation;
         const { email, password, submit, resetEmail } = this.state;
 
 
-        if (this.isEmailValid(email) && submit && email) {
-
-            replace("Main")
+        if (this.isEmailValid(email) && submit && email && password) {
+            let userData = {
+                email: email,
+                password: password
+            }
+            // replace("Main")
             // this.setState({ resetModal: false, submit: false })
-            // await this.props.authActions.userLogin(userData, replace);
+            await this.props.authActions.userLogin(userData, replace);
         }
         else {
             this.setState({ submit: true })
@@ -62,21 +67,27 @@ class Login extends Component {
 
     // ============== func_HandleResetPassword - Function Will allow user to reset his/her password ==============
     func_HandleResetPassword = () => {
-        const { email, password, submit, resetEmail } = this.state;
+        const { email, password, submit1, resetEmail, sendLoading } = this.state;
         const { replace, navigate } = this.props.navigation;
-        if (this.isEmailValid(resetEmail) && submit && resetEmail) {
+        if (this.isEmailValid(resetEmail) && submit1 && resetEmail) {
+            AuthServices.resetpasswordmail(resetEmail)
+                .then((res) => {
+                    if (res.data.success) {
+                        navigate("OTP", { email: resetEmail, code: res.data.data })
+                        this.setState({ resetModal: false, submit1: false, resetEmail: "", sendLoading: false })
+                    }
+                })
+                .catch((err) => { console.log(err) })
 
-            navigate("OTP", { email: resetEmail })
-            this.setState({ resetModal: false, submit: false, resetEmail: "" })
             // await this.props.authActions.userLogin(userData, replace);
         }
         else {
-            this.setState({ submit: true })
+            this.setState({ submit1: true, sendLoading: false })
         }
     }
 
     render() {
-        const { email, password, loading, submit, resetEmail } = this.state;
+        const { email, password, loading, submit, resetEmail, submit1, sendLoading } = this.state;
         return (
             <>
                 <View style={styles.backgroundStyle}>
@@ -161,17 +172,17 @@ class Login extends Component {
                                 onChangeText={(resetEmail) => this.setState({ resetEmail })}
                             />
                             {
-                                submit && !resetEmail ? <Text style={[styles.errorText]}>Please fill this field</Text> : null
+                                submit1 && !resetEmail ? <Text style={[styles.errorText]}>Please fill this field</Text> : null
                             }
                             {
-                                submit && resetEmail.length && !this.isEmailValid(resetEmail) ? <Text style={[styles.errorText]}>Email is invalid</Text> : null
+                                submit1 && resetEmail.length && !this.isEmailValid(resetEmail) ? <Text style={[styles.errorText]}>Email is invalid</Text> : null
                             }
                         </View>
-                        <View style={{ alignItems: 'flex-end', margin: '5%',}}>
+                        <View style={{ alignItems: 'flex-end', margin: '5%', }}>
                             <View style={{ flexDirection: "row", }}>
                                 <ClearButton title='Cancel ' onPress={() => { this.setState({ resetModal: false, submit: false, resetEmail: "" }) }} />
                                 <View style={{ width: 15 }}></View>
-                                <ColorButton title='Send ' onPress={() => this.setState({ submit: true }, () => this.func_HandleResetPassword())} />
+                                <ColorButton loading={sendLoading} title='Send ' onPress={() => this.setState({ submit1: true, sendLoading: true }, () => this.func_HandleResetPassword())} />
                             </View>
 
                         </View>

@@ -12,7 +12,7 @@ let configToken = (token) => {
 }
 const Api = {
     userLogin: function (userData) {
-        return axiosInstance.post('buyer/loginCustomer', {
+        return axiosInstance.post('registration/loginTrainee', {
             email: userData.email,
             password: userData.password
         }, config)
@@ -38,45 +38,40 @@ const Api = {
             fcmToken: userData.fcmToken
         }, configToken(userData.token))
     },
-    updatePassword: function (userData) {
-        return axiosInstance.put('buyer/updatepassword', {
+    changePasswordOnLogin: function (userData) {
+        return axiosInstance.put('registration/changePasswordOnLogin', {
             "id": userData.id,
-            "oldPassword": `${userData.oldPassword}`,
-            "password": `${userData.password}`,
-            "password2": `${userData.newPassword}`
+            "new_password": `${userData.new_password}`
         }, configToken(userData.token))
     },
     getUserProfile: function (userData) {
-        return axiosInstance.get(`buyer/customerdetails?id=${userData.user != undefined ? userData.user.id : userData.id}`)
-    },
-    updateUserProfile: function (userData) {
-        return axiosInstance.put('buyer/updatecustomer', {
-            "id": userData.id,
-            "city": `${userData.city}`,
-            "address": `${userData.address}`,
-            "phone": `${userData.phone}`,
-            "fullName": `${userData.fullName}`
+        return axiosInstance.post(`registration/refreshToken`, {
+            "id": userData.id
         }, configToken(userData.token))
     },
     resetpasswordmail: function (email) {
-        return axiosInstance.post('buyer/resetpasswordmail', {
+        return axiosInstance.post('registration/forgetPassword', {
             "email": email
         }, config)
     },
-    resetpasswordtokencheck: function (userData) {
-        return axiosInstance.post('buyer/resetpasswordtokencheck', {
-            "email": userData.email,
-            "resetToken": userData.resetToken
+    verifyCodeForResetPass: function (code) {
+        return axiosInstance.post('registration/verifyCodeForResetPass', {
+            "code": code,
+        }, config)
+    },
+    updatePassword: function (userData) {
+        return axiosInstance.post('registration/updatePassword', {
+            "id": userData.id,
+            "new_password": userData.new_password
+        }, config)
+    },
+    changePassword: function (userData) {
+        return axiosInstance.post('registration/changePassword', {
+            "id": userData.id,
+            "current_password": userData.current_password,
+            "new_password": userData.new_password
         }, configToken(userData.token))
     },
-    resetpassword: function (userData) {
-        return axiosInstance.post('buyer/resetpassword', {
-            "email": userData.email,
-            "resetToken": userData.resetToken,
-            "password": userData.password,
-            "password2": userData.password2
-        }, configToken(userData.token))
-    }
 
 
 };

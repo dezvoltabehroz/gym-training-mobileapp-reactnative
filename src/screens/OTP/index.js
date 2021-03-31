@@ -17,14 +17,28 @@ class OTP extends Component {
         super(props);
         this.state = {
             code: '',
-            submit: false
+            submit: false,
+            buttonLoading: false
         };
     }
 
     // ============== func_HandleSubmitVerificationCode - Function Will allow user to verify the code to reset his/her password ==============
     func_HandleSubmitVerificationCode = () => {
+        this.setState({ buttonLoading: true })
         if (this.state.submit) {
-            this.props.navigation.replace('NewPassword',)
+            if (this.state.code == this.props.route.params.code) {
+                AuthServices.verifyCodeForResetPass(this.state.code)
+                    .then((res) => {
+                        if (res.data.success) {
+                            this.props.navigation.replace('NewPassword', { id: res.data.data[0].id, token: res.data.data[0].token })
+                            this.setState({ buttonLoading: false })
+                        }
+                    })
+            }
+            else {
+
+            }
+
         }
         // const { password, userData, phoneAuthSnapshot } = this.props.route.params;
         // if (password) {
@@ -63,7 +77,7 @@ class OTP extends Component {
     }
 
     render() {
-        const { code, submit } = this.state;
+        const { code, submit, buttonLoading } = this.state;
         const { email } = this.props.route.params;
         return (
             <View>
@@ -89,21 +103,21 @@ class OTP extends Component {
                                     label={"Code"}
                                     placeholder="Enter your reset code"
                                     value={code}
+                                    keyboardType={"number-pad"}
                                     leftIcon={<Code height={12} width={12} />}
-                                    secureTextEntry={true}
                                     onChangeText={(code) => this.setState({ code })}
                                 />
 
                                 {
                                     submit && !code ? <Text style={[styles.errorText]}>Please fill this field</Text> : submit && code.length != 6 ? <Text style={[styles.errorText]}>Code is Invalid!</Text> : null
                                 }
-                                <View style={{ alignItems: 'flex-end', marginTop: '15%' }}>
-                                    <ColorButton title='Done  ' onPress={() => this.setState({ submit: true }, () => this.func_HandleSubmitVerificationCode())} />
-                                </View>
+
                             </View>
 
                             {/* </View> */}
-
+                            <View style={{ alignItems: 'flex-end', marginTop: '15%', marginHorizontal: '10%' }}>
+                                <ColorButton loading={buttonLoading} title='Done  ' onPress={() => this.setState({ submit: true }, () => this.func_HandleSubmitVerificationCode())} />
+                            </View>
                         </View>
 
                         {/* <View style={{ flex: 0.8, justifyContent: 'flex-end', marginTop: "5%", }} >

@@ -12,18 +12,49 @@ export default class NewPassword extends Component {
         this.state = {
             password: '',
             confirmPassword: '',
-            submit: false
+            submit: false,
+            buttonLoading: false
         };
     }
 
     // ============== func_HandleSetNewPassword - Function Will allow user to update his/her password ==============
     func_HandleSetNewPassword = () => {
-        this.props.navigation.replace('Login')
+
+        this.setState({ buttonLoading: true })
+        let userData = {
+            id: this.props.route.params.id,
+            token: this.props.route.params.token,
+            new_password: this.state.password,
+        }
+        if (this.state.submit && this.isPasswordValid(this.state.password) && this.state.password == this.state.confirmPassword) {
+            AuthServices.updatePassword(userData)
+                .then((res) => {
+                    if (res.data.success) {
+                        this.props.navigation.replace('Auth')
+                    }
+                    else {
+                        Alert.alert(res.data.message)
+                        this.setState({ buttonLoading: false })
+                    }
+                })
+                .catch((err) => console.log(err))
+
+            this.props.navigation.replace('Login')
+        }
+        else {
+            this.setState({ submit: true, buttonLoading: false })
+        }
+
     }
 
+    isPasswordValid(password) {
+        // return /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(password)
+        // return /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(password)
+        return /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,16}$/.test(password)
+    }
 
     render() {
-        const { password, confirmPassword, loading, submit } = this.state;
+        const { password, confirmPassword, loading, submit, buttonLoading } = this.state;
         return (
             <>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
@@ -44,7 +75,8 @@ export default class NewPassword extends Component {
                                 />
                                 <View style={{ paddingTop: '5%' }}>
                                     {
-                                        submit && !password ? <Text style={[styles.errorText]}>Please fill this field</Text> : submit && code.length != 6 ? <Text style={[styles.errorText]}>Code is Invalid!</Text> : null
+                                        submit && password.length && !this.isPasswordValid(password) ?
+                                            <Text style={[styles.errorText, { marginVertical: '2%' }]}>Password must be 8 letters along which must contain one capital letter, and one digit</Text> : null
                                     }
                                 </View>
                                 <View style={{ marginVertical: "5%" }}>
@@ -68,7 +100,7 @@ export default class NewPassword extends Component {
                                 </View> */}
                             </View>
                             <View style={{ alignItems: 'flex-end', marginHorizontal: "5%", marginTop: '5%' }}>
-                                <ColorButton disabled={password && confirmPassword && password == confirmPassword ? false : true} title='Reset  ' onPress={() => this.func_HandleSetNewPassword()} />
+                                <ColorButton loading={buttonLoading} disabled={password && confirmPassword && password == confirmPassword ? false : true} title='Reset  ' onPress={() => this.setState({ submit: true }, () => this.func_HandleSetNewPassword())} />
                             </View>
                         </View>
 

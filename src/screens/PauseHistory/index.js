@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from './style';
 import moment from "moment";
 import { Icon } from '../../components';
-export default class PauseHistory extends Component {
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { authActions } from '../../redux/actions/auth';
+import { ProfileServices } from '../../services';
+import THEME from '../../assets/styles/theme.style'
+
+class PauseHistory extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,35 +29,35 @@ export default class PauseHistory extends Component {
                     startDate: "2021-03-23",
                     duration: "1 Week",
                     is_Processed: '1',
-                    reason:""
+                    reason: ""
                 },
                 {
                     memberShipType: "Basic",
                     startDate: "2021-03-23",
                     duration: "1 Week",
                     is_Processed: '0',
-                    reason:""
+                    reason: ""
                 },
                 {
                     memberShipType: "Basic",
                     startDate: "2021-03-23",
                     duration: "1 Week",
                     is_Processed: '1',
-                    reason:""
+                    reason: ""
                 },
                 {
                     memberShipType: "Basic",
                     startDate: "2021-03-23",
                     duration: "1 Week",
                     is_Processed: '',
-                    reason:""
+                    reason: ""
                 },
                 {
                     memberShipType: "Basic",
                     startDate: "2021-03-23",
                     duration: "1 Week",
                     is_Processed: '0',
-                    reason:""
+                    reason: ""
                 },
             ],
             data: [
@@ -75,9 +81,29 @@ export default class PauseHistory extends Component {
                     label: "4 Week",
                     value: "4 Week",
                 }
-            ]
+            ],
+            loading: true,
 
         }
+    }
+
+
+    componentDidMount = () => {
+        let userData = {
+            id: this.props.user.userData.id,
+            member_id: this.props.route.params.memberId,
+            token: this.props.user.userData.token
+        }
+        ProfileServices.getPauseList(userData)
+            .then((response) => {
+                if (response.data.success) {
+                    this.setState({
+                        pauseHistory: response.data.data,
+                        loading: false
+                    })
+                }
+            })
+            .catch((err) => console.log(err))
     }
 
     hideDatePicker = () => {
@@ -85,7 +111,6 @@ export default class PauseHistory extends Component {
     };
 
     handleConfirm = (selectedDate) => {
-        console.log()
         var date = moment(selectedDate).format('YYYY-MM-DD')
         var dob = (selectedDate.getYear() + 1900);
         dob += "-";
@@ -111,7 +136,7 @@ export default class PauseHistory extends Component {
                         <Text style={styles.userDetailTextStyle}>{"Membership Type:"}</Text>
                     </View>
                     <View>
-                        <Text style={styles.userDetailTextStyle}>{item.memberShipType}</Text>
+                        <Text style={styles.userDetailTextStyle}>{item.membership_type}</Text>
                     </View>
                 </View>
                 <View style={styles.memberShipContentRowStyle}>
@@ -119,7 +144,7 @@ export default class PauseHistory extends Component {
                         <Text style={styles.userDetailTextStyle}>{"Pause Duration:"}</Text>
                     </View>
                     <View>
-                        <Text style={styles.userDetailTextStyle}>{item.duration}</Text>
+                        <Text style={styles.userDetailTextStyle}>{Math.floor(item.days / 7)} Week</Text>
                     </View>
                 </View>
                 <View style={styles.memberShipContentRowStyle}>
@@ -127,7 +152,7 @@ export default class PauseHistory extends Component {
                         <Text style={styles.userDetailTextStyle}>{"Start Date:"}</Text>
                     </View>
                     <View>
-                        <Text style={styles.userDetailTextStyle}>{moment(item.startDate).format("MMM DD,YYYY")}</Text>
+                        <Text style={styles.userDetailTextStyle}>{moment(item.pause_start).format("MMM DD,YYYY")}</Text>
                     </View>
                 </View>
                 <View style={styles.memberShipContentRowStyle}>
@@ -135,10 +160,10 @@ export default class PauseHistory extends Component {
                         <Text style={styles.userDetailTextStyle}>{"End Date:"}</Text>
                     </View>
                     <View>
-                        <Text style={styles.userDetailTextStyle}>{moment(item.startDate).add(7, "days").format("MMM DD,YYYY")}</Text>
+                        <Text style={styles.userDetailTextStyle}>{moment(item.pause_end).format("MMM DD,YYYY")}</Text>
                     </View>
                 </View>
-                {item.is_Processed == "1" ?
+                {item.is_approved == "1" ?
                     null
                     :
                     <TouchableOpacity onPress={() => this.props.navigation.navigate("PauseMemberShip", { item: item })} style={{ alignItems: 'center', justifyContent: "flex-end", flexDirection: "row", marginTop: '5%', }}>
@@ -156,34 +181,51 @@ export default class PauseHistory extends Component {
     }
 
     render() {
-        const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, data } = this.state;
+        const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, loading } = this.state;
         return (
             <>
-                <View style={styles.container}>
-                    <View style={{ flex: 0.1, marginTop: "5%" }}>
-                        <View style={styles.headingContainer}>
-                            <View>
-                                <Text style={styles.headingTextStyle}>Pause History</Text>
+                { loading ?
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                        <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
+                    </View>
+                    :
+                    <View style={styles.container}>
+                        <View style={{ flex: 0.1, marginTop: "5%" }}>
+                            <View style={styles.headingContainer}>
+                                <View>
+                                    <Text style={styles.headingTextStyle}>Pause History</Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                    <View style={{ flex: 0.9, }}>
-                        {
-                            this.state.pauseHistory.length == 0 ?
-                                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                    <Text style={styles.darkTextStyle}>No pause history at the moment :(</Text>
-                                </View>
-                                :
-                                <FlatList
-                                    contentContainerStyle={{ paddingBottom: 80 }}
-                                    data={this.state.pauseHistory}
-                                    showsVerticalScrollIndicator={false}
-                                    ItemSeparatorComponent={this._renderSeparator}
-                                    renderItem={({ item }) => this._renderItems(item)}
-                                    keyExtractor={item => item} />}
-                    </View>
-                </View>
+                        <View style={{ flex: 0.9, }}>
+                            {
+                                this.state.pauseHistory.length == 0 ?
+                                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                        <Text style={styles.darkTextStyle}>No pause history at the moment :(</Text>
+                                    </View>
+                                    :
+                                    <FlatList
+                                        contentContainerStyle={{ paddingBottom: 80 }}
+                                        data={this.state.pauseHistory}
+                                        showsVerticalScrollIndicator={false}
+                                        ItemSeparatorComponent={this._renderSeparator}
+                                        renderItem={({ item }) => this._renderItems(item)}
+                                        keyExtractor={item => item} />}
+                        </View>
+                    </View>}
             </>
         )
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        user: state.authReducer || {}
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        authActions: bindActionCreators(authActions, dispatch),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(PauseHistory)

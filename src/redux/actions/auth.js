@@ -23,7 +23,7 @@ const setUserProfile = (userData, navigate) => {
         let token = await AsyncStorage.getItem('TOKEN')
         let data = JSON.parse(token)
         if (userData) {
-            dispatch({ type: USER_LOGIN_SUCCESS, userData: userData, userToken: data, loading: false });
+            await dispatch({ type: USER_LOGIN_SUCCESS, userData: userData, userToken: data, loading: false });
             if (navigate != null)
                 navigate('Main');
         }
@@ -38,9 +38,9 @@ const getUserProfile = (userData, navigate) => {
         }
         AuthServices.getUserProfile(userData)
             .then(async (responseData) => {
-                if (responseData.data.success != 'undefined' && responseData.data.success == false) {
-                    dispatch(removeUser(navigate));
-                    dispatch({ type: LOADING_SUCCESS, loading: !loading })
+                if (responseData.data.success) {
+                    await AsyncStorage.setItem('USER', JSON.stringify(responseData.data.data))
+                    await dispatch(setUserProfile(responseData.data.data, navigate))
                 }
                 else {
                     // socket.on("updateNotification", async ({ receiver_id }) => {
@@ -48,10 +48,11 @@ const getUserProfile = (userData, navigate) => {
                     //         await dispatch(notificationActions.getNotification(responseData.data.userData[0]));
                     //     }
                     // });
-                    await dispatch(setUserProfile(responseData.data.result, navigate))
-                    AsyncStorage.setItem('USER', JSON.stringify(responseData.data.result))
+
+                    dispatch(removeUser(navigate));
+                    dispatch({ type: LOADING_SUCCESS, loading: !loading })
                     // navigate('Main');
-                    dispatch({ type: LOADING_SUCCESS, loading: false })
+                    // dispatch({ type: LOADING_SUCCESS, loading: false })
                     // else {
                     //     Alert.alert(responseData.data.message)
                     //     dispatch({ type: LOADING_SUCCESS, loading: !loading })
@@ -294,11 +295,9 @@ const phoneVerifyCode = (userData, navigate) => {
 
 const removeUser = (navigate) => {
     return async (dispatch) => {
+        dispatch({ type: USER_LOGOUT_SUCCESS })
         await navigate('Auth')
         await AsyncStorage.removeItem('USER');
-        await AsyncStorage.removeItem('CART_ITEMS');
-        dispatch({ type: USER_LOGOUT_SUCCESS })
-        dispatch({ type: CART_SUCCESS, cart: [] })
     }
 };
 
@@ -311,9 +310,13 @@ const userLogin = (userData, navigate) => {
         AuthServices.userLogin(userData)
             .then(async (responseData) => {
                 if (responseData.data.success) {
-                    await requestUserPermission(responseData.data.result, dispatch, navigate)
-                    AsyncStorage.setItem('TOKEN', JSON.stringify(responseData.data.result.access_token))
-                    AsyncStorage.setItem('Email', JSON.stringify(userData))
+                    // await requestUserPermission(responseData.data.data, dispatch, navigate)
+                    await AsyncStorage.setItem('USER', JSON.stringify(responseData.data.data))
+                    await AsyncStorage.setItem('TOKEN', JSON.stringify(responseData.data.data.token))
+                    await AsyncStorage.setItem('Email', JSON.stringify(userData))
+                    await dispatch({ type: USER_LOGIN_SUCCESS, userData: responseData.data.data, loading: !loading })
+                    // dispatch(getUserProfile(responseData.data.userData[0], navigate))
+                    navigate("Main")
                 }
                 else {
                     Alert.alert(responseData.data.msg)
@@ -354,7 +357,7 @@ const requestUserPermission = async function (data, dispatch, navigate) {
     //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
     // if (enabled) {
-    //     getFcmToken(data, dispatch, navigate);
+    getFcmToken(data, dispatch, navigate);
     // } else {
     //     console.log('Authorization status:', authStatus);
     // }
@@ -372,7 +375,7 @@ const getFcmToken = async (userData, dispatch, navigate) => {
     //     AuthServices.addFcmToken(data)
     //         .then((res) => {
     //             if (res.data.success) {
-    //                 dispatch(getUserProfile(userData, navigate))
+    dispatch(getUserProfile(userData, navigate))
     //             }
 
     //         }).catch((err) => console.log(err))
