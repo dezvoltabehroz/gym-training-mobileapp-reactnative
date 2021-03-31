@@ -58,7 +58,8 @@ class MemberShip extends Component {
                 }
             ],
             reason: "",
-            buttonLoading: false
+            buttonLoading: false,
+            dropdownOpen: false
 
         }
     }
@@ -95,7 +96,7 @@ class MemberShip extends Component {
     }
 
     hideDatePicker = () => {
-        this.setState({ showDatePicker: !this.state.showDatePicker });
+        this.setState({ showDatePicker: !this.state.showDatePicker, pauseMemberShip: true });
     };
 
     handleConfirm = (selectedDate) => {
@@ -211,7 +212,7 @@ class MemberShip extends Component {
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
                             <View style={{ flex: 0.5, }}>
                                 <Text style={styles.userTextStyle}>Start Date</Text>
-                                <TouchableOpacity style={styles.dateContainer} onPress={() => this.setState({ showDatePicker: true })}>
+                                <TouchableOpacity style={styles.dateContainer} onPress={() => this.setState({ pauseMemberShip: false, showDatePicker: true })}>
                                     <Text style={styles.dateTextStyle} >{moment(date).format("MMM DD,YYYY")}</Text>
                                     <Calender />
                                 </TouchableOpacity>
@@ -245,9 +246,12 @@ class MemberShip extends Component {
                                         ]}
                                         arrowColor="#000000"
                                         placeholder="Select week"
+                                        onClose={() => this.setState({ dropdownOpen: false })}
+                                        onOpen={() => this.setState({ dropdownOpen: true })}
+                                        containerStyle={{ height: 40, width: 140, marginBottom: this.state.dropdownOpen ? '50%' : 0 }}
                                         globalTextStyle={{ color: "#000000", fontSize: 12, fontFamily: "Montserrat-Medium" }}
                                         defaultValue={this.state.selectedDuration ? this.state.selectedDuration.label : ""}
-                                        containerStyle={{ height: 40 }}
+                                        // containerStyle={{ height: 40 }}
                                         style={{ backgroundColor: 'white', marginTop: '5%' }}
                                         itemStyle={{
                                             justifyContent: 'center'
