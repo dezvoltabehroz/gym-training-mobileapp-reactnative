@@ -201,15 +201,10 @@ class Home extends Component {
     multiSliderValueCallback = (values) => {
         this.setState({ listloading: true })
         const time = moment().format("YYYY-MM-DD")
-        console.log("values, =========>", values)
         var now = moment(`${time} 09:00:00`); //todays date
         var end = moment(`${time} 18:00:00`);
-        console.log(end)
         var duration = moment.duration(end.diff(now));
         var hours = duration.asHours();
-        console.log(duration)
-        console.log(hours)
-        console.log(moment(now.add('hour', values[0])).format("HH:mm:ss"))
         let userData = {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
@@ -217,7 +212,6 @@ class Home extends Component {
             start_time: moment(now.add('hour', values[0])).format("HH:mm:ss"),
             end_time: hours == values[1] ? moment(end).format("HH:mm:ss") : moment(end.subtract('hour', (hours - values[1]))).format("HH:mm:ss")
         }
-        console.log(userData)
         BookingServices.getBookings(userData)
             .then((response) => {
                 if (response.data.success) {
@@ -249,8 +243,6 @@ class Home extends Component {
         var end = moment(`${time} 18:00:00`);
         var duration = moment.duration(end.diff(now));
         var hours = duration.asHours();
-        console.log(hours);
-        let resetSlider = null;
         const { item, index, date, startingHour, loading, listloading } = this.state;
         return (
             <>
@@ -287,7 +279,6 @@ class Home extends Component {
                                                     this.setState({ allslots: response.data.data, listloading: false })
                                                 }
                                             }).catch((err) => {
-                                                console.log('err', err)
                                                 this.setState({ allslots: [], listloading: false })
                                             })
                                     })

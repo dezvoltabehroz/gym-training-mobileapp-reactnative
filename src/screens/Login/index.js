@@ -79,8 +79,6 @@ class Login extends Component {
                     }
                 })
                 .catch((err) => { console.log(err) })
-
-            // await this.props.authActions.userLogin(userData, replace);
         }
         else {
             this.setState({ submit1: true, sendLoading: false })

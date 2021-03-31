@@ -6,6 +6,7 @@ import styles from './style';
 import { Icon } from '../../components'
 import { ProfileServices } from '../../services';
 import { connect } from 'react-redux';
+import themeStyle from '../../assets/styles/theme.style';
 
 class About extends Component {
     constructor(props) {
@@ -45,8 +46,8 @@ class About extends Component {
             <>
                 {
                     this.state.loading ?
-                        <View style={styles.mainView}>
-                            <ActivityIndicator />
+                        <View style={[styles.mainView, { justifyContent: "center", alignItems: "center" }]}>
+                            <ActivityIndicator size={"small"} color={themeStyle} />
                         </View>
                         :
                         <View style={styles.mainView}>

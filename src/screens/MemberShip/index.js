@@ -147,7 +147,6 @@ class MemberShip extends Component {
         var from = moment().format('YYYY-MM-DD')
         var d = new Date(from);
         d.setMonth(d.getMonth() + 1);
-        console.log(d)
         const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, loading, reason, selectedDuration, buttonLoading } = this.state;
         return (
             <>

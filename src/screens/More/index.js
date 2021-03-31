@@ -30,40 +30,7 @@ class More extends Component {
         };
     }
 
-    // ============== func_HandleSubmitVerificationCode - Function Will allow user to verify the code to reset his/her password ==============
-    func_HandleSubmitVerificationCode = () => {
-        if (this.state.submit) {
-            // this.props.navigation.replace(,)
-        }
-        // const { password, userData, phoneAuthSnapshot } = this.props.route.params;
-        // if (password) {
-        //     this.setState({ loading: true })
-        //     let userData = {
-        //         email: this.props.route.params.email,
-        //         resetToken: this.state.value,
-        //     }
-        //     AuthServices.resetpasswordtokencheck(userData)
-        //         .then((response) => {
-        //             if (response.data.success) {
-        //                 this.props.navigation.replace('NewPassword', { token: this.state.value, email: this.props.route.params.email, })
-        //             }
-        //         })
-        //         .catch((error) => {
-        //             console.log(error);
-        //             Alert.alert("", "Invaid Token!");
-        //             this.setState({ loading: false })
-        //         })
-        // }
-        // else {
-        //     let data = {
-        //         ...userData,
-        //         code: phoneAuthSnapshot.code,
-        //         id: phoneAuthSnapshot.verificationId
-        //     }
-        //     console.log('data:', data)
-        //     this.props.authActions.verifyCode(data, this.props.navigation.replace)
-        // }
-    }
+    
 
     // ============== func_HandleResendCode - Function Will allow user to resend code to reset his/her email again ==============
     func_HandleResendCode = () => {
@@ -73,14 +40,10 @@ class More extends Component {
 
     render() {
         const { code, submit } = this.state;
-        // const { email } = this.props.route.params;
         return (
             <View style={{ flex: 1, backgroundColor: themeStyle.COLOR_WHITE }}>
                 <View style={{ flex: 0.95 }}>
                     <View style={{ flex: 0.8, marginTop: '1%', }}>
-                        {/* <View style={styles.innerImageContainer}>
-                                <Logo />
-                            </View> */}
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')} style={styles.cardStyle}>
                             <View style={{ alignItems: "center" }}>
                                 <ProfileIcon height={31} width={31} />
@@ -88,11 +51,7 @@ class More extends Component {
                             <View style={{ width: 15 }}></View>
                             <View style={{ alignItems: "flex-start" }}>
                                 <Text style={styles.headingTextStyle}>Profile</Text>
-                                {/* <Text style={styles.headingTextStyle1}>{email != "" ? email : ""}</Text> */}
                             </View>
-
-
-
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('About')} style={styles.cardStyle}>
                             <View style={{ alignItems: "center" }}>
@@ -101,7 +60,6 @@ class More extends Component {
                             <View style={{ width: 15 }}></View>
                             <View style={{ alignItems: "flex-start" }}>
                                 <Text style={styles.headingTextStyle}>About Us</Text>
-                                {/* <Text style={styles.headingTextStyle1}>{email != "" ? email : ""}</Text> */}
                             </View>
 
                         </TouchableOpacity>
@@ -112,7 +70,6 @@ class More extends Component {
                             <View style={{ width: 15 }}></View>
                             <View style={{ alignItems: "flex-start" }}>
                                 <Text style={styles.headingTextStyle}>Rate App</Text>
-                                {/* <Text style={styles.headingTextStyle1}>{email != "" ? email : ""}</Text> */}
                             </View>
 
                         </TouchableOpacity>

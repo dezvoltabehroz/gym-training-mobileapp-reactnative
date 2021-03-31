@@ -42,42 +42,11 @@ class Profile extends Component {
     componentDidMount = () => {
         setTimeout(() => {
             this.setState({
-                // name: this.props.user.userData.fullName,
-                // phone: this.props.user.userData.phone,
-                // email: this.props.user.userData.email,
-                // city: this.props.user.userData.city,
-                // address: this.props.user.userData.address,
                 loading: false
             })
         }, 3000);
     }
 
-    handleUpdate = async () => {
-        // this.setState({ buttonLoading: true })
-        // const { name, phone, city, address } = this.state;
-        // let userData = {
-        //     id: this.props.user.userData.id,
-        //     fullName: name,
-        //     city: city,
-        //     phone: phone,
-        //     address: address,
-        //     token: this.props.user.userToken,
-        //     phoneVerification: true
-        // }
-        // if (this.props.user.userData.phone != phone) {
-        //     await this.props.authActions.phoneVerificationCode(userData, this.props.navigation.replace);
-        // }
-        // else {
-        //     AuthServices.updateUserProfile(userData)
-        //         .then(async (response) => {
-        //             await this.props.authActions.getUserProfile(userData, null)
-        //             this.setState({ updateContactInfo: false, buttonLoading: false }, () => setTimeout(() => {
-        //                 this.componentDidMount()
-        //             }, 5000))
-        //         })
-        //         .catch((err) => console.log(err))
-        // }
-    }
 
     onSelect = (country) => {
         this.setState({

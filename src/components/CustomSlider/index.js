@@ -48,45 +48,6 @@ export default class CustomSlider extends Component {
         );
     }
 
-    // multiSliderValuesChange = values => {
-    //     console.log("multiSliderValuesChange : ", values)
-    //     console.log("multiSliderValuesChange : ", values[0])
-    //     console.log("multiSliderValuesChange : ", values[1])
-    //     console.log("multiSliderValuesChange4 : ", this.state.value[0][values[0]])
-    //     console.log("multiSliderValuesChange5 : ", this.state.value[0][values[1] - 1])
-    //     if (this.props.single) {
-    //         this.setState({
-    //             second: values[0],
-    //         })
-    //     } else {
-    //         this.setState({
-    //             multiSliderValue: values,
-    //             // first: this.state.value[0][values[0]],
-    //             // second: this.state.value[0][values[1]],
-    //             first: values[0],
-    //             second: values[1],
-    //         })
-    //     }
-    //     //this.props.callback(values)
-    // }
-
-    // renderScale = () => {
-
-    //     const items = [];
-    //     for (let i = this.props.min; i < this.state.value[0].length; i++) {
-    //         items.push(
-    //             <Item
-    //                 value={this.state.value[0][i]}
-    //                 i={i}
-    //                 first={this.state.first}
-    //                 second={this.state.second}
-    //             />
-    //         );
-    //     }
-    //     return items;
-    // }
-
-
     handleResetValues = () => {
         this.setState({
             multiSliderValue: [this.props.min, this.props.max],

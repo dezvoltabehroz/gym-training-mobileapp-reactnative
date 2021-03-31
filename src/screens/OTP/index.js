@@ -40,41 +40,8 @@ class OTP extends Component {
             }
 
         }
-        // const { password, userData, phoneAuthSnapshot } = this.props.route.params;
-        // if (password) {
-        //     this.setState({ loading: true })
-        //     let userData = {
-        //         email: this.props.route.params.email,
-        //         resetToken: this.state.value,
-        //     }
-        //     AuthServices.resetpasswordtokencheck(userData)
-        //         .then((response) => {
-        //             if (response.data.success) {
-        //                 this.props.navigation.replace('NewPassword', { token: this.state.value, email: this.props.route.params.email, })
-        //             }
-        //         })
-        //         .catch((error) => {
-        //             console.log(error);
-        //             Alert.alert("", "Invaid Token!");
-        //             this.setState({ loading: false })
-        //         })
-        // }
-        // else {
-        //     let data = {
-        //         ...userData,
-        //         code: phoneAuthSnapshot.code,
-        //         id: phoneAuthSnapshot.verificationId
-        //     }
-        //     console.log('data:', data)
-        //     this.props.authActions.verifyCode(data, this.props.navigation.replace)
-        // }
     }
 
-    // ============== func_HandleResendCode - Function Will allow user to resend code to reset his/her email again ==============
-    func_HandleResendCode = () => {
-        // const { userData } = this.props.route.params;
-        // this.props.authActions.sendVerificationCode(userData, this.props.navigation.replace)
-    }
 
     render() {
         const { code, submit, buttonLoading } = this.state;

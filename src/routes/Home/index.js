@@ -4,7 +4,6 @@ import { View, StyleSheet, Dimensions, } from 'react-native';
 import { Home, } from '../../screens';
 import Logo from '../../assets/svg/logo.svg';
 import { connect } from 'react-redux';
-import { cartActions } from '../../redux/actions/cart';
 import { bindActionCreators } from "redux";
 import themeStyle from '../../assets/styles/theme.style';
 const screenWidth = Dimensions.get('window').width;
@@ -54,16 +53,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         user: state.authReducer || {},
-        cart: state.cartReducer || {}
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        cartActions: bindActionCreators(cartActions, dispatch)
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomeRoutes);
+export default connect(mapStateToProps)(HomeRoutes);
 
 

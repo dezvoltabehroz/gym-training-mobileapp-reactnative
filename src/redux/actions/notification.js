@@ -18,12 +18,10 @@ const getNotification = (userData) => {
                     dispatch({ type: GET_NOTIFICATIONS, notifications: response.data.addresses, notificationCount:response.data.notificationCount, loading: !loading })
                 }
                 else {
-                    // Alert.alert(response.data.message)
                     dispatch({ type: LOADING_NOTIFICATIONS_SUCCESS, loading: !loading })
                 }
             })
             .catch(error => {
-                console.log(JSON.stringify(error))
                 dispatch({ type: LOADING_NOTIFICATIONS_SUCCESS, loading: !loading })
             })
     };
