@@ -143,6 +143,10 @@ class MemberShip extends Component {
     }
 
     render() {
+        var from = moment().format('YYYY-MM-DD')
+        var d = new Date(from);
+        d.setMonth(d.getMonth() + 1);
+        console.log(d)
         const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, loading, reason, selectedDuration, buttonLoading } = this.state;
         return (
             <>
@@ -281,7 +285,7 @@ class MemberShip extends Component {
                     isVisible={this.state.showDatePicker}
                     mode="date"
                     minimumDate={new Date()}
-                    maximumDate={moment(new Date()).add('month', 1)}
+                    maximumDate={d}
                     onConfirm={this.handleConfirm}
                     onCancel={this.hideDatePicker}
                 />
