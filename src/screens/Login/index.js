@@ -189,7 +189,7 @@ class Login extends Component {
                         </View>
                     </View>
                 </Modal>
-                <Modal isVisible={this.props.user.loading}>
+                <Modal isVisible={this.props.user.loading || sendLoading}>
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                         <ActivityIndicator size={"large"} color={themeStyle.PRIMARY_COLOR} />
                     </View>
