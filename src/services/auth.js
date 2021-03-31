@@ -17,27 +17,6 @@ const Api = {
             password: userData.password
         }, config)
     },
-    googleLogin: function (userData) {
-        return axiosInstance.post('buyer/logingoogle', {
-            idToken: userData.token,
-            client_id: userData.client_id
-        }, config)
-    },
-    userSignUp: function (userData) {
-        return axiosInstance.post('buyer/signup', {
-            fullName: userData.full_name,
-            email: userData.email,
-            password: userData.password,
-            password2: userData.confirmPassword,
-            phone: userData.phone
-        }, config)
-    },
-    addFcmToken: function (userData) {
-        return axiosInstance.post('buyer/addfcmToken', {
-            customer_id: userData.id,
-            fcmToken: userData.fcmToken
-        }, configToken(userData.token))
-    },
     changePasswordOnLogin: function (userData) {
         return axiosInstance.put('registration/changePasswordOnLogin', {
             "id": userData.id,
