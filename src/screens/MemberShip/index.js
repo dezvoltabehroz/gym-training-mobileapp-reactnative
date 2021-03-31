@@ -90,7 +90,8 @@ class MemberShip extends Component {
                         loading: false
                     })
                 }
-            })
+            }).catch((err) => console.log(err))
+
     }
 
     hideDatePicker = () => {

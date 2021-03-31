@@ -103,6 +103,7 @@ class PauseHistory extends Component {
                     })
                 }
             })
+            .catch((err) => console.log(err))
     }
 
     hideDatePicker = () => {
@@ -143,7 +144,7 @@ class PauseHistory extends Component {
                         <Text style={styles.userDetailTextStyle}>{"Pause Duration:"}</Text>
                     </View>
                     <View>
-                        <Text style={styles.userDetailTextStyle}>{item.days}</Text>
+                        <Text style={styles.userDetailTextStyle}>{Math.floor(item.days / 7)} Week</Text>
                     </View>
                 </View>
                 <View style={styles.memberShipContentRowStyle}>
