@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
 import styles from './style';
 import User from "../../assets/svg/user_image.svg"
 import { Icon } from '../../components';
 import buttonStyle from '../../components/Button/style';
 import { Button, Input } from "react-native-elements";
-import Modal from "react-native-modal";
+// import Modal from "react-native-modal";
 import THEME from '../../assets/styles/theme.style';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -203,10 +203,10 @@ class MemberShip extends Component {
                             <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Pause Membership ' onPress={() => this.setState({ pauseMemberShip: true })} />
                         </View>
                     </View >}
-                <Modal isVisible={this.state.pauseMemberShip}>
+                <Modal visible={this.state.pauseMemberShip}>
                     <View style={{ backgroundColor: "white", borderRadius: 8, marginHorizontal: '2.5%', marginBottom: 2, }}>
                         <View style={{ marginTop: "5%", marginHorizontal: "5%", alignItems: "flex-end" }}>
-                            <Icon.Entypo onPress={() => this.setState({ pauseMemberShip: false })} name="circle-with-cross" size={25} />
+                            <Icon.Entypo onPress={() => this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false })} name="circle-with-cross" size={25} />
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
                             <View style={{ flex: 0.5, }}>
