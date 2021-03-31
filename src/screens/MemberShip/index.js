@@ -281,6 +281,7 @@ class MemberShip extends Component {
                     isVisible={this.state.showDatePicker}
                     mode="date"
                     minimumDate={new Date()}
+                    maximumDate={moment(new Date()).add('month', 1)}
                     onConfirm={this.handleConfirm}
                     onCancel={this.hideDatePicker}
                 />
