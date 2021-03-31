@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, ImageBackground, TouchableOpacity, Dimensions, Text, View, Alert, Platform } from 'react-native';
+import { Image, ImageBackground, TouchableOpacity, Dimensions, Text, View, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, ClearButton, Icon, ColorButton } from '../../components';
 import styles from './style';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -15,6 +15,7 @@ import Email from '../../assets/svg/email_icon.svg';
 import Password from '../../assets/svg/password_icon.svg';
 import themeStyle from '../../assets/styles/theme.style';
 import Modal from 'react-native-modal';
+import { color } from 'react-native-reanimated';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -40,7 +41,7 @@ class Login extends Component {
     func_HandleLogin = async () => {
         const { replace, navigate } = this.props.navigation;
         const { email, password, submit, resetEmail } = this.state;
-
+        this.setState({ submit: true })
 
         if (this.isEmailValid(email) && submit && email && password) {
             let userData = {
@@ -182,10 +183,15 @@ class Login extends Component {
                             <View style={{ flexDirection: "row", }}>
                                 <ClearButton title='Cancel ' onPress={() => { this.setState({ resetModal: false, submit: false, resetEmail: "" }) }} />
                                 <View style={{ width: 15 }}></View>
-                                <ColorButton loading={sendLoading} title='Send ' onPress={() => this.setState({ submit1: true, sendLoading: true }, () => this.func_HandleResetPassword())} />
+                                <ColorButton title='Send ' onPress={() => this.setState({ submit1: true, sendLoading: true }, () => this.func_HandleResetPassword())} />
                             </View>
 
                         </View>
+                    </View>
+                </Modal>
+                <Modal isVisible={this.props.user.loading}>
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                        <ActivityIndicator size={"large"} color={themeStyle.PRIMARY_COLOR} />
                     </View>
                 </Modal>
             </>

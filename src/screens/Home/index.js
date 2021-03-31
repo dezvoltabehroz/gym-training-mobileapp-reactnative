@@ -312,6 +312,7 @@ class Home extends Component {
                                 <CustomSlider
                                     min={1}
                                     max={hours}
+                                    // resetValue={(reset,Va)}
                                     LRpadding={40}
                                     callback={this.multiSliderValueCallback}
                                     single={false}
