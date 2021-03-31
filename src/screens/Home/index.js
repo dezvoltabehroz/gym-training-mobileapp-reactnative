@@ -265,7 +265,7 @@ class Home extends Component {
                                 ref={(ref) => (this.ref = ref)}
                                 // calendarAnimation={{ type: 'sequence', duration: 30 }}
                                 daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: themeStyle.PRIMARY_BACKGROUND_COLOR }}
-                                style={{ height: 100, paddingBottom: 10 }}
+                                style={{ height: 150 }}
                                 calendarHeaderStyle={{ color: 'black' }}
                                 calendarColor={'#fffff'}
                                 headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (9:00am - 6:00pm)`}
