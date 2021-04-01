@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import { Image, Dimensions, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Input, ColorButton, Icon } from '../../components';
 import styles from './style';
-import CodeInput from 'react-native-confirmation-code-input';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
-import { AuthServices } from '../../services';
-import Logo from '../../assets/svg/logo.svg';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { authActions } from '../../redux/actions/auth';
