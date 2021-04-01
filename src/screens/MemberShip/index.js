@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
+import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import styles from './style';
 import User from "../../assets/svg/user_image.svg"
 import { Icon } from '../../components';
 import buttonStyle from '../../components/Button/style';
 import { Button, Input } from "react-native-elements";
-// import Modal from "react-native-modal";
+import Modal from "react-native-modal";
 import THEME from '../../assets/styles/theme.style';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -235,7 +235,7 @@ class MemberShip extends Component {
                                             </View>
                                         </View>
                                         <View style={{ alignItems: 'flex-end', marginTop: '5%', marginHorizontal: "5%", paddingBottom: '5%' }}>
-                                            <Button loading={buttonLoading} disabled={reason && selectedDuration.value && date ? false : true} titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Request Pause ' onPress={() => this.handleRequestPause()} />
+                                            <Button disabled={reason && selectedDuration.value && date ? false : true} titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Request Pause ' onPress={() => this.handleRequestPause()} />
                                         </View>
                                     </View>
                                     :
@@ -417,6 +417,11 @@ class MemberShip extends Component {
                         </View>
                     </View>
                 </Modal> */}
+                <Modal isVisible={buttonLoading}>
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                        <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
+                    </View>
+                </Modal>
                 <DateTimePickerModal
                     isVisible={this.state.showDatePicker}
                     mode="date"
