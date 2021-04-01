@@ -163,8 +163,8 @@ class MemberShip extends Component {
                                         <View style={{ marginTop: "5%", marginHorizontal: "5%", alignItems: "flex-end" }}>
                                             <Icon.Entypo onPress={() => this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false })} name="circle-with-cross" size={25} />
                                         </View>
-                                        <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
-                                            <View style={{ flex: 0.5, }}>
+                                        <View style={{ flexDirection: "row", marginBottom: this.state.dropdownOpen ? "35%" : 0, justifyContent: "space-between", marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
+                                            <View style={{ flex: 0.5 }}>
                                                 <Text style={styles.userTextStyle}>Start Date</Text>
                                                 <TouchableOpacity style={styles.dateContainer} onPress={() => this.setState({ showDatePicker: true })}>
                                                     <Text style={styles.dateTextStyle} >{moment(date).format("MMM DD,YYYY")}</Text>
@@ -174,7 +174,7 @@ class MemberShip extends Component {
                                             <View style={{ width: 15 }}></View>
                                             <View style={{ flex: 0.5, }}>
                                                 <Text style={styles.userTextStyle}>Time Duration</Text>
-                                                <View>
+                                                <View style={{ flexWrap: "wrap" }}>
                                                     <DropDownPicker
                                                         items={[
                                                             {
@@ -202,7 +202,7 @@ class MemberShip extends Component {
                                                         placeholder="Select week"
                                                         onClose={() => this.setState({ dropdownOpen: false })}
                                                         onOpen={() => this.setState({ dropdownOpen: true })}
-                                                        containerStyle={{ height: 40, width: 140, marginBottom: this.state.dropdownOpen ? '50%' : 0 }}
+                                                        containerStyle={{ height: 40, width: 140, }}
                                                         globalTextStyle={{ color: "#000000", fontSize: 12, fontFamily: "Montserrat-Medium" }}
                                                         defaultValue={this.state.selectedDuration ? this.state.selectedDuration.label : ""}
                                                         // containerStyle={{ height: 40 }}
