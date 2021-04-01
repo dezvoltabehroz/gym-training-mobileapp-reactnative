@@ -161,7 +161,7 @@ class MemberShip extends Component {
                                 this.state.pauseMemberShip ?
                                     <View style={{ backgroundColor: "white", borderRadius: 8, marginTop: "10%", marginHorizontal: '2.5%', marginBottom: 2, }}>
                                         <View style={{ marginTop: "5%", marginHorizontal: "5%", alignItems: "flex-end" }}>
-                                            <Icon.Entypo onPress={() => this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false })} name="circle-with-cross" size={25} />
+                                            <Icon.Entypo onPress={() => this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false, dropdownOpen: false })} name="circle-with-cross" size={25} />
                                         </View>
                                         <View style={{ flexDirection: "row", marginBottom: this.state.dropdownOpen ? "35%" : 0, justifyContent: "space-between", marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
                                             <View style={{ flex: 0.5 }}>
