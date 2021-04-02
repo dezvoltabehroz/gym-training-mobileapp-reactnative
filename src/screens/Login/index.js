@@ -158,36 +158,46 @@ class Login extends Component {
                     </View>
                 </View>
                 <Modal isVisible={this.state.resetModal}>
-                    <View style={{ padding: "5%", backgroundColor: "white", borderRadius: 8, marginHorizontal: '2.5%' }}>
-                        <View style={{ marginLeft: "5%", marginTop: '5%' }}>
-                            <Text style={{ fontSize: 16, fontFamily: 'Montserrat-Bold', fontWeight: "normal" }} >Reset Password</Text>
-                        </View>
-                        <View style={{ marginHorizontal: '2.5%', marginTop: '3.5%' }}>
-                            <Input
-                                // label={"Email"}
-                                placeholder="Enter email to get reset code"
-                                value={resetEmail}
-                                leftIcon={<Email height={12} width={12} />}
-                                onChangeText={(resetEmail) => this.setState({ resetEmail })}
-                            />
-                            {
-                                submit1 && !resetEmail ? <Text style={[styles.errorText]}>Please fill this field</Text> : null
-                            }
-                            {
-                                submit1 && resetEmail.length && !this.isEmailValid(resetEmail) ? <Text style={[styles.errorText]}>Email is invalid</Text> : null
-                            }
-                        </View>
-                        <View style={{ alignItems: 'flex-end', margin: '5%', }}>
-                            <View style={{ flexDirection: "row", }}>
-                                <ClearButton title='Cancel ' onPress={() => { this.setState({ resetModal: false, submit: false, resetEmail: "" }) }} />
-                                <View style={{ width: 15 }}></View>
-                                <ColorButton title='Send ' onPress={() => this.setState({ submit1: true, sendLoading: true }, () => this.func_HandleResetPassword())} />
-                            </View>
 
-                        </View>
+                    <View style={{ padding: "5%", backgroundColor: "white", borderRadius: 8, marginHorizontal: '2.5%' }}>
+                        {
+                            sendLoading ?
+                                <View style={{ padding: "30%", justifyContent: "center", alignItems: "center" }}>
+                                    <ActivityIndicator size={"large"} color={themeStyle.PRIMARY_COLOR} />
+                                </View>
+                                :
+                                <>
+                                    <View style={{ marginLeft: "5%", marginTop: '5%' }}>
+                                        <Text style={{ fontSize: 16, fontFamily: 'Montserrat-Bold', fontWeight: "normal" }} >Reset Password</Text>
+                                    </View>
+                                    <View style={{ marginHorizontal: '2.5%', marginTop: '3.5%' }}>
+                                        <Input
+                                            // label={"Email"}
+                                            placeholder="Enter email to get reset code"
+                                            value={resetEmail}
+                                            leftIcon={<Email height={12} width={12} />}
+                                            onChangeText={(resetEmail) => this.setState({ resetEmail })}
+                                        />
+                                        {
+                                            submit1 && !resetEmail ? <Text style={[styles.errorText]}>Please fill this field</Text> : null
+                                        }
+                                        {
+                                            submit1 && resetEmail.length && !this.isEmailValid(resetEmail) ? <Text style={[styles.errorText]}>Email is invalid</Text> : null
+                                        }
+                                    </View>
+                                    <View style={{ alignItems: 'flex-end', margin: '5%', }}>
+                                        <View style={{ flexDirection: "row", }}>
+                                            <ClearButton title='Cancel ' onPress={() => { this.setState({ resetModal: false, submit: false, resetEmail: "" }) }} />
+                                            <View style={{ width: 15 }}></View>
+                                            <ColorButton title='Send ' onPress={() => this.setState({ submit1: true, sendLoading: true }, () => this.func_HandleResetPassword())} />
+                                        </View>
+
+                                    </View>
+                                </>
+                        }
                     </View>
                 </Modal>
-                <Modal isVisible={this.props.user.loading || sendLoading}>
+                <Modal isVisible={this.props.user.loading}>
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                         <ActivityIndicator size={"large"} color={themeStyle.PRIMARY_COLOR} />
                     </View>
