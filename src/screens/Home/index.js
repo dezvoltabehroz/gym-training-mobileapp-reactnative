@@ -68,7 +68,10 @@ class Home extends Component {
                     })
                     this.setState({ allslots: response.data.data, availableSolts: arr, loading: false })
                 }
-            }).catch((err) => console.log(err))
+                else {
+                    this.setState({ allslots: [], availableSolts: [], loading: false })
+                }
+            }).catch((err) => { this.setState({ allslots: [], availableSolts: [], loading: false }); console.log(err) })
 
 
     }

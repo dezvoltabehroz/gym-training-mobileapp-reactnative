@@ -101,9 +101,19 @@ class PauseHistory extends Component {
                         pauseHistory: response.data.data,
                         loading: false
                     })
+                } else {
+                    this.setState({
+                        pauseHistory: [],
+                        loading: false
+                    })
                 }
             })
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                this.setState({
+                    pauseHistory: [],
+                    loading: false
+                }); console.log(err)
+            })
     }
 
     hideDatePicker = () => {
