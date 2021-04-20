@@ -44,7 +44,8 @@ class Home extends Component {
             startingHour: 1,
             loading: true,
             bookingLoading: false,
-            listloading: false
+            listloading: false,
+            booked: false
         }
     }
 
@@ -62,7 +63,10 @@ class Home extends Component {
                     let arr = []
                     let array = [...response.data.data]
                     array.forEach(item => {
-                        if (item.booked_slots != 4 && item.isBreak == false) {
+                        if (item.is_booked == '1') {
+                            this.setState({ booked: true });
+                        }
+                        if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1 && item.is_booked != 1) {
                             arr.push(item)
                         }
                     })
@@ -84,7 +88,7 @@ class Home extends Component {
     }
 
     handleBookSlot = (item) => {
-        this.setState({ bookingLoading: true })
+        this.setState({ bookingLoading: true, booked: false, })
         let userData = {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
@@ -101,7 +105,10 @@ class Home extends Component {
                                 let arr = []
                                 let array = [...response.data.data]
                                 array.forEach(item => {
-                                    if (item.booked_slots != 4 && item.isBreak == false) {
+                                    if (item.is_booked == '1') {
+                                        this.setState({ booked: true });
+                                    }
+                                    if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1) {
                                         arr.push(item)
                                     }
                                 })
@@ -114,7 +121,7 @@ class Home extends Component {
     }
 
     handleUnbookSlot = () => {
-        this.setState({ bookingLoading: true })
+        this.setState({ bookingLoading: true, booked: false, })
         var { item } = this.state
         let userData = {
             id: this.props.user.userData.id,
@@ -132,7 +139,10 @@ class Home extends Component {
                                 let arr = []
                                 let array = [...response.data.data]
                                 array.forEach(item => {
-                                    if (item.booked_slots != 4 && item.isBreak == false) {
+                                    if (item.is_booked == '1') {
+                                        this.setState({ booked: true });
+                                    }
+                                    if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1) {
                                         arr.push(item)
                                     }
                                 })
@@ -147,6 +157,7 @@ class Home extends Component {
     }
 
     _renderItems = (item, index) => {
+        const { booked } = this.state;
         const time = moment().format("YYYY-MM-DD")
         return (
             <>
@@ -178,7 +189,7 @@ class Home extends Component {
                                             </View>
                                             :
                                             item.is_booked == "0" ?
-                                                <TouchableOpacity onPress={() => this.handleBookSlot(item)} style={styles.buttonContainer}>
+                                                <TouchableOpacity disabled={booked} onPress={() => this.handleBookSlot(item)} style={styles.buttonContainer}>
                                                     <Text style={styles.darkTextStyle}>Book Slot</Text>
                                                 </TouchableOpacity>
                                                 : item.is_unavailable == "1" ?
@@ -221,20 +232,57 @@ class Home extends Component {
                     let arr = []
                     let array = [...response.data.data]
                     array.forEach(item => {
-                        if (item.booked_slots != 4 && item.isBreak == false) {
+                        if (item.is_booked == '1') {
+                            this.setState({ booked: true });
+                        }
+                        if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1) {
                             arr.push(item)
                         }
                     })
-                    this.setState({ allslots: response.data.data, availableSolts: arr, listloading: false })
+                    this.setState({ listloading: false, allslots: response.data.data, availableSolts: arr, })
                 }
             }).catch((err) => console.log(err))
         this.setState({ multiSliderValues: values })
     }
 
+    handleDateSelectBooking = (date) => {
+        console.log(moment(date).format("YYYY-MM-DD"));
+
+        this.setState({ listloading: true, booked: false, date, multiSliderValues: [] }, () => {
+            this.resetSlider();
+            let userData = {
+                id: this.props.user.userData.id,
+                token: this.props.user.userData.token,
+                date: moment(date).format("YYYY-MM-DD"),
+                start_time: "",
+                end_time: ""
+            }
+            BookingServices.getBookings(userData)
+                .then((response) => {
+                    if (response.data.success) {
+                        let arr = [];
+                        let array = [...response.data.data]
+                        array.forEach(item => {
+                            if (item.is_booked == '1') {
+                                this.setState({ booked: true });
+                            }
+                            if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1) {
+                                arr.push(item)
+                            }
+                        })
+                        this.setState({ allslots: response.data.data, availableSolts: arr, listloading: false })
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                    this.setState({ allslots: [], listloading: false })
+                })
+        })
+    }
+
     render() {
         let datesWhitelist = [{
             start: moment(),
-            end: moment().add(3, 'months')  // total 4 days enabled
+            end: moment().add(7, 'day')  // total 4 days enabled
         }];
         var d = new Date();
         var dated = d.getDate();
@@ -259,7 +307,7 @@ class Home extends Component {
                             <CalendarStrip
                                 scrollable
                                 ref={(ref) => (this.ref = ref)}
-                                // calendarAnimation={{ type: 'sequence', duration: 30 }}
+                                calendarAnimation={{ type: 'sequence', duration: 30 }}
                                 daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: themeStyle.PRIMARY_BACKGROUND_COLOR }}
                                 style={{ height: 150 }}
                                 calendarHeaderStyle={{ color: 'black' }}
@@ -267,25 +315,10 @@ class Home extends Component {
                                 headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (9:00am - 6:00pm)`}
                                 selectedDate={date}
                                 onDateSelected={(date) => {
-                                    this.setState({ listloading: true, date, multiSliderValues: [] }, () => {
-                                        this.resetSlider();
-                                        let userData = {
-                                            id: this.props.user.userData.id,
-                                            token: this.props.user.userData.token,
-                                            date: moment(date).format("YYYY-MM-DD"),
-                                            start_time: "",
-                                            end_time: ""
-                                        }
-                                        BookingServices.getBookings(userData)
-                                            .then((response) => {
-                                                if (response.data.success) {
-                                                    this.setState({ allslots: response.data.data, listloading: false })
-                                                }
-                                            }).catch((err) => {
-                                                this.setState({ allslots: [], listloading: false })
-                                            })
-                                    })
+                                    this.handleDateSelectBooking(date)
                                 }}
+                                useIsoWeekday={false}
+                                minDate={moment(date).subtract(3, 'day')}
                                 dateNumberStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
                                 dateNameStyle={{ color: 'black', fontFamily: "Montserrat-Medium" }}
                                 highlightDateNumberStyle={{ color: 'white' }}
@@ -381,12 +414,17 @@ class Home extends Component {
                                             <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
                                         </View>
                                         :
-                                        <FlatList
-                                            data={this.state.availableSolts}
-                                            showsVerticalScrollIndicator={false}
-                                            ItemSeparatorComponent={this._renderSeparator}
-                                            renderItem={({ item, index }) => this._renderItems(item, index)}
-                                            keyExtractor={item => item} /> :
+                                        listloading ?
+                                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                                <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
+                                            </View>
+                                            :
+                                            <FlatList
+                                                data={this.state.availableSolts}
+                                                showsVerticalScrollIndicator={false}
+                                                ItemSeparatorComponent={this._renderSeparator}
+                                                renderItem={({ item, index }) => this._renderItems(item, index)}
+                                                keyExtractor={item => item} /> :
                                     null}
                             </View>
                         </ScrollView>

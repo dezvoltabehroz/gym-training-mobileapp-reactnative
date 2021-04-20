@@ -130,7 +130,7 @@ class Profile extends Component {
                             </View>
                             <View style={{}}>
                                 <Input label="Name"
-                                    value={name}
+                                    value={this.props.user.userData.full_name}
                                     disabled={true}
                                     leftIcon={<User height={12} width={12} />}
                                     onChangeText={(name) => this.setState({ name })}
@@ -138,7 +138,7 @@ class Profile extends Component {
                             </View>
                             <View style={{}}>
                                 <Input label="Phone Number"
-                                    value={phone}
+                                    value={this.props.user.userData.phone}
                                     disabled={true}
                                     leftIcon={<Phone height={12} width={12} />}
                                     onChangeText={(phone) => this.setState({ phone })}
