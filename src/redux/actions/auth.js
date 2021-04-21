@@ -13,10 +13,6 @@ import {
 import { AuthServices, RegisterUser } from '../../services';
 import { Alert, Linking, Platform } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-// import auth from '@react-native-firebase/auth';
-// import messaging from '@react-native-firebase/messaging';
-import io from 'socket.io-client';
-const socket = io.connect('http://ec2-18-204-20-183.compute-1.amazonaws.com:3000'); //dev
 
 const setUserProfile = (userData, navigate) => {
     return async (dispatch) => {
