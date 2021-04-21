@@ -41,10 +41,11 @@ class EditInfo extends Component {
                 token: this.props.user.userData.token
             }
             ProfileServices.changeProfileDetail(userData)
-                .then((response) => {
+                .then(async (response) => {
                     if (response.data.success) {
-                        this.props.authActions.getUserProfile(userData)
-                        Alert.alert(response.data.message)
+                        await this.props.authActions.getUserProfile(userData)
+                        Alert.alert("", response.data.message,
+                            [{ text: "OK", onPress: () => this.props.navigation.pop() }])
                         this.setState({ buttonLoading: false })
                     }
                 })

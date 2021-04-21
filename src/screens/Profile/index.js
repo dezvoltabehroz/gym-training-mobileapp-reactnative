@@ -10,8 +10,6 @@ import { bindActionCreators } from "redux";
 import { authActions } from '../../redux/actions/auth';
 import { ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-import PhoneInput from 'react-native-phone-input';
-import CountryPicker, { FlagButton } from 'react-native-country-picker-modal';
 import buttonStyle from '../../components/Button/style';
 import User from '../../assets/svg/user_icon.svg'
 import Email from '../../assets/svg/email_icon.svg'
@@ -60,24 +58,6 @@ class Profile extends Component {
         this.phoneRef.selectCountry(country.cca2);
         this.setState({ phone: "+" + country.callingCode, countryCode: country.cca2 })
 
-    }
-
-    _flagButton = () => {
-        return (
-            <TouchableOpacity activeOpacity={0.9} onPress={() => this.setState({ isVisible: !this.state.isVisible })} >
-                <View style={{}}>
-                    <FlagButton
-                        onOpen={() => this.setState({ isVisible: !this.state.isVisible })}
-                        onClose={() => this.setState({ isVisible: !this.state.isVisible })}
-                        placeholder={""}
-                        withEmoji={false}
-                        withFlagButton={false}
-                        countryCode={this.state.countryCode}
-                        containerButtonStyle={{ height: 0 }}
-                    />
-                </View>
-            </TouchableOpacity>
-        )
     }
 
     disabled = () => {
@@ -130,7 +110,7 @@ class Profile extends Component {
                             </View>
                             <View style={{}}>
                                 <Input label="Name"
-                                    value={name}
+                                    value={this.props.user.userData.full_name}
                                     disabled={true}
                                     leftIcon={<User height={12} width={12} />}
                                     onChangeText={(name) => this.setState({ name })}
@@ -138,7 +118,7 @@ class Profile extends Component {
                             </View>
                             <View style={{}}>
                                 <Input label="Phone Number"
-                                    value={phone}
+                                    value={this.props.user.userData.phone}
                                     disabled={true}
                                     leftIcon={<Phone height={12} width={12} />}
                                     onChangeText={(phone) => this.setState({ phone })}
