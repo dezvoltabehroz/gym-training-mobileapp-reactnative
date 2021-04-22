@@ -45,7 +45,9 @@ class Home extends Component {
             loading: true,
             bookingLoading: false,
             listloading: false,
-            booked: false
+            booked: false,
+            bookedSlots: [],
+            booked_slots: false
         }
     }
 
@@ -60,17 +62,18 @@ class Home extends Component {
         BookingServices.getBookings(userData)
             .then((response) => {
                 if (response.data.success) {
-                    let arr = []
-                    let array = [...response.data.data]
+                    let array = [...response.data.data.all_slots]
                     array.forEach(item => {
                         if (item.is_booked == '1') {
                             this.setState({ booked: true });
                         }
-                        if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1 && item.is_booked != 1) {
-                            arr.push(item)
-                        }
                     })
-                    this.setState({ allslots: response.data.data, availableSolts: arr, loading: false })
+                    this.setState({
+                        allslots: response.data.data.all_slots,
+                        availableSolts: response.data.data.available_slots,
+                        bookedSlots: response.data.data.full_slots,
+                        loading: false
+                    })
                 }
                 else {
                     this.setState({ allslots: [], availableSolts: [], loading: false })
@@ -102,17 +105,18 @@ class Home extends Component {
                     BookingServices.getBookings(userData)
                         .then((response) => {
                             if (response.data.success) {
-                                let arr = []
-                                let array = [...response.data.data]
+                                let array = [...response.data.data.all_slots]
                                 array.forEach(item => {
                                     if (item.is_booked == '1') {
                                         this.setState({ booked: true });
                                     }
-                                    if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1) {
-                                        arr.push(item)
-                                    }
                                 })
-                                this.setState({ allslots: response.data.data, availableSolts: arr, bookingLoading: false, item: null, index: null })
+                                this.setState({
+                                    allslots: response.data.data.all_slots,
+                                    availableSolts: response.data.data.available_slots,
+                                    bookedSlots: response.data.data.full_slots,
+                                    bookingLoading: false, item: null, index: null
+                                })
                             }
                         }).catch((err) => console.log(err))
                 }
@@ -136,17 +140,18 @@ class Home extends Component {
                     BookingServices.getBookings(userData)
                         .then((response) => {
                             if (response.data.success) {
-                                let arr = []
-                                let array = [...response.data.data]
+                                let array = [...response.data.data.all_slots]
                                 array.forEach(item => {
                                     if (item.is_booked == '1') {
                                         this.setState({ booked: true });
                                     }
-                                    if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1) {
-                                        arr.push(item)
-                                    }
                                 })
-                                this.setState({ allslots: response.data.data, availableSolts: arr, unBookModal: false, bookingLoading: false, item: null, index: null })
+                                this.setState({
+                                    allslots: response.data.data.all_slots,
+                                    availableSolts: response.data.data.available_slots,
+                                    bookedSlots: response.data.data.full_slots,
+                                    bookingLoading: false, item: null, index: null
+                                })
                             }
                         }).catch((err) => console.log(err))
                 }
@@ -229,17 +234,18 @@ class Home extends Component {
         BookingServices.getBookings(userData)
             .then((response) => {
                 if (response.data.success) {
-                    let arr = []
-                    let array = [...response.data.data]
+                    let array = [...response.data.data.all_slots]
                     array.forEach(item => {
                         if (item.is_booked == '1') {
                             this.setState({ booked: true });
                         }
-                        if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1) {
-                            arr.push(item)
-                        }
                     })
-                    this.setState({ listloading: false, allslots: response.data.data, availableSolts: arr, })
+                    this.setState({
+                        allslots: response.data.data.all_slots,
+                        availableSolts: response.data.data.available_slots,
+                        bookedSlots: response.data.data.full_slots,
+                        listloading: false,
+                    })
                 }
             }).catch((err) => console.log(err))
         this.setState({ multiSliderValues: values })
@@ -261,16 +267,18 @@ class Home extends Component {
                 .then((response) => {
                     if (response.data.success) {
                         let arr = [];
-                        let array = [...response.data.data]
+                        let array = [...response.data.data.all_slots]
                         array.forEach(item => {
                             if (item.is_booked == '1') {
                                 this.setState({ booked: true });
                             }
-                            if (item.booked_slots <= 3 && item.isBreak == false && item.is_booked != 1) {
-                                arr.push(item)
-                            }
                         })
-                        this.setState({ allslots: response.data.data, availableSolts: arr, listloading: false })
+                        this.setState({
+                            allslots: response.data.data.all_slots,
+                            availableSolts: response.data.data.available_slots,
+                            bookedSlots: response.data.data.full_slots,
+                            listloading: false
+                        })
                     }
                 }).catch((err) => {
                     console.log(err)
@@ -366,6 +374,11 @@ class Home extends Component {
                                             id: 2,
                                             label: "Available Slots",
                                             value: "Available Slots",
+                                        },
+                                        {
+                                            id: 3,
+                                            label: "Booked Slots",
+                                            value: "Booked Slots",
                                         }
                                     ]}
                                     arrowColor="#d3d3d3"
@@ -381,7 +394,9 @@ class Home extends Component {
                                     }}
                                     dropDownStyle={{ backgroundColor: 'white' }}
                                     onChangeItem={(item) => this.setState({
-                                        selectedSlots: item.value, available: item.id == 2 ? true : false, slots: item.id == 1 ? true : false,
+                                        selectedSlots: item.value, available: item.id == 2 ? true : false,
+                                        booked_slots: item.id == 3 ? true : false,
+                                        slots: item.id == 1 ? true : false,
                                     })}
                                 />
                             </View>
@@ -421,6 +436,24 @@ class Home extends Component {
                                             :
                                             <FlatList
                                                 data={this.state.availableSolts}
+                                                showsVerticalScrollIndicator={false}
+                                                ItemSeparatorComponent={this._renderSeparator}
+                                                renderItem={({ item, index }) => this._renderItems(item, index)}
+                                                keyExtractor={item => item} /> :
+                                    null}
+                                {this.state.booked_slots ?
+                                    this.state.bookedSlots.length == 0 ?
+                                        <View style={{ marginTop: "40%", justifyContent: "center", alignItems: "center" }}>
+                                            <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
+                                        </View>
+                                        :
+                                        listloading ?
+                                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                                <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
+                                            </View>
+                                            :
+                                            <FlatList
+                                                data={this.state.bookedSlots}
                                                 showsVerticalScrollIndicator={false}
                                                 ItemSeparatorComponent={this._renderSeparator}
                                                 renderItem={({ item, index }) => this._renderItems(item, index)}
