@@ -313,7 +313,7 @@ class Home extends Component {
                     <View style={styles.container}>
                         <View style={styles.upperContainer}>
                             <CalendarStrip
-                                scrollable
+                                // scrollable
                                 ref={(ref) => (this.ref = ref)}
                                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                                 daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: themeStyle.PRIMARY_BACKGROUND_COLOR }}
