@@ -385,7 +385,7 @@ class Home extends Component {
                                     placeholder="All slots"
                                     onClose={() => this.setState({ dropdownOpen: false })}
                                     onOpen={() => this.setState({ dropdownOpen: true })}
-                                    containerStyle={{ height: 40, width: 140, marginBottom: this.state.dropdownOpen ? '50%' : 0 }}
+                                    containerStyle={{ height: 40, width: 140, marginBottom: this.state.dropdownOpen ? '70%' : 0 }}
                                     globalTextStyle={{ color: "#000000", fontSize: 12, fontFamily: "Montserrat-Medium" }}
                                     defaultValue={this.state.selectedSlots ? this.state.selectedSlots.label : ""}
                                     style={{ backgroundColor: 'white', marginTop: '5%' }}
