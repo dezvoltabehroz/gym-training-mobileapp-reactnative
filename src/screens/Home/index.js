@@ -178,7 +178,7 @@ class Home extends Component {
                             <View style={styles.contentContainer}>
                                 <View style={styles.contentRowStyle}>
                                     <View>
-                                        <Text style={styles.timeTextStyle}>{moment(`${time} ${item.booking_start_time}`).format("hh:mm a")}</Text>
+                                        <Text style={styles.timeTextStyle}>{moment(`${time} ${item.booking_start_time}`).format("h:mm a")}</Text>
                                         <Text style={styles.timeTextStyle}>GMT+1:00</Text>
                                         <Text style={styles.darkTextStyle}>({moment(`${time} ${item.booking_time_duration}`).format("mm")}mins)</Text>
                                     </View>
