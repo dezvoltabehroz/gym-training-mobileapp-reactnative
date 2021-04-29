@@ -32,11 +32,16 @@ class OTP extends Component {
                         if (res.data.success) {
                             this.props.navigation.replace('NewPassword', { id: res.data.data[0].id, token: res.data.data[0].token })
                             this.setState({ buttonLoading: false })
+                        } else {
+                            Alert.alert(res.data.message)
+                            this.setState({ buttonLoading: false })
                         }
                     })
+                    .catch((err) => console.log(err))
             }
             else {
-
+                alert('Invalid Code')
+                this.setState({ buttonLoading: false })
             }
 
         }
@@ -68,6 +73,7 @@ class OTP extends Component {
                                 {/* <View style={{ marginHorizontal: '2.5%', marginTop: '5%', paddingBottom: "10%", }}> */}
                                 <Input
                                     label={"Code"}
+                                    maxLength={6}
                                     placeholder="Enter your reset code"
                                     value={code}
                                     keyboardType={"number-pad"}

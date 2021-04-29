@@ -77,6 +77,10 @@ class Login extends Component {
                         navigate("OTP", { email: resetEmail, code: res.data.data })
                         this.setState({ resetModal: false, submit1: false, resetEmail: "", sendLoading: false })
                     }
+                    else {
+                        Alert.alert(res.data.message)
+                        this.setState({ submit1: false, sendLoading: false })
+                    }
                 })
                 .catch((err) => { console.log(err) })
         }

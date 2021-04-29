@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import styles from './style';
 import User from "../../assets/svg/user_image.svg"
 import { Icon } from '../../components';
@@ -123,10 +123,10 @@ class MemberShip extends Component {
             token: this.props.user.userData.token,
             start_date: moment(date).format('YYYY-MM-DD'),
             end_date:
-                selectedDuration.value == "1 Week" ? moment(date).add(7, "days").format('YYYY-MM-DD')
-                    : selectedDuration.value == "2  Week" ? moment(date).add(14, "days").format('YYYY-MM-DD')
-                        : selectedDuration.value == "3 Week" ? moment(date).add(21, "days").format('YYYY-MM-DD')
-                            : selectedDuration.value == "4 Week" ? moment(date).add(28, "days").format('YYYY-MM-DD') :
+                selectedDuration.value == "1 Week" ? moment(date).add(6, "days").format('YYYY-MM-DD')
+                    : selectedDuration.value == "2  Week" ? moment(date).add(12, "days").format('YYYY-MM-DD')
+                        : selectedDuration.value == "3 Week" ? moment(date).add(18, "days").format('YYYY-MM-DD')
+                            : selectedDuration.value == "4 Week" ? moment(date).add(24, "days").format('YYYY-MM-DD') :
                                 moment(date).add(7, "days").format('YYYY-MM-DD'),
             reason: reason,
             member_id: memberId
@@ -136,6 +136,10 @@ class MemberShip extends Component {
                 if (res.data.success) {
                     this.componentDidMount();
                     this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false })
+                }else{
+                    this.setState({pauseMemberShip: false, buttonLoading: false});
+                    Alert.alert(res.data.message);
+
                 }
             })
             .catch((err) => {
@@ -224,7 +228,7 @@ class MemberShip extends Component {
                                             <Text style={{ fontSize: 12, fontFamily: 'Montserrat-Medium', fontWeight: "normal", }} >Any specific reason? (Required)</Text>
                                             <View style={{ marginTop: "5%" }}>
                                                 <Input
-                                                    placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+                                                    placeholder="Input text here"
                                                     multiline={true}
                                                     value={reason}
                                                     containerStyle={styles.containerStyle}

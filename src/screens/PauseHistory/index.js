@@ -154,7 +154,7 @@ class PauseHistory extends Component {
                         <Text style={styles.userDetailTextStyle}>{"Pause Duration:"}</Text>
                     </View>
                     <View>
-                        <Text style={styles.userDetailTextStyle}>{Math.floor(item.days / 7)} Week</Text>
+                        <Text style={styles.userDetailTextStyle}>{Math.ceil(item.days / 7)} Week</Text>
                     </View>
                 </View>
                 <View style={styles.memberShipContentRowStyle}>
