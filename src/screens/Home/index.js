@@ -47,11 +47,14 @@ class Home extends Component {
             listloading: false,
             booked: false,
             bookedSlots: [],
-            booked_slots: false
+            booked_slots: false,
+            dayEndTime: "",
+            dayStartTime: ""
         }
     }
 
     componentDidMount = () => {
+        console.log(this.props.user.userData.id,  "   "+this.props.user.userData.token)
         let userData = {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
@@ -62,16 +65,19 @@ class Home extends Component {
         BookingServices.getBookings(userData)
             .then((response) => {
                 if (response.data.success) {
-                    let array = [...response.data.data.all_slots]
+                    let array = [...response.data.data.filterArray.all_slots]
                     array.forEach(item => {
                         if (item.is_booked == '1') {
                             this.setState({ booked: true });
                         }
                     })
                     this.setState({
-                        allslots: response.data.data.all_slots,
-                        availableSolts: response.data.data.available_slots,
-                        bookedSlots: response.data.data.full_slots,
+                        dayStartTime: response.data.data.start_time,
+                        dayEndTime: response.data.data.end_time,
+                        allslots: response.data.data.filterArray.all_slots,
+                        availableSolts: response.data.data.filterArray.available_slots,
+                        bookedSlots: response.data.data.filterArray.full_slots,
+
                         loading: false
                     })
                 }
@@ -105,16 +111,18 @@ class Home extends Component {
                     BookingServices.getBookings(userData)
                         .then((response) => {
                             if (response.data.success) {
-                                let array = [...response.data.data.all_slots]
+                                let array = [...response.data.data.filterArray.all_slots]
                                 array.forEach(item => {
                                     if (item.is_booked == '1') {
                                         this.setState({ booked: true });
                                     }
                                 })
                                 this.setState({
-                                    allslots: response.data.data.all_slots,
-                                    availableSolts: response.data.data.available_slots,
-                                    bookedSlots: response.data.data.full_slots,
+                                    allslots: response.data.data.filterArray.all_slots,
+                                    availableSolts: response.data.data.filterArray.available_slots,
+                                    bookedSlots: response.data.data.filterArray.full_slots,
+                                    dayStartTime: response.data.data.start_time,
+                                    dayEndTime: response.data.data.end_time,
                                     bookingLoading: false, item: null, index: null
                                 })
                             }
@@ -125,7 +133,7 @@ class Home extends Component {
     }
 
     handleUnbookSlot = () => {
-        this.setState({ bookingLoading: true, booked: false, })
+        this.setState({ unBookModal: false, bookingLoading: true, booked: false, })
         var { item } = this.state
         let userData = {
             id: this.props.user.userData.id,
@@ -140,16 +148,18 @@ class Home extends Component {
                     BookingServices.getBookings(userData)
                         .then((response) => {
                             if (response.data.success) {
-                                let array = [...response.data.data.all_slots]
+                                let array = [...response.data.data.filterArray.all_slots]
                                 array.forEach(item => {
                                     if (item.is_booked == '1') {
                                         this.setState({ booked: true });
                                     }
                                 })
                                 this.setState({
-                                    allslots: response.data.data.all_slots,
-                                    availableSolts: response.data.data.available_slots,
-                                    bookedSlots: response.data.data.full_slots,
+                                    allslots: response.data.data.filterArray.all_slots,
+                                    availableSolts: response.data.data.filterArray.available_slots,
+                                    bookedSlots: response.data.data.filterArray.full_slots,
+                                    dayStartTime: response.data.data.start_time,
+                                    dayEndTime: response.data.data.end_time,
                                     bookingLoading: false, item: null, index: null
                                 })
                             }
@@ -218,10 +228,11 @@ class Home extends Component {
 
 
     multiSliderValueCallback = (values) => {
+        console.log(values)
         this.setState({ listloading: true })
         const time = moment().format("YYYY-MM-DD")
-        var now = moment(`${time} 09:00:00`); //todays date
-        var end = moment(`${time} 18:00:00`);
+        var now = moment(`${time} ${this.state.dayStartTime}`); //todays date
+        var end = moment(`${time} ${this.state.dayEndTime}`);
         var duration = moment.duration(end.diff(now));
         var hours = duration.asHours();
         let userData = {
@@ -234,16 +245,18 @@ class Home extends Component {
         BookingServices.getBookings(userData)
             .then((response) => {
                 if (response.data.success) {
-                    let array = [...response.data.data.all_slots]
+                    let array = [...response.data.data.filterArray.all_slots]
                     array.forEach(item => {
                         if (item.is_booked == '1') {
                             this.setState({ booked: true });
                         }
                     })
                     this.setState({
-                        allslots: response.data.data.all_slots,
-                        availableSolts: response.data.data.available_slots,
-                        bookedSlots: response.data.data.full_slots,
+                        allslots: response.data.data.filterArray.all_slots,
+                        availableSolts: response.data.data.filterArray.available_slots,
+                        bookedSlots: response.data.data.filterArray.full_slots,
+                        dayStartTime: response.data.data.start_time,
+                        dayEndTime: response.data.data.end_time,
                         listloading: false,
                     })
                 }
@@ -267,16 +280,18 @@ class Home extends Component {
                 .then((response) => {
                     if (response.data.success) {
                         let arr = [];
-                        let array = [...response.data.data.all_slots]
+                        let array = [...response.data.data.filterArray.all_slots]
                         array.forEach(item => {
                             if (item.is_booked == '1') {
                                 this.setState({ booked: true });
                             }
                         })
                         this.setState({
-                            allslots: response.data.data.all_slots,
-                            availableSolts: response.data.data.available_slots,
-                            bookedSlots: response.data.data.full_slots,
+                            allslots: response.data.data.filterArray.all_slots,
+                            availableSolts: response.data.data.filterArray.available_slots,
+                            bookedSlots: response.data.data.filterArray.full_slots,
+                            dayStartTime: response.data.data.start_time,
+                            dayEndTime: response.data.data.end_time,
                             listloading: false
                         })
                     }
@@ -288,6 +303,7 @@ class Home extends Component {
     }
 
     render() {
+        const { dayStartTime, dayEndTime } = this.state;
         let datesWhitelist = [{
             start: moment(),
             end: moment().add(7, 'day')  // total 4 days enabled
@@ -295,13 +311,16 @@ class Home extends Component {
         var d = new Date();
         var dated = d.getDate();
         var dayd = d.getDay();
-
-        var weekOfMonth = Math.ceil((dated + 6 - dayd) / 7);
         const time = moment().format("YYYY-MM-DD")
-        var now = moment(`${time} 09:00:00`); //todays date
-        var end = moment(`${time} 18:00:00`);
-        var duration = moment.duration(end.diff(now));
-        var hours = duration.asHours();
+        var weekOfMonth = Math.ceil((dated + 6 - dayd) / 7);
+        if (dayStartTime && dayEndTime) {
+
+            var now = moment(`${time} ${dayStartTime}`); //todays date
+            var end = moment(`${time}  ${dayEndTime}`);
+            var duration = moment.duration(end.diff(now));
+            var hours = duration.asHours();
+        }
+
         const { item, index, date, startingHour, loading, listloading } = this.state;
         return (
             <>
@@ -320,7 +339,7 @@ class Home extends Component {
                                 style={{ height: 150 }}
                                 calendarHeaderStyle={{ color: 'black' }}
                                 calendarColor={'#fffff'}
-                                headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (9:00am - 6:00pm)`}
+                                headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (${moment(`${time} ${dayStartTime}`).format('h:mm a')} - ${moment(`${time} ${dayEndTime}`).format('h:mm a')})`}
                                 selectedDate={date}
                                 onDateSelected={(date) => {
                                     this.handleDateSelectBooking(date)
@@ -339,15 +358,15 @@ class Home extends Component {
                             />
                             <View style={styles.headingContainer}>
                                 <View>
-                                    <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>09:00am GTM+01</Text>
+                                    <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${dayStartTime}`).format('hh:mm a')} GTM+01</Text>
                                 </View>
                                 <View>
-                                    <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>6:00pm GTM+01</Text>
+                                    <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${dayEndTime}`).format('hh:mm a')} GTM+01</Text>
                                 </View>
                             </View>
                             <View >
                                 <CustomSlider
-                                    min={1}
+                                    min={0}
                                     max={hours}
                                     resetValue={(reset) => this.resetSlider = reset}
                                     LRpadding={40}
