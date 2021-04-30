@@ -72,7 +72,7 @@ const userLogin = (userData, navigate) => {
                     navigate("Main")
                 }
                 else {
-                    Alert.alert(responseData.data.message)
+                    Alert.alert(responseData.data.msg)
                     dispatch({ type: LOADING_SUCCESS, loading: !loading })
                 }
             })

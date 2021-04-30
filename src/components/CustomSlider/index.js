@@ -73,8 +73,9 @@ export default class CustomSlider extends Component {
     }
 
     renderScale = () => {
+
         const items = [];
-        for (let i = this.props.min; i <= this.props.max + 1; i++) {
+        for (let i = this.props.min; i <= this.props.max; i++) {
             items.push(
                 <Item
                     value={i}
