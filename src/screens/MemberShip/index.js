@@ -124,9 +124,9 @@ class MemberShip extends Component {
             start_date: moment(date).format('YYYY-MM-DD'),
             end_date:
                 selectedDuration.value == "1 Week" ? moment(date).add(6, "days").format('YYYY-MM-DD')
-                    : selectedDuration.value == "2  Week" ? moment(date).add(12, "days").format('YYYY-MM-DD')
-                        : selectedDuration.value == "3 Week" ? moment(date).add(18, "days").format('YYYY-MM-DD')
-                            : selectedDuration.value == "4 Week" ? moment(date).add(24, "days").format('YYYY-MM-DD') :
+                    : selectedDuration.value == "2 Week" ? moment(date).add(13, "days").format('YYYY-MM-DD')
+                        : selectedDuration.value == "3 Week" ? moment(date).add(20, "days").format('YYYY-MM-DD')
+                            : selectedDuration.value == "4 Week" ? moment(date).add(27, "days").format('YYYY-MM-DD') :
                                 moment(date).add(7, "days").format('YYYY-MM-DD'),
             reason: reason,
             member_id: memberId
