@@ -296,7 +296,7 @@ class PauseMemberShip extends Component {
                                     <Input
                                         placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
                                         multiline={true}
-                                        value={reason}
+                                        value={item.reason}
                                         editable={false}
                                         containerStyle={styles.containerStyle}
                                         placeholderTextColor={'#77777B'}
