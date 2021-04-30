@@ -72,14 +72,16 @@ const userLogin = (userData, navigate) => {
                     navigate("Main")
                 }
                 else {
-                    Alert.alert(responseData.data.msg)
                     dispatch({ type: LOADING_SUCCESS, loading: !loading })
+                    console.log(responseData.data.message)
+                    Alert.alert(responseData.data.message)
                 }
             })
             .catch(err => {
+                dispatch({ type: LOADING_SUCCESS, loading: !loading })
+
                 console.log(err)
                 Alert.alert("Email or Password is incorrect")
-                dispatch({ type: LOADING_SUCCESS, loading: !loading })
             })
     }
 };

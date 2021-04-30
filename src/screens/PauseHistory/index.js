@@ -139,6 +139,7 @@ class PauseHistory extends Component {
     }
 
     _renderItems = (item) => {
+        console.log(item)
         return (
             <View style={styles.memberShipContainer}>
                 <View style={styles.memberShipContentRowStyle}>
