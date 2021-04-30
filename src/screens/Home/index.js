@@ -74,8 +74,8 @@ class Home extends Component {
                         dayStartTime: response.data.data.start_time,
                         dayEndTime: response.data.data.end_time,
                         allslots: response.data.data.filterArray.all_slots,
-                        availableSolts: response.data.data.available_slots,
-                        bookedSlots: response.data.data.full_slots,
+                        availableSolts: response.data.data.filterArray.available_slots,
+                        bookedSlots: response.data.data.filterArray.full_slots,
                         loading: false
                     })
                 }
@@ -117,8 +117,8 @@ class Home extends Component {
                                 })
                                 this.setState({
                                     allslots: response.data.data.filterArray.all_slots,
-                                    availableSolts: response.data.data.available_slots,
-                                    bookedSlots: response.data.data.full_slots,
+                                    availableSolts: response.data.data.filterArray.available_slots,
+                                    bookedSlots: response.data.data.filterArray.full_slots,
                                     bookingLoading: false, item: null, index: null
                                 })
                             }
@@ -152,8 +152,8 @@ class Home extends Component {
                                 })
                                 this.setState({
                                     allslots: response.data.data.filterArray.all_slots,
-                                    availableSolts: response.data.data.available_slots,
-                                    bookedSlots: response.data.data.full_slots,
+                                    availableSolts: response.data.data.filterArray.available_slots,
+                                    bookedSlots: response.data.data.filterArray.full_slots,
                                     bookingLoading: false, item: null, index: null
                                 })
                             }
@@ -246,8 +246,8 @@ class Home extends Component {
                     })
                     this.setState({
                         allslots: response.data.data.filterArray.all_slots,
-                        availableSolts: response.data.data.available_slots,
-                        bookedSlots: response.data.data.full_slots,
+                        availableSolts: response.data.data.filterArray.available_slots,
+                        bookedSlots: response.data.data.filterArray.full_slots,
                         listloading: false,
                     })
                 }
@@ -281,8 +281,8 @@ class Home extends Component {
                             dayStartTime: response.data.data.start_time,
                             dayEndTime: response.data.data.end_time,
                             allslots: response.data.data.filterArray.all_slots,
-                            availableSolts: response.data.data.available_slots,
-                            bookedSlots: response.data.data.full_slots,
+                            availableSolts: response.data.data.filterArray.available_slots,
+                            bookedSlots: response.data.data.filterArray.full_slots,
                             listloading: false
                         })
                     }
