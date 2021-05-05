@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Dimensions, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Dimensions, Platform, ScrollView, Text, TouchableOpacity, View, Linking } from 'react-native';
 import styles from './style';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
@@ -25,7 +25,7 @@ class More extends Component {
         };
     }
 
-    
+
 
     // ============== func_HandleResendCode - Function Will allow user to resend code to reset his/her email again ==============
     func_HandleResendCode = () => {
@@ -58,7 +58,10 @@ class More extends Component {
                             </View>
 
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { }} style={styles.cardStyle}>
+                        <TouchableOpacity onPress={() => {
+                            let url = "https://play.google.com/store/apps/details?id=com.infinitybits.educogym"
+                            Linking.openURL(url)
+                        }} style={styles.cardStyle}>
                             <View style={{ alignItems: "center" }}>
                                 <Star height={31} width={31} />
                             </View>
