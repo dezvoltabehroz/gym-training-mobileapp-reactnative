@@ -64,8 +64,8 @@ class Bookings extends Component {
                             <Text style={styles.darkTextStyle}>({moment.duration(`${item.booking_time_duration}`).asMinutes()}mins)</Text>
                         </View>
                         <View style={styles.bookingContainer}>
-                            <Text style={[styles.textStyle, { textAlign: "center" }]}>{"No. of booking\non this slot"}</Text>
-                            <Text style={styles.textStyle} >{item.booked_slots} / 4</Text>
+                            <Text style={[styles.textStyle, { textAlign: "center" }]}>{"No. of bookings\non this slot"}</Text>
+                            <Text style={styles.textStyle} >{item.booked_slots} / 5</Text>
                         </View>
                         <TouchableOpacity onPress={() => this.setState({ unBookModal: true, item: item })} style={styles.buttonContainer}>
                             <Text style={styles.darkTextStyle}>Unbook</Text>

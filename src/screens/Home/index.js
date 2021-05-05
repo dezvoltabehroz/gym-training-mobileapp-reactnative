@@ -187,8 +187,8 @@ class Home extends Component {
                                         <Text style={styles.darkTextStyle}>({moment(`${time} ${item.booking_time_duration}`).format("mm")}mins)</Text>
                                     </View>
                                     <View style={styles.bookingContainer}>
-                                        <Text style={[styles.textStyle, { textAlign: "center" }]}>{"No. of booking\non this slot"}</Text>
-                                        <Text style={styles.textStyle} >{item.booked_slots} / 4</Text>
+                                        <Text style={[styles.textStyle, { textAlign: "center" }]}>{"No. of bookings\non this slot"}</Text>
+                                        <Text style={styles.textStyle} >{item.booked_slots} / 5</Text>
                                     </View>
                                     {
                                         item.is_blocked == "1" ?

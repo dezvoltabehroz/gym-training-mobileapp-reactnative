@@ -276,14 +276,14 @@ class MemberShip extends Component {
                                         </View>
                                         <View style={styles.pausedAvailedContainer}>
                                             <View style={styles.memberShipContentRowStyle}>
-                                                <Text style={styles.userDetailTextStyle}>Paused Availed</Text>
+                                                <Text style={styles.userDetailTextStyle}>Pauses Availed</Text>
                                                 <Text style={styles.userDetailTextStyle}>{pauseAvailed}</Text>
                                             </View>
 
                                         </View>
                                         <View style={styles.pausedHistoryContainer}>
                                             <TouchableOpacity onPress={() => this.props.navigation.navigate("PauseHistory", { memberId })} style={styles.memberShipContentRowStyle}>
-                                                <Text style={styles.userDetailTextStyle}>Paused History</Text>
+                                                <Text style={styles.userDetailTextStyle}>Pause History</Text>
                                                 <Icon.Entypo name={"chevron-right"} size={20} />
                                             </TouchableOpacity>
                                         </View>
