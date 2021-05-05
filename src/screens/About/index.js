@@ -1,7 +1,7 @@
 
 
 import React, { Component } from 'react';
-import { Text, View, ScrollView, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
 import styles from './style';
 import { Icon } from '../../components'
 import { ProfileServices } from '../../services';
@@ -18,6 +18,8 @@ class About extends Component {
             developed_by: "",
             content: null,
             loading: true,
+            facebookUrl: '',
+            instaUrl: '',
         }
     }
 
@@ -25,11 +27,14 @@ class About extends Component {
         this.setState({ loading: true })
         ProfileServices.getAboutUs(this.props.user.userData.token)
             .then(res => {
+                console.log(res.data)
                 this.setState({
                     website: res.data.data.website,
                     city: res.data.data.city_country,
                     contents: res.data.data.content,
                     email: res.data.data.email,
+                    facebookUrl: res.data.data.facebook,
+                    instaUrl: res.data.data.instagram,
                     developed_by: res.data.data.developed_by,
                     phone: res.data.data.phone,
                     loading: false
@@ -41,7 +46,7 @@ class About extends Component {
     }
 
     render() {
-
+        const { facebookUrl, instaUrl } = this.state;
         return (
             <>
                 {
@@ -73,21 +78,42 @@ class About extends Component {
                                             <Icon.FontAwesome name="phone" color="#5F6365" size={20} />
                                             <Text style={styles.aboutcontentStyle}> {this.state.phone}</Text>
                                         </View>
-                                        <View style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginTop: '2.5%' }}>
+                                        <TouchableOpacity onPress={() => {
+                                            let url = 'fb://page/1797845333842406';
+                                            Linking.openURL(url).then((data) => {
+                                            }).catch(() => {
+                                                Linking.openURL(facebookUrl)
+                                            });
+                                        }} style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginTop: '2.5%' }}>
                                             <Icon.FontAwesome name="facebook-square" color="#5F6365" size={20} />
                                             <View style={{ width: 5 }}></View>
                                             <Text style={styles.aboutcontentStyle}> {'Facebook'}</Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginTop: '2.5%' }}>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {
+                                            let msg = '';
+                                            let phoneWithCountryCode = this.state.phone.split("+");
+                                            let mobile = Platform.OS == 'ios' ? phoneWithCountryCode : this.state.phone;
+                                            let url = 'whatsapp://send?text=' + msg + '&phone=' + mobile;
+                                            Linking.openURL(url).then((data) => {
+                                            }).catch(() => {
+                                                alert('Make sure WhatsApp installed on your device');
+                                            });
+                                        }} style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginTop: '2.5%' }}>
                                             <Icon.FontAwesome name="whatsapp" color="#5F6365" size={20} />
                                             <View style={{ width: 5 }}></View>
                                             <Text style={styles.aboutcontentStyle}> {'WhatsApp'}</Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginTop: '2.5%' }}>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {
+                                            let url = 'instagram://user?username=educogymeccles'
+                                            Linking.openURL(url).then((data) => {
+                                            }).catch(() => {
+                                                Linking.openURL(instaUrl)
+                                            });
+                                        }} style={{ justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginTop: '2.5%' }}>
                                             <Icon.FontAwesome name="instagram" color="#5F6365" size={20} />
                                             <View style={{ width: 5 }}></View>
                                             <Text style={styles.aboutcontentStyle}> {"Instagram"}</Text>
-                                        </View>
+                                        </TouchableOpacity>
                                     </View>
                                     <Text style={styles.aboutTitleStyle}>{'Developed By'}</Text>
                                     <View style={{ marginLeft: "2.5%" }}>
