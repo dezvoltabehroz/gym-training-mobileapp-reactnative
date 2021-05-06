@@ -65,6 +65,7 @@ class Home extends Component {
         }
         BookingServices.getBookings(userData)
             .then((response) => {
+                console.log("response.data : ", response.data)
                 if (response.data.success) {
                     let array = [...response.data.data.filterArray.all_slots]
                     array.forEach(item => {
@@ -430,26 +431,29 @@ class Home extends Component {
                                     <ActivityIndicator size={20} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                                 </View>
                                 :
-                                <>
-                                    <View style={styles.headingContainer}>
-                                        <View>
-                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} GTM+01</Text>
+                                hours == 0 ?
+                                    null
+                                    :
+                                    <>
+                                        <View style={styles.headingContainer}>
+                                            <View>
+                                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} GTM+01</Text>
+                                            </View>
+                                            <View>
+                                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')} GTM+01</Text>
+                                            </View>
                                         </View>
-                                        <View>
-                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')} GTM+01</Text>
+                                        <View >
+                                            <CustomSlider
+                                                min={-1}
+                                                max={hours - 1}
+                                                resetValue={(reset) => this.resetSlider = reset}
+                                                LRpadding={40}
+                                                callback={this.multiSliderValueCallback}
+                                                single={false}
+                                            />
                                         </View>
-                                    </View>
-                                    <View >
-                                        <CustomSlider
-                                            min={-1}
-                                            max={hours - 1}
-                                            resetValue={(reset) => this.resetSlider = reset}
-                                            LRpadding={40}
-                                            callback={this.multiSliderValueCallback}
-                                            single={false}
-                                        />
-                                    </View>
-                                </>}
+                                    </>}
                         </View>
 
 
