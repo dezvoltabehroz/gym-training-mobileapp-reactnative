@@ -85,8 +85,8 @@ class MemberShip extends Component {
                         phone: response.data.data.phone,
                         memberShipType: response.data.data.membership_type,
                         memberId: response.data.data.member_id,
-                        validFrom: moment(response.data.data.membership_start_date).format("YY / MM"),
-                        validTo: moment(response.data.data.membership_end_date).format("YY / MM"),
+                        validFrom: moment(response.data.data.membership_start_date).format("YY / MM / DD"),
+                        validTo: moment(response.data.data.membership_end_date).format("YY / MM / DD"),
                         pauseAvailed: response.data.data.pause_count,
                         loading: false
                     })
@@ -136,8 +136,8 @@ class MemberShip extends Component {
                 if (res.data.success) {
                     this.componentDidMount();
                     this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false })
-                }else{
-                    this.setState({pauseMemberShip: false, buttonLoading: false});
+                } else {
+                    this.setState({ pauseMemberShip: false, buttonLoading: false });
                     Alert.alert(res.data.message);
 
                 }
@@ -251,14 +251,20 @@ class MemberShip extends Component {
                                                         <User />
                                                     </View>
                                                     <View style={{ marginLeft: 5 }}>
-                                                        <Text style={styles.userDetailTextStyle}>{name}</Text>
+                                                        <View style={styles.memberShipContentRowStyle}>
+                                                            <View>
+                                                                <Text style={styles.userDetailTextStyle}>{name}</Text>
+                                                            </View>
+                                                            <View>
+                                                                <Text style={styles.memberShipTypeTextStyle}>{memberShipType}</Text>
+                                                            </View>
+                                                        </View>
+
                                                         <Text style={styles.userDetailTextStyle}>{email}</Text>
                                                         <Text style={styles.userDetailTextStyle}>{phone}</Text>
                                                     </View>
                                                 </View>
-                                                <View>
-                                                    <Text style={styles.memberShipTypeTextStyle}>{memberShipType}</Text>
-                                                </View>
+
                                             </View>
                                             <View style={styles.memberShipIdContainer}>
                                                 <Text style={styles.userDetailTextStyle}>Member ID : {memberId}</Text>
