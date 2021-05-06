@@ -91,6 +91,13 @@ class MemberShip extends Component {
                         loading: false
                     })
                 }
+                else {
+                    Alert.alert("Error", `${response.data.message}`, [{
+                        text: "OK", onPress: () => {
+                            this.props.authActions.removeUser(this.props.navigation.replace)
+                        }
+                    }])
+                }
             }).catch((err) => console.log(err))
 
     }

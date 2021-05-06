@@ -50,6 +50,8 @@ class Home extends Component {
             booked_slots: false,
             dayStartTime: '',
             dayEndTime: '',
+            resMessage: "",
+            hours: 0
         }
     }
 
@@ -70,17 +72,30 @@ class Home extends Component {
                             this.setState({ booked: true });
                         }
                     })
+                    const time = moment().format("YYYY-MM-DD")
+                    var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                    var end = moment(`${time} ${response.data.data.end_time}`);
+                    var duration = moment.duration(end.diff(now));
+                    var hours = duration.asHours();
+                    console.log(hours)
                     this.setState({
                         dayStartTime: response.data.data.start_time,
                         dayEndTime: response.data.data.end_time,
                         allslots: response.data.data.filterArray.all_slots,
                         availableSolts: response.data.data.filterArray.available_slots,
                         bookedSlots: response.data.data.filterArray.full_slots,
+                        hours: parseInt(hours),
                         loading: false
                     })
                 }
                 else {
-                    this.setState({ allslots: [], availableSolts: [], loading: false })
+                    this.setState({
+                        resMessage: response.data.message,
+                        allslots: [],
+                        availableSolts: [],
+                        bookedSlots: [],
+                        loading: false
+                    })
                 }
             }).catch((err) => { this.setState({ allslots: [], availableSolts: [], loading: false }); console.log(err) })
 
@@ -95,7 +110,7 @@ class Home extends Component {
     }
 
     handleBookSlot = (item) => {
-        this.setState({ bookingLoading: true, booked: false, })
+        this.setState({ bookingLoading: true, resMessage: "", booked: false, })
         let userData = {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
@@ -115,11 +130,29 @@ class Home extends Component {
                                         this.setState({ booked: true });
                                     }
                                 })
+                                const time = moment().format("YYYY-MM-DD")
+                                var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                                var end = moment(`${time} ${response.data.data.end_time}`);
+                                var duration = moment.duration(end.diff(now));
+                                var hours = duration.asHours();
+                                console.log(hours)
                                 this.setState({
+                                    dayStartTime: response.data.data.start_time,
+                                    dayEndTime: response.data.data.end_time,
                                     allslots: response.data.data.filterArray.all_slots,
                                     availableSolts: response.data.data.filterArray.available_slots,
                                     bookedSlots: response.data.data.filterArray.full_slots,
-                                    bookingLoading: false, item: null, index: null
+                                    hours: parseInt(hours),
+                                    listloading: false
+                                })
+                            }
+                            else {
+                                this.setState({
+                                    resMessage: response.data.message,
+                                    allslots: [],
+                                    availableSolts: [],
+                                    bookedSlots: [],
+                                    listloading: false
                                 })
                             }
                         }).catch((err) => console.log(err))
@@ -129,7 +162,7 @@ class Home extends Component {
     }
 
     handleUnbookSlot = () => {
-        this.setState({ unBookModal: false, bookingLoading: true, booked: false, })
+        this.setState({ unBookModal: false, bookingLoading: true, resMessage: "", booked: false, })
         var { item } = this.state
         let userData = {
             id: this.props.user.userData.id,
@@ -138,6 +171,7 @@ class Home extends Component {
             booking_start_time: item.booking_start_time,
             booking_end_time: item.booking_end_time
         }
+        console.log(userData)
         BookingServices.unBookSlot(userData)
             .then((res) => {
                 if (res.data.success) {
@@ -150,11 +184,29 @@ class Home extends Component {
                                         this.setState({ booked: true });
                                     }
                                 })
+                                const time = moment().format("YYYY-MM-DD")
+                                var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                                var end = moment(`${time} ${response.data.data.end_time}`);
+                                var duration = moment.duration(end.diff(now));
+                                var hours = duration.asHours();
+                                console.log(hours)
                                 this.setState({
+                                    dayStartTime: response.data.data.start_time,
+                                    dayEndTime: response.data.data.end_time,
                                     allslots: response.data.data.filterArray.all_slots,
                                     availableSolts: response.data.data.filterArray.available_slots,
                                     bookedSlots: response.data.data.filterArray.full_slots,
-                                    bookingLoading: false, item: null, index: null
+                                    hours: parseInt(hours),
+                                    listloading: false
+                                })
+                            }
+                            else {
+                                this.setState({
+                                    resMessage: response.data.message,
+                                    allslots: [],
+                                    availableSolts: [],
+                                    bookedSlots: [],
+                                    listloading: false
                                 })
                             }
                         }).catch((err) => console.log(err))
@@ -222,7 +274,7 @@ class Home extends Component {
 
 
     multiSliderValueCallback = (values) => {
-        this.setState({ listloading: true })
+        this.setState({ listloading: true, resMessage: "", })
         const time = moment().format("YYYY-MM-DD")
         var now = moment(`${time} 09:00:00`); //todays date
         var end = moment(`${time} 18:00:00`);
@@ -244,11 +296,29 @@ class Home extends Component {
                             this.setState({ booked: true });
                         }
                     })
+                    const time = moment().format("YYYY-MM-DD")
+                    var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                    var end = moment(`${time} ${response.data.data.end_time}`);
+                    var duration = moment.duration(end.diff(now));
+                    var hours = duration.asHours();
+                    console.log(hours)
                     this.setState({
+                        dayStartTime: response.data.data.start_time,
+                        dayEndTime: response.data.data.end_time,
                         allslots: response.data.data.filterArray.all_slots,
                         availableSolts: response.data.data.filterArray.available_slots,
                         bookedSlots: response.data.data.filterArray.full_slots,
-                        listloading: false,
+                        hours: parseInt(hours),
+                        listloading: false
+                    })
+                }
+                else {
+                    this.setState({
+                        resMessage: response.data.message,
+                        allslots: [],
+                        availableSolts: [],
+                        bookedSlots: [],
+                        listloading: false
                     })
                 }
             }).catch((err) => console.log(err))
@@ -258,7 +328,7 @@ class Home extends Component {
     handleDateSelectBooking = (date) => {
         console.log(moment(date).format("YYYY-MM-DD"));
 
-        this.setState({ listloading: true, booked: false, date, multiSliderValues: [] }, () => {
+        this.setState({ listloading: true, booked: false, resMessage: "", date, multiSliderValues: [] }, () => {
             this.resetSlider();
             let userData = {
                 id: this.props.user.userData.id,
@@ -269,20 +339,36 @@ class Home extends Component {
             }
             BookingServices.getBookings(userData)
                 .then((response) => {
+                    console.log("response.data : ", response.data)
                     if (response.data.success) {
-                        let arr = [];
                         let array = [...response.data.data.filterArray.all_slots]
                         array.forEach(item => {
                             if (item.is_booked == '1') {
                                 this.setState({ booked: true });
                             }
                         })
+                        const time = moment().format("YYYY-MM-DD")
+                        var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                        var end = moment(`${time} ${response.data.data.end_time}`);
+                        var duration = moment.duration(end.diff(now));
+                        var hours = duration.asHours();
+                        console.log(hours)
                         this.setState({
                             dayStartTime: response.data.data.start_time,
                             dayEndTime: response.data.data.end_time,
                             allslots: response.data.data.filterArray.all_slots,
                             availableSolts: response.data.data.filterArray.available_slots,
                             bookedSlots: response.data.data.filterArray.full_slots,
+                            hours: parseInt(hours),
+                            listloading: false
+                        })
+                    }
+                    else {
+                        this.setState({
+                            resMessage: response.data.message,
+                            allslots: [],
+                            availableSolts: [],
+                            bookedSlots: [],
                             listloading: false
                         })
                     }
@@ -301,15 +387,10 @@ class Home extends Component {
         var d = new Date();
         var dated = d.getDate();
         var dayd = d.getDay();
-
-        var weekOfMonth = Math.ceil((dated + 6 - dayd) / 7);
         const time = moment().format("YYYY-MM-DD")
-        var now = moment(`${time} ${this.state.dayStartTime}`); //todays date
-        var end = moment(`${time} ${this.state.dayEndTime}`);
-        var duration = moment.duration(end.diff(now));
-        var hours = duration.asHours();
-        console.log(hours)
-        const { item, index, date, startingHour, loading, listloading } = this.state;
+        var weekOfMonth = Math.ceil((dated + 6 - dayd) / 7);
+
+        const { item, index, date, startingHour, hours, resMessage, loading, listloading } = this.state;
         return (
             <>
                 { loading ?
@@ -344,24 +425,31 @@ class Home extends Component {
                                 iconLeft={null}
                                 iconRight={null}
                             />
-                            <View style={styles.headingContainer}>
-                                <View>
-                                    <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} GTM+01</Text>
+                            {listloading ?
+                                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                    <ActivityIndicator size={20} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                                 </View>
-                                <View>
-                                    <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')} GTM+01</Text>
-                                </View>
-                            </View>
-                            <View >
-                                <CustomSlider
-                                    min={-1}
-                                    max={hours-1}
-                                    resetValue={(reset) => this.resetSlider = reset}
-                                    LRpadding={40}
-                                    callback={this.multiSliderValueCallback}
-                                    single={false}
-                                />
-                            </View>
+                                :
+                                <>
+                                    <View style={styles.headingContainer}>
+                                        <View>
+                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} GTM+01</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')} GTM+01</Text>
+                                        </View>
+                                    </View>
+                                    <View >
+                                        <CustomSlider
+                                            min={-1}
+                                            max={hours - 1}
+                                            resetValue={(reset) => this.resetSlider = reset}
+                                            LRpadding={40}
+                                            callback={this.multiSliderValueCallback}
+                                            single={false}
+                                        />
+                                    </View>
+                                </>}
                         </View>
 
 
@@ -413,16 +501,18 @@ class Home extends Component {
 
 
                                 {this.state.slots ?
-                                    this.state.allslots.length == 0 ?
-                                        <View style={{ marginTop: "40%", justifyContent: "center", alignItems: "center" }}>
-                                            <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
+
+                                    listloading ?
+                                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                            <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                                         </View>
                                         :
-                                        listloading ?
-                                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                                <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
+                                        this.state.allslots.length == 0 ?
+                                            <View style={{ marginTop: "40%", justifyContent: "center", alignItems: "center" }}>
+                                                <Text style={styles.darkTextStyle}>{resMessage != "" ? resMessage : "No slots available for today"} :(</Text>
                                             </View>
                                             :
+
                                             <FlatList
                                                 data={this.state.allslots}
                                                 showsVerticalScrollIndicator={false}
@@ -431,16 +521,17 @@ class Home extends Component {
                                                 keyExtractor={item => item} /> :
                                     null}
                                 {this.state.available ?
-                                    this.state.availableSolts.length == 0 ?
-                                        <View style={{ marginTop: "40%", justifyContent: "center", alignItems: "center" }}>
-                                            <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
+                                    listloading ?
+                                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                            <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                                         </View>
                                         :
-                                        listloading ?
-                                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                                <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
+                                        this.state.availableSolts.length == 0 ?
+                                            <View style={{ marginTop: "40%", justifyContent: "center", alignItems: "center" }}>
+                                                <Text style={styles.darkTextStyle}>{resMessage != "" ? resMessage : "No slots available for today"} :(</Text>
                                             </View>
                                             :
+
                                             <FlatList
                                                 data={this.state.availableSolts}
                                                 showsVerticalScrollIndicator={false}
@@ -449,16 +540,17 @@ class Home extends Component {
                                                 keyExtractor={item => item} /> :
                                     null}
                                 {this.state.booked_slots ?
-                                    this.state.bookedSlots.length == 0 ?
-                                        <View style={{ marginTop: "40%", justifyContent: "center", alignItems: "center" }}>
-                                            <Text style={styles.darkTextStyle}>No slots available for today :(</Text>
+                                    listloading ?
+                                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                                            <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                                         </View>
                                         :
-                                        listloading ?
-                                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                                                <ActivityIndicator size={30} color={THEME.PRIMARY_BACKGROUND_COLOR} />
+                                        this.state.bookedSlots.length == 0 ?
+                                            <View style={{ marginTop: "40%", justifyContent: "center", alignItems: "center" }}>
+                                                <Text style={styles.darkTextStyle}>{resMessage != "" ? resMessage : "No slots available for today"} :(</Text>
                                             </View>
                                             :
+
                                             <FlatList
                                                 data={this.state.bookedSlots}
                                                 showsVerticalScrollIndicator={false}

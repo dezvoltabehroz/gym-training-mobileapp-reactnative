@@ -141,7 +141,7 @@ class Login extends Component {
                             </View>
 
                             <TouchableOpacity onPress={() => this.setState({ resetModal: true })} style={{ marginHorizontal: '7%', alignItems: 'flex-end', marginTop: "5%" }} >
-                                <Text style={{ fontFamily: 'Montserrat-Regular', color: "white" }} >Forget Password?</Text>
+                                <Text style={{ fontFamily: 'Montserrat-Regular', color: "white" }} >Forgot Password?</Text>
                             </TouchableOpacity>
                             <View style={{ alignItems: 'flex-end', margin: '5%', marginTop: '10%' }}>
                                 <Button loading={this.props.user.loading} title='Sign In ' onPress={() => { this.setState({ submit: true }, () => this.func_HandleLogin()); }} />
