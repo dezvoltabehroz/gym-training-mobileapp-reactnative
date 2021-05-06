@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import styles from './style';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from "moment";
@@ -65,7 +65,6 @@ class Home extends Component {
         }
         BookingServices.getBookings(userData)
             .then((response) => {
-                console.log("response.data : ", response.data)
                 if (response.data.success) {
                     let array = [...response.data.data.filterArray.all_slots]
                     array.forEach(item => {
@@ -90,6 +89,11 @@ class Home extends Component {
                     })
                 }
                 else {
+                    Alert.alert("Error", response.data.message + " please contact your admin", [{
+                        text: "OK", onPress: async () => {
+                            await this.props.authActions.removeUser(this.props.navigation.replace)
+                        }
+                    }])
                     this.setState({
                         resMessage: response.data.message,
                         allslots: [],
@@ -431,29 +435,27 @@ class Home extends Component {
                                     <ActivityIndicator size={20} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                                 </View>
                                 :
-                                hours == 0 ?
-                                    null
-                                    :
-                                    <>
-                                        <View style={styles.headingContainer}>
-                                            <View>
-                                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} GTM+01</Text>
-                                            </View>
-                                            <View>
-                                                <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')} GTM+01</Text>
-                                            </View>
+
+                                <>
+                                    <View style={styles.headingContainer}>
+                                        <View>
+                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} GTM+01</Text>
                                         </View>
-                                        <View >
-                                            <CustomSlider
-                                                min={-1}
-                                                max={hours - 1}
-                                                resetValue={(reset) => this.resetSlider = reset}
-                                                LRpadding={40}
-                                                callback={this.multiSliderValueCallback}
-                                                single={false}
-                                            />
+                                        <View>
+                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')} GTM+01</Text>
                                         </View>
-                                    </>}
+                                    </View>
+                                    <View >
+                                        <CustomSlider
+                                            min={-1}
+                                            max={hours == 0 ? 0 : (hours - 1)}
+                                            resetValue={(reset) => this.resetSlider = reset}
+                                            LRpadding={40}
+                                            callback={this.multiSliderValueCallback}
+                                            single={false}
+                                        />
+                                    </View>
+                                </>}
                         </View>
 
 
