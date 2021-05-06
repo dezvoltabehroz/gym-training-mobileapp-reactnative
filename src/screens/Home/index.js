@@ -281,8 +281,8 @@ class Home extends Component {
     multiSliderValueCallback = (values) => {
         this.setState({ listloading: true, resMessage: "", })
         const time = moment().format("YYYY-MM-DD")
-        var now = moment(`${time} 09:00:00`); //todays date
-        var end = moment(`${time} 18:00:00`);
+        var now = moment(`${time} ${this.state.dayStartTime}`); //todays date
+        var end = moment(`${time} ${this.state.dayEndTime}`);
         var duration = moment.duration(end.diff(now));
         var hours = duration.asHours();
         let userData = {
