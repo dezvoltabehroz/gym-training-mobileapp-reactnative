@@ -89,13 +89,8 @@ class Home extends Component {
                     })
                 }
                 else {
-                    Alert.alert("Error", response.data.message + " please contact your admin", [{
-                        text: "OK", onPress: async () => {
-                            await this.props.authActions.removeUser(this.props.navigation.replace)
-                        }
-                    }])
                     this.setState({
-                        resMessage: response.data.message,
+                        resMessage: response.data.message + " for today",
                         allslots: [],
                         availableSolts: [],
                         bookedSlots: [],
@@ -413,7 +408,7 @@ class Home extends Component {
                                 style={{ height: 150 }}
                                 calendarHeaderStyle={{ color: 'black' }}
                                 calendarColor={'#fffff'}
-                                headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (${moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} - ${moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')})`}
+                                headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (${moment(`${time} ${this.state.dayStartTime != "" ? this.state.dayStartTime : "09:00"}`).format('hh:mm a')} - ${moment(`${time} ${this.state.dayEndTime != "" ? this.state.dayEndTime : "18:00"}`).format('hh:mm a')})`}
                                 selectedDate={date}
                                 onDateSelected={(date) => {
                                     this.handleDateSelectBooking(date)
@@ -439,10 +434,10 @@ class Home extends Component {
                                 <>
                                     <View style={styles.headingContainer}>
                                         <View>
-                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} GTM+01</Text>
+                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayStartTime != "" ? this.state.dayStartTime : "09:00"}`).format('hh:mm a')} GTM+01</Text>
                                         </View>
                                         <View>
-                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')} GTM+01</Text>
+                                            <Text style={[styles.headingTextStyle, { fontFamily: "Montserrat-Medium" }]}>{moment(`${time} ${this.state.dayEndTime != "" ? this.state.dayEndTime : "18:00"}`).format('hh:mm a')} GTM+01</Text>
                                         </View>
                                     </View>
                                     <View >
