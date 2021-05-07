@@ -143,6 +143,7 @@ class Home extends Component {
                                     availableSolts: response.data.data.filterArray.available_slots,
                                     bookedSlots: response.data.data.filterArray.full_slots,
                                     hours: parseInt(hours),
+                                    bookingLoading:false,
                                     listloading: false
                                 })
                             }
@@ -152,6 +153,7 @@ class Home extends Component {
                                     allslots: [],
                                     availableSolts: [],
                                     bookedSlots: [],
+                                    bookingLoading:false,
                                     listloading: false
                                 })
                             }
@@ -197,6 +199,7 @@ class Home extends Component {
                                     availableSolts: response.data.data.filterArray.available_slots,
                                     bookedSlots: response.data.data.filterArray.full_slots,
                                     hours: parseInt(hours),
+                                    bookingLoading:false,
                                     listloading: false
                                 })
                             }
@@ -206,6 +209,7 @@ class Home extends Component {
                                     allslots: [],
                                     availableSolts: [],
                                     bookedSlots: [],
+                                    bookingLoading:false,
                                     listloading: false
                                 })
                             }
@@ -430,7 +434,6 @@ class Home extends Component {
                                     <ActivityIndicator size={20} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                                 </View>
                                 :
-
                                 <>
                                     <View style={styles.headingContainer}>
                                         <View>

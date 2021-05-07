@@ -35,6 +35,7 @@ export default StyleSheet.create({
         alignItems: "center"
     },
     userDetailTextStyle: {
+        fontSize:12,
         fontFamily: "Montserrat-Medium"
     },
     userTextStyle: {

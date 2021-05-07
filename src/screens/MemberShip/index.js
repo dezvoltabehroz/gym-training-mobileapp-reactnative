@@ -258,20 +258,14 @@ class MemberShip extends Component {
                                                         <User />
                                                     </View>
                                                     <View style={{ marginLeft: 5 }}>
-                                                        <View style={styles.memberShipContentRowStyle}>
-                                                            <View>
-                                                                <Text style={styles.userDetailTextStyle}>{name}</Text>
-                                                            </View>
-                                                            <View>
-                                                                <Text style={styles.memberShipTypeTextStyle}>{memberShipType}</Text>
-                                                            </View>
-                                                        </View>
-
+                                                        <Text style={styles.userDetailTextStyle}>{name}</Text>
                                                         <Text style={styles.userDetailTextStyle}>{email}</Text>
                                                         <Text style={styles.userDetailTextStyle}>{phone}</Text>
                                                     </View>
                                                 </View>
-
+                                                <View>
+                                                    <Text style={styles.memberShipTypeTextStyle}>{memberShipType}</Text>
+                                                </View>
                                             </View>
                                             <View style={styles.memberShipIdContainer}>
                                                 <Text style={styles.userDetailTextStyle}>Member ID : {memberId}</Text>
