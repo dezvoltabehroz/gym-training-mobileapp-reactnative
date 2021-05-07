@@ -143,7 +143,7 @@ class Home extends Component {
                                     availableSolts: response.data.data.filterArray.available_slots,
                                     bookedSlots: response.data.data.filterArray.full_slots,
                                     hours: parseInt(hours),
-                                    bookingLoading:false,
+                                    bookingLoading: false,
                                     listloading: false
                                 })
                             }
@@ -153,7 +153,7 @@ class Home extends Component {
                                     allslots: [],
                                     availableSolts: [],
                                     bookedSlots: [],
-                                    bookingLoading:false,
+                                    bookingLoading: false,
                                     listloading: false
                                 })
                             }
@@ -199,7 +199,7 @@ class Home extends Component {
                                     availableSolts: response.data.data.filterArray.available_slots,
                                     bookedSlots: response.data.data.filterArray.full_slots,
                                     hours: parseInt(hours),
-                                    bookingLoading:false,
+                                    bookingLoading: false,
                                     listloading: false
                                 })
                             }
@@ -209,7 +209,7 @@ class Home extends Component {
                                     allslots: [],
                                     availableSolts: [],
                                     bookedSlots: [],
-                                    bookingLoading:false,
+                                    bookingLoading: false,
                                     listloading: false
                                 })
                             }
@@ -550,8 +550,8 @@ class Home extends Component {
                                         </View>
                                         :
                                         this.state.bookedSlots.length == 0 ?
-                                            <View style={{ marginTop: "40%", justifyContent: "center", alignItems: "center" }}>
-                                                <Text style={styles.darkTextStyle}>{resMessage != "" ? resMessage : "No slots available for today"} :(</Text>
+                                            <View style={{ marginTop: "40%", marginHorizontal: "5%", justifyContent: "center", alignItems: "center" }}>
+                                                <Text style={[styles.darkTextStyle, { fontSize: 16, fontFamily: "Montserrat-Bold" }]}>{resMessage != "" ? resMessage : "No slots has been booked until now"} :(</Text>
                                             </View>
                                             :
 
