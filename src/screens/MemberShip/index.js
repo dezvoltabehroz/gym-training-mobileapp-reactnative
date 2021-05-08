@@ -29,6 +29,7 @@ class MemberShip extends Component {
             pauseAvailed: 1,
             pauseMemberShip: false,
             date: new Date(),
+            endDate: new Date(),
             loading: true,
             selectedDuration: [
                 {
@@ -119,9 +120,26 @@ class MemberShip extends Component {
         this.hideDatePicker();
     };
 
+    hideEndDatePicker = () => {
+        this.setState({ showEndDatePicker: !this.state.showEndDatePicker, });
+    };
+
+    handleEndConfirm = (selectedDate) => {
+        var date = moment(selectedDate).format('YYYY-MM-DD')
+        var dob = (selectedDate.getYear() + 1900);
+        dob += "-";
+        dob += (selectedDate.getMonth() + 1) < 10 ? "0" + (selectedDate.getMonth() + 1) : (selectedDate.getMonth() + 1);
+        dob += "-";
+        dob += selectedDate.getDate() < 10 ? "0" + selectedDate.getDate() : selectedDate.getDate();
+        this.setState({
+            endDate: date
+        })
+        this.hideEndDatePicker();
+    };
+
     handleRequestPause = () => {
         this.setState({ buttonLoading: true })
-        const { date, selectedDuration, reason, memberId } = this.state;
+        const { date, selectedDuration, reason, memberId, endDate } = this.state;
         // if(date&&selectedDuration&&reason&&memberId){
 
         // }
@@ -129,12 +147,12 @@ class MemberShip extends Component {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
             start_date: moment(date).format('YYYY-MM-DD'),
-            end_date:
-                selectedDuration.value == "1 Week" ? moment(date).add(6, "days").format('YYYY-MM-DD')
-                    : selectedDuration.value == "2 Week" ? moment(date).add(13, "days").format('YYYY-MM-DD')
-                        : selectedDuration.value == "3 Week" ? moment(date).add(20, "days").format('YYYY-MM-DD')
-                            : selectedDuration.value == "4 Week" ? moment(date).add(27, "days").format('YYYY-MM-DD') :
-                                moment(date).add(7, "days").format('YYYY-MM-DD'),
+            end_date: moment(endDate).format('YYYY-MM-DD'),
+            // selectedDuration.value == "1 Week" ? moment(date).add(6, "days").format('YYYY-MM-DD')
+            //     : selectedDuration.value == "2 Week" ? moment(date).add(13, "days").format('YYYY-MM-DD')
+            //         : selectedDuration.value == "3 Week" ? moment(date).add(20, "days").format('YYYY-MM-DD')
+            //             : selectedDuration.value == "4 Week" ? moment(date).add(27, "days").format('YYYY-MM-DD') :
+            //                 moment(date).add(7, "days").format('YYYY-MM-DD'),
             reason: reason,
             member_id: memberId
         }
@@ -158,7 +176,7 @@ class MemberShip extends Component {
         var from = moment().format('YYYY-MM-DD')
         var d = new Date(from);
         d.setMonth(d.getMonth() + 1);
-        const { name, email, phone, memberId, memberShipType, validFrom, validTo, pauseAvailed, date, loading, reason, selectedDuration, buttonLoading } = this.state;
+        const { name, email, phone, memberId, memberShipType, validFrom, validTo, endDate, pauseAvailed, date, loading, reason, selectedDuration, buttonLoading } = this.state;
         return (
             <>
                 {
@@ -182,8 +200,16 @@ class MemberShip extends Component {
                                                     <Calender />
                                                 </TouchableOpacity>
                                             </View>
+                                            <View style={{ width: 10 }}></View>
+                                            <View style={{ flex: 0.5 }}>
+                                                <Text style={styles.userTextStyle}>End Date</Text>
+                                                <TouchableOpacity style={styles.dateContainer} onPress={() => this.setState({ showEndDatePicker: true })}>
+                                                    <Text style={styles.dateTextStyle} >{moment(endDate).format("MMM DD,YYYY")}</Text>
+                                                    <Calender />
+                                                </TouchableOpacity>
+                                            </View>
                                             <View style={{ width: 15 }}></View>
-                                            <View style={{ flex: 0.5, }}>
+                                            {/* <View style={{ flex: 0.5, }}>
                                                 <Text style={styles.userTextStyle}>Time Duration</Text>
                                                 <View style={{ flexWrap: "wrap" }}>
                                                     <DropDownPicker
@@ -229,7 +255,7 @@ class MemberShip extends Component {
                                                         }}
                                                     />
                                                 </View>
-                                            </View>
+                                            </View> */}
                                         </View>
                                         <View style={{ marginHorizontal: '5%', marginTop: '3.5%' }}>
                                             <Text style={{ fontSize: 12, fontFamily: 'Montserrat-Medium', fontWeight: "normal", }} >Any specific reason? (Required)</Text>
@@ -246,7 +272,9 @@ class MemberShip extends Component {
                                             </View>
                                         </View>
                                         <View style={{ alignItems: 'flex-end', marginTop: '5%', marginHorizontal: "5%", paddingBottom: '5%' }}>
-                                            <Button disabled={reason && selectedDuration.value && date ? false : true} titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Request Pause ' onPress={() => this.handleRequestPause()} />
+                                            <Button disabled={reason && endDate
+                                                // endDate > date// selectedDuration.value
+                                                && date ? false : true} titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Request Pause ' onPress={() => this.handleRequestPause()} />
                                         </View>
                                     </View>
                                     :
@@ -440,6 +468,14 @@ class MemberShip extends Component {
                     maximumDate={d}
                     onConfirm={this.handleConfirm}
                     onCancel={this.hideDatePicker}
+                />
+                <DateTimePickerModal
+                    isVisible={this.state.showEndDatePicker}
+                    mode="date"
+                    minimumDate={new Date()}
+                    maximumDate={d}
+                    onConfirm={this.handleEndConfirm}
+                    onCancel={this.hideEndDatePicker}
                 />
             </>
         )

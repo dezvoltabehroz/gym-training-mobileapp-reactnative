@@ -89,13 +89,38 @@ class Home extends Component {
                     })
                 }
                 else {
-                    this.setState({
-                        resMessage: response.data.message + " for today",
-                        allslots: [],
-                        availableSolts: [],
-                        bookedSlots: [],
-                        loading: false
-                    })
+                    if (response.data.message == "No Record Found") {
+                        this.setState({
+                            dayStartTime: "",
+                            dayEndTime: "",
+                            resMessage: response.data.message,
+                            hours: 0,
+                            allslots: [],
+                            availableSolts: [],
+                            bookedSlots: [],
+                            bookingLoading: false,
+                            listloading: false
+                        })
+                    } else {
+                        const time = moment().format("YYYY-MM-DD")
+                        var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                        var end = moment(`${time} ${response.data.data.end_time}`);
+                        var duration = moment.duration(end.diff(now));
+                        var hours = duration.asHours();
+                        console.log(hours)
+                        this.setState({
+                            dayStartTime: response.data.data.start_time,
+                            dayEndTime: response.data.data.end_time,
+                            resMessage: response.data.message,
+                            hours: hours,
+                            allslots: [],
+                            availableSolts: [],
+                            bookedSlots: [],
+                            bookingLoading: false,
+                            listloading: false
+                        })
+                    }
+
                 }
             }).catch((err) => { this.setState({ allslots: [], availableSolts: [], loading: false }); console.log(err) })
 
@@ -110,7 +135,7 @@ class Home extends Component {
     }
 
     handleBookSlot = (item) => {
-        this.setState({ bookingLoading: true, resMessage: "", booked: false, })
+        this.setState({ bookingLoading: true,sliderloading:true,  resMessage: "", booked: false, })
         let userData = {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
@@ -144,17 +169,28 @@ class Home extends Component {
                                     bookedSlots: response.data.data.filterArray.full_slots,
                                     hours: parseInt(hours),
                                     bookingLoading: false,
-                                    listloading: false
+                                    listloading: false,
+                                    sliderloading:false, 
                                 })
                             }
                             else {
+                                const time = moment().format("YYYY-MM-DD")
+                                var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                                var end = moment(`${time} ${response.data.data.end_time}`);
+                                var duration = moment.duration(end.diff(now));
+                                var hours = duration.asHours();
+                                console.log(hours)
                                 this.setState({
+                                    dayStartTime: response.data.data.start_time,
+                                    dayEndTime: response.data.data.end_time,
                                     resMessage: response.data.message,
+                                    hours: hours,
                                     allslots: [],
                                     availableSolts: [],
                                     bookedSlots: [],
                                     bookingLoading: false,
-                                    listloading: false
+                                    listloading: false,
+                                    sliderloading:false, 
                                 })
                             }
                         }).catch((err) => console.log(err))
@@ -164,7 +200,7 @@ class Home extends Component {
     }
 
     handleUnbookSlot = () => {
-        this.setState({ unBookModal: false, bookingLoading: true, resMessage: "", booked: false, })
+        this.setState({ unBookModal: false,sliderloading:true, bookingLoading: true, resMessage: "", booked: false, })
         var { item } = this.state
         let userData = {
             id: this.props.user.userData.id,
@@ -200,17 +236,28 @@ class Home extends Component {
                                     bookedSlots: response.data.data.filterArray.full_slots,
                                     hours: parseInt(hours),
                                     bookingLoading: false,
-                                    listloading: false
+                                    listloading: false,
+                                    sliderloading:false, 
                                 })
                             }
                             else {
+                                const time = moment().format("YYYY-MM-DD")
+                                var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                                var end = moment(`${time} ${response.data.data.end_time}`);
+                                var duration = moment.duration(end.diff(now));
+                                var hours = duration.asHours();
+                                console.log(hours)
                                 this.setState({
+                                    dayStartTime: response.data.data.start_time,
+                                    dayEndTime: response.data.data.end_time,
                                     resMessage: response.data.message,
+                                    hours: hours,
                                     allslots: [],
                                     availableSolts: [],
                                     bookedSlots: [],
                                     bookingLoading: false,
-                                    listloading: false
+                                    listloading: false,
+                                    sliderloading:false, 
                                 })
                             }
                         }).catch((err) => console.log(err))
@@ -287,7 +334,7 @@ class Home extends Component {
         let userData = {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
-            date: moment().format("YYYY-MM-DD"),
+            date: moment(this.state.date).format("YYYY-MM-DD"),
             start_time: moment(now.add('hour', values[0])).format("HH:mm:ss"),
             end_time: hours == values[1] ? moment(end).format("HH:mm:ss") : moment(end.subtract('hour', (hours - values[1]))).format("HH:mm:ss")
         }
@@ -312,7 +359,6 @@ class Home extends Component {
                         allslots: response.data.data.filterArray.all_slots,
                         availableSolts: response.data.data.filterArray.available_slots,
                         bookedSlots: response.data.data.filterArray.full_slots,
-                        hours: parseInt(hours),
                         listloading: false
                     })
                 }
@@ -332,8 +378,8 @@ class Home extends Component {
     handleDateSelectBooking = (date) => {
         console.log(moment(date).format("YYYY-MM-DD"));
 
-        this.setState({ listloading: true, booked: false, resMessage: "", date, multiSliderValues: [] }, () => {
-            this.resetSlider();
+        this.setState({ listloading: true, sliderloading: true, booked: false, resMessage: "", date, multiSliderValues: [] }, () => {
+            // this.resetSlider();
             let userData = {
                 id: this.props.user.userData.id,
                 token: this.props.user.userData.token,
@@ -341,6 +387,7 @@ class Home extends Component {
                 start_time: "",
                 end_time: ""
             }
+            console.log(userData);
             BookingServices.getBookings(userData)
                 .then((response) => {
                     console.log("response.data : ", response.data)
@@ -364,17 +411,45 @@ class Home extends Component {
                             availableSolts: response.data.data.filterArray.available_slots,
                             bookedSlots: response.data.data.filterArray.full_slots,
                             hours: parseInt(hours),
-                            listloading: false
+                            listloading: false,
+                            sliderloading: false
                         })
                     }
                     else {
-                        this.setState({
-                            resMessage: response.data.message,
-                            allslots: [],
-                            availableSolts: [],
-                            bookedSlots: [],
-                            listloading: false
-                        })
+                        if (response.data.message == "No Record Found") {
+                            this.setState({
+                                dayStartTime: "",
+                                dayEndTime: "",
+                                resMessage: response.data.message,
+                                hours: 0,
+                                allslots: [],
+                                availableSolts: [],
+                                bookedSlots: [],
+                                bookingLoading: false,
+                                listloading: false,
+                                sliderloading: false
+                            })
+                        } else {
+                            const time = moment().format("YYYY-MM-DD")
+                            var now = moment(`${time} ${response.data.data.start_time}`); //todays date
+                            var end = moment(`${time} ${response.data.data.end_time}`);
+                            var duration = moment.duration(end.diff(now));
+                            var hours = duration.asHours();
+                            console.log(hours)
+                            this.setState({
+                                dayStartTime: response.data.data.start_time,
+                                dayEndTime: response.data.data.end_time,
+                                resMessage: response.data.message,
+                                hours: hours,
+                                allslots: [],
+                                availableSolts: [],
+                                bookedSlots: [],
+                                bookingLoading: false,
+                                listloading: false,
+                                sliderloading: false
+                            })
+                        }
+
                     }
                 }).catch((err) => {
                     console.log(err)
@@ -394,7 +469,7 @@ class Home extends Component {
         const time = moment().format("YYYY-MM-DD")
         var weekOfMonth = Math.ceil((dated + 6 - dayd) / 7);
 
-        const { item, index, date, startingHour, hours, resMessage, loading, listloading } = this.state;
+        const { item, index, date, startingHour, sliderloading, hours, resMessage, loading, listloading } = this.state;
         return (
             <>
                 { loading ?
@@ -412,7 +487,7 @@ class Home extends Component {
                                 style={{ height: 150 }}
                                 calendarHeaderStyle={{ color: 'black' }}
                                 calendarColor={'#fffff'}
-                                headerText={`${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (${moment(`${time} ${this.state.dayStartTime != "" ? this.state.dayStartTime : "09:00"}`).format('hh:mm a')} - ${moment(`${time} ${this.state.dayEndTime != "" ? this.state.dayEndTime : "18:00"}`).format('hh:mm a')})`}
+                                headerText={this.state.dayStartTime != "" && this.state.dayEndTime != "" ? `${moment(date).format("MMMM")} (Week ${weekOfMonth} )\n${moment(date).format('dddd, DD MMM')} (${moment(`${time} ${this.state.dayStartTime}`).format('hh:mm a')} - ${moment(`${time} ${this.state.dayEndTime}`).format('hh:mm a')})` : ""}
                                 selectedDate={date}
                                 onDateSelected={(date) => {
                                     this.handleDateSelectBooking(date)
@@ -429,7 +504,7 @@ class Home extends Component {
                                 iconLeft={null}
                                 iconRight={null}
                             />
-                            {listloading ?
+                            {sliderloading ?
                                 <View style={{ justifyContent: "center", alignItems: "center" }}>
                                     <ActivityIndicator size={20} color={THEME.PRIMARY_BACKGROUND_COLOR} />
                                 </View>
@@ -445,8 +520,8 @@ class Home extends Component {
                                     </View>
                                     <View >
                                         <CustomSlider
-                                            min={-1}
-                                            max={hours == 0 ? 0 : (hours - 1)}
+                                            min={0}
+                                            max={hours == 0 ? 1 : (hours)}
                                             resetValue={(reset) => this.resetSlider = reset}
                                             LRpadding={40}
                                             callback={this.multiSliderValueCallback}
