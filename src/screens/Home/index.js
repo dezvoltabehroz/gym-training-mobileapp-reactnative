@@ -77,7 +77,6 @@ class Home extends Component {
                     var end = moment(`${time} ${response.data.data.end_time}`);
                     var duration = moment.duration(end.diff(now));
                     var hours = duration.asHours();
-                    console.log(hours)
                     this.setState({
                         dayStartTime: response.data.data.start_time,
                         dayEndTime: response.data.data.end_time,
@@ -107,7 +106,6 @@ class Home extends Component {
                         var end = moment(`${time} ${response.data.data.end_time}`);
                         var duration = moment.duration(end.diff(now));
                         var hours = duration.asHours();
-                        console.log(hours)
                         this.setState({
                             dayStartTime: response.data.data.start_time,
                             dayEndTime: response.data.data.end_time,
@@ -135,7 +133,7 @@ class Home extends Component {
     }
 
     handleBookSlot = (item) => {
-        this.setState({ bookingLoading: true,sliderloading:true,  resMessage: "", booked: false, })
+        this.setState({ bookingLoading: true, sliderloading: true, resMessage: "", booked: false, })
         let userData = {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
@@ -160,7 +158,6 @@ class Home extends Component {
                                 var end = moment(`${time} ${response.data.data.end_time}`);
                                 var duration = moment.duration(end.diff(now));
                                 var hours = duration.asHours();
-                                console.log(hours)
                                 this.setState({
                                     dayStartTime: response.data.data.start_time,
                                     dayEndTime: response.data.data.end_time,
@@ -170,7 +167,7 @@ class Home extends Component {
                                     hours: parseInt(hours),
                                     bookingLoading: false,
                                     listloading: false,
-                                    sliderloading:false, 
+                                    sliderloading: false,
                                 })
                             }
                             else {
@@ -179,7 +176,6 @@ class Home extends Component {
                                 var end = moment(`${time} ${response.data.data.end_time}`);
                                 var duration = moment.duration(end.diff(now));
                                 var hours = duration.asHours();
-                                console.log(hours)
                                 this.setState({
                                     dayStartTime: response.data.data.start_time,
                                     dayEndTime: response.data.data.end_time,
@@ -190,7 +186,7 @@ class Home extends Component {
                                     bookedSlots: [],
                                     bookingLoading: false,
                                     listloading: false,
-                                    sliderloading:false, 
+                                    sliderloading: false,
                                 })
                             }
                         }).catch((err) => console.log(err))
@@ -200,7 +196,7 @@ class Home extends Component {
     }
 
     handleUnbookSlot = () => {
-        this.setState({ unBookModal: false,sliderloading:true, bookingLoading: true, resMessage: "", booked: false, })
+        this.setState({ unBookModal: false, sliderloading: true, bookingLoading: true, resMessage: "", booked: false, })
         var { item } = this.state
         let userData = {
             id: this.props.user.userData.id,
@@ -209,7 +205,6 @@ class Home extends Component {
             booking_start_time: item.booking_start_time,
             booking_end_time: item.booking_end_time
         }
-        console.log(userData)
         BookingServices.unBookSlot(userData)
             .then((res) => {
                 if (res.data.success) {
@@ -227,7 +222,6 @@ class Home extends Component {
                                 var end = moment(`${time} ${response.data.data.end_time}`);
                                 var duration = moment.duration(end.diff(now));
                                 var hours = duration.asHours();
-                                console.log(hours)
                                 this.setState({
                                     dayStartTime: response.data.data.start_time,
                                     dayEndTime: response.data.data.end_time,
@@ -237,7 +231,7 @@ class Home extends Component {
                                     hours: parseInt(hours),
                                     bookingLoading: false,
                                     listloading: false,
-                                    sliderloading:false, 
+                                    sliderloading: false,
                                 })
                             }
                             else {
@@ -246,7 +240,6 @@ class Home extends Component {
                                 var end = moment(`${time} ${response.data.data.end_time}`);
                                 var duration = moment.duration(end.diff(now));
                                 var hours = duration.asHours();
-                                console.log(hours)
                                 this.setState({
                                     dayStartTime: response.data.data.start_time,
                                     dayEndTime: response.data.data.end_time,
@@ -257,7 +250,7 @@ class Home extends Component {
                                     bookedSlots: [],
                                     bookingLoading: false,
                                     listloading: false,
-                                    sliderloading:false, 
+                                    sliderloading: false,
                                 })
                             }
                         }).catch((err) => console.log(err))
@@ -352,7 +345,7 @@ class Home extends Component {
                     var end = moment(`${time} ${response.data.data.end_time}`);
                     var duration = moment.duration(end.diff(now));
                     var hours = duration.asHours();
-                    console.log(hours)
+
                     this.setState({
                         dayStartTime: response.data.data.start_time,
                         dayEndTime: response.data.data.end_time,
@@ -376,8 +369,6 @@ class Home extends Component {
     }
 
     handleDateSelectBooking = (date) => {
-        console.log(moment(date).format("YYYY-MM-DD"));
-
         this.setState({ listloading: true, sliderloading: true, booked: false, resMessage: "", date, multiSliderValues: [] }, () => {
             // this.resetSlider();
             let userData = {
@@ -387,10 +378,8 @@ class Home extends Component {
                 start_time: "",
                 end_time: ""
             }
-            console.log(userData);
             BookingServices.getBookings(userData)
                 .then((response) => {
-                    console.log("response.data : ", response.data)
                     if (response.data.success) {
                         let array = [...response.data.data.filterArray.all_slots]
                         array.forEach(item => {
@@ -403,7 +392,6 @@ class Home extends Component {
                         var end = moment(`${time} ${response.data.data.end_time}`);
                         var duration = moment.duration(end.diff(now));
                         var hours = duration.asHours();
-                        console.log(hours)
                         this.setState({
                             dayStartTime: response.data.data.start_time,
                             dayEndTime: response.data.data.end_time,
@@ -435,7 +423,6 @@ class Home extends Component {
                             var end = moment(`${time} ${response.data.data.end_time}`);
                             var duration = moment.duration(end.diff(now));
                             var hours = duration.asHours();
-                            console.log(hours)
                             this.setState({
                                 dayStartTime: response.data.data.start_time,
                                 dayEndTime: response.data.data.end_time,

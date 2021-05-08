@@ -272,8 +272,8 @@ class MemberShip extends Component {
                                             </View>
                                         </View>
                                         <View style={{ alignItems: 'flex-end', marginTop: '5%', marginHorizontal: "5%", paddingBottom: '5%' }}>
-                                            <Button disabled={reason && endDate
-                                                // endDate > date// selectedDuration.value
+                                            <Button disabled={reason && endDate &&
+                                                moment(endDate).format("MMM DD,YYYY") > moment(date).format("MMM DD,YYYY")// selectedDuration.value
                                                 && date ? false : true} titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Request Pause ' onPress={() => this.handleRequestPause()} />
                                         </View>
                                     </View>
