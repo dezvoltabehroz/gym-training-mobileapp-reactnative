@@ -98,7 +98,8 @@ class Home extends Component {
                             availableSolts: [],
                             bookedSlots: [],
                             bookingLoading: false,
-                            listloading: false
+                            listloading: false,
+                            loading: false
                         })
                     } else {
                         const time = moment().format("YYYY-MM-DD")
@@ -115,7 +116,8 @@ class Home extends Component {
                             availableSolts: [],
                             bookedSlots: [],
                             bookingLoading: false,
-                            listloading: false
+                            listloading: false,
+                            loading: false
                         })
                     }
 
