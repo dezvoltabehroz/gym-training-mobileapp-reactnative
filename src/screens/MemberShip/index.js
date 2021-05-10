@@ -138,44 +138,36 @@ class MemberShip extends Component {
     };
 
     handleRequestPause = () => {
+        this.setState({ buttonLoading: true })
         const { date, selectedDuration, reason, memberId, endDate } = this.state;
-
-        if (moment(endDate).format("MMM DD,YYYY") > moment(date).format("MMM DD,YYYY")) {
-            this.setState({ buttonLoading: true })
-            // if(date&&selectedDuration&&reason&&memberId){
-
-            // }
-            let userData = {
-                id: this.props.user.userData.id,
-                token: this.props.user.userData.token,
-                start_date: moment(date).format('YYYY-MM-DD'),
-                end_date: moment(endDate).format('YYYY-MM-DD'),
-                // selectedDuration.value == "1 Week" ? moment(date).add(6, "days").format('YYYY-MM-DD')
-                //     : selectedDuration.value == "2 Week" ? moment(date).add(13, "days").format('YYYY-MM-DD')
-                //         : selectedDuration.value == "3 Week" ? moment(date).add(20, "days").format('YYYY-MM-DD')
-                //             : selectedDuration.value == "4 Week" ? moment(date).add(27, "days").format('YYYY-MM-DD') :
-                //                 moment(date).add(7, "days").format('YYYY-MM-DD'),
-                reason: reason,
-                member_id: memberId
-            }
-            ProfileServices.requestPauseMembership(userData)
-                .then((res) => {
-                    if (res.data.success) {
-                        this.componentDidMount();
-                        this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false })
-                    } else {
-                        this.setState({ pauseMemberShip: false, buttonLoading: false });
-                        Alert.alert(res.data.message);
-
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+        let userData = {
+            id: this.props.user.userData.id,
+            token: this.props.user.userData.token,
+            start_date: moment(date).format('YYYY-MM-DD'),
+            end_date: moment(endDate).format('YYYY-MM-DD'),
+            // selectedDuration.value == "1 Week" ? moment(date).add(6, "days").format('YYYY-MM-DD')
+            //     : selectedDuration.value == "2 Week" ? moment(date).add(13, "days").format('YYYY-MM-DD')
+            //         : selectedDuration.value == "3 Week" ? moment(date).add(20, "days").format('YYYY-MM-DD')
+            //             : selectedDuration.value == "4 Week" ? moment(date).add(27, "days").format('YYYY-MM-DD') :
+            //                 moment(date).add(7, "days").format('YYYY-MM-DD'),
+            reason: reason,
+            member_id: memberId
         }
-        else {
-            Alert.alert("Selected end date must be greater then starting date")
-        }
+        ProfileServices.requestPauseMembership(userData)
+            .then((res) => {
+                if (res.data.success) {
+                    this.componentDidMount();
+                    this.setState({ reason: "", date: new Date(), selectedDuration: [{}], pauseMemberShip: false, buttonLoading: false })
+                } else {
+                    this.setState({ pauseMemberShip: false, buttonLoading: false });
+                    Alert.alert(res.data.message);
+
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
 
     }
 
