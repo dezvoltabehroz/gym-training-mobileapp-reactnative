@@ -144,15 +144,16 @@ class MemberShip extends Component {
             id: this.props.user.userData.id,
             token: this.props.user.userData.token,
             start_date: moment(date).format('YYYY-MM-DD'),
-            end_date: moment(endDate).format('YYYY-MM-DD'),
-            // selectedDuration.value == "1 Week" ? moment(date).add(6, "days").format('YYYY-MM-DD')
-            //     : selectedDuration.value == "2 Week" ? moment(date).add(13, "days").format('YYYY-MM-DD')
-            //         : selectedDuration.value == "3 Week" ? moment(date).add(20, "days").format('YYYY-MM-DD')
-            //             : selectedDuration.value == "4 Week" ? moment(date).add(27, "days").format('YYYY-MM-DD') :
-            //                 moment(date).add(7, "days").format('YYYY-MM-DD'),
+            end_date:// moment(endDate).format('YYYY-MM-DD'),
+                selectedDuration.value == "1 Week" ? moment(date).add(6, "days").format('YYYY-MM-DD')
+                    : selectedDuration.value == "2 Week" ? moment(date).add(13, "days").format('YYYY-MM-DD')
+                        : selectedDuration.value == "3 Week" ? moment(date).add(20, "days").format('YYYY-MM-DD')
+                            : selectedDuration.value == "4 Week" ? moment(date).add(27, "days").format('YYYY-MM-DD') :
+                                moment(date).add(7, "days").format('YYYY-MM-DD'),
             reason: reason,
             member_id: memberId
         }
+        console.log("userData : ", userData)
         ProfileServices.requestPauseMembership(userData)
             .then((res) => {
                 if (res.data.success) {
@@ -194,21 +195,21 @@ class MemberShip extends Component {
                                         <View style={{ flexDirection: "row", marginBottom: this.state.dropdownOpen ? "35%" : 0, justifyContent: "space-between", marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
                                             <View style={{ flex: 0.5 }}>
                                                 <Text style={styles.userTextStyle}>Start Date</Text>
-                                                <TouchableOpacity style={styles.dateContainer} onPress={() => this.setState({ showDatePicker: true })}>
+                                                <TouchableOpacity disabled={memberShipType == '3 Days' || memberShipType == '12 Days' ? true : false} style={styles.dateContainer} onPress={() => this.setState({ showDatePicker: true })}>
                                                     <Text style={styles.dateTextStyle} >{moment(date).format("MMM DD,YYYY")}</Text>
                                                     <Calender />
                                                 </TouchableOpacity>
                                             </View>
-                                            <View style={{ width: 10 }}></View>
+                                            {/* <View style={{ width: 10 }}></View>
                                             <View style={{ flex: 0.5 }}>
                                                 <Text style={styles.userTextStyle}>End Date</Text>
                                                 <TouchableOpacity style={styles.dateContainer} onPress={() => this.setState({ showEndDatePicker: true })}>
                                                     <Text style={styles.dateTextStyle} >{moment(endDate).format("MMM DD,YYYY")}</Text>
                                                     <Calender />
                                                 </TouchableOpacity>
-                                            </View>
+                                            </View> */}
                                             <View style={{ width: 15 }}></View>
-                                            {/* <View style={{ flex: 0.5, }}>
+                                            <View style={{ flex: 0.5, }}>
                                                 <Text style={styles.userTextStyle}>Time Duration</Text>
                                                 <View style={{ flexWrap: "wrap" }}>
                                                     <DropDownPicker
@@ -235,6 +236,7 @@ class MemberShip extends Component {
                                                             }
                                                         ]}
                                                         arrowColor="#000000"
+                                                        disabled={memberShipType == '3 Days' || memberShipType == '12 Days' ? true : false}
                                                         placeholder="Select week"
                                                         onClose={() => this.setState({ dropdownOpen: false })}
                                                         onOpen={() => this.setState({ dropdownOpen: true })}
@@ -254,7 +256,7 @@ class MemberShip extends Component {
                                                         }}
                                                     />
                                                 </View>
-                                            </View> */}
+                                            </View>
                                         </View>
                                         <View style={{ marginHorizontal: '5%', marginTop: '3.5%' }}>
                                             <Text style={{ fontSize: 12, fontFamily: 'Montserrat-Medium', fontWeight: "normal", }} >Any specific reason? (Required)</Text>
@@ -262,6 +264,7 @@ class MemberShip extends Component {
                                                 <Input
                                                     placeholder="Input text here"
                                                     multiline={true}
+                                                    editable={memberShipType == '3 Days' || memberShipType == '12 Days' ? false : true}
                                                     value={reason}
                                                     containerStyle={styles.containerStyle}
                                                     placeholderTextColor={'#77777B'}
@@ -271,8 +274,9 @@ class MemberShip extends Component {
                                             </View>
                                         </View>
                                         <View style={{ alignItems: 'flex-end', marginTop: '5%', marginHorizontal: "5%", paddingBottom: '5%' }}>
-                                            <Button disabled={reason && endDate && date
-                                                //    && moment(endDate).format("MMM DD,YYYY") > moment(date).format("MMM DD,YYYY")// selectedDuration.value
+                                            <Button disabled={reason && date &&
+                                                //    && moment(endDate).format("MMM DD,YYYY") > moment(date).format("MMM DD,YYYY")//
+                                                selectedDuration.value
                                                 ? false : true} titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Request Pause ' onPress={() => this.handleRequestPause()} />
                                         </View>
                                     </View>
