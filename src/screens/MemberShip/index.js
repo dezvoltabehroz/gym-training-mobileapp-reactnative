@@ -66,10 +66,11 @@ class MemberShip extends Component {
     }
 
     componentDidMount = () => {
+        this.getMemberShipDetail()
+
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.getMemberShipDetail()
         });
-        this.getMemberShipDetail()
     }
 
     getMemberShipDetail = () => {
@@ -139,12 +140,9 @@ class MemberShip extends Component {
 
     handleRequestPause = () => {
         const { date, selectedDuration, reason, memberId, endDate } = this.state;
-
-        if (moment(endDate).format("MMM DD,YYYY") > moment(date).format("MMM DD,YYYY")) {
+        console.log(moment(endDate).format('YYYY-MM-DD') > moment(date).format('YYYY-MM-DD'))
+        if (moment(endDate).format('YYYY-MM-DD') > moment(date).format('YYYY-MM-DD')) {
             this.setState({ buttonLoading: true })
-            // if(date&&selectedDuration&&reason&&memberId){
-
-            // }
             let userData = {
                 id: this.props.user.userData.id,
                 token: this.props.user.userData.token,
