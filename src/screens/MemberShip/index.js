@@ -329,7 +329,13 @@ class MemberShip extends Component {
                                         <View style={{ alignItems: 'flex-end', marginTop: '15%', marginHorizontal: "5%" }}>
                                             <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Pause Membership ' onPress={() => this.setState({ pauseMemberShip: true }, () => {
                                                 if (days <= 12) {
-                                                    Alert.alert("Pause requests are disabled for current membership plan");
+                                                    Alert.alert("","Pause requests are disabled for current membership plan", [
+                                                        {
+                                                            text: "OK", onPress: () => {
+                                                                this.setState({ pauseMemberShip: false })
+                                                            }
+                                                        }
+                                                    ]);
                                                 }
                                             })} />
                                         </View>
