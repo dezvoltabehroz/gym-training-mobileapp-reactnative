@@ -51,7 +51,7 @@ class Bookings extends Component {
     }
 
     _renderItems = (item) => {
-        console.log(item)
+        // console.log(item)
         const time = moment().format("YYYY-MM-DD")
         return (
             <View style={{ marginHorizontal: '5%', }}>
