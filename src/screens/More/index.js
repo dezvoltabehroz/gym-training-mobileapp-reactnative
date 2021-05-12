@@ -60,7 +60,7 @@ class More extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
                             if (Platform.OS == 'ios') {
-                                let url = "  https://apps.apple.com/ie/app/educogym-eccles/id1563795071"
+                                let url = "https://apps.apple.com/ie/app/educogym-eccles/id1563795071"
                                 Linking.openURL(url)
                             } else {
                                 let url = "https://play.google.com/store/apps/details?id=com.infinitybits.educogym"
