@@ -83,6 +83,7 @@ class MemberShip extends Component {
                     this.setState({
                         name: response.data.data.full_name,
                         email: response.data.data.email,
+                        days: response.data.data.days,
                         phone: response.data.data.phone,
                         memberShipType: response.data.data.membership_type,
                         memberId: response.data.data.member_id,
@@ -176,7 +177,7 @@ class MemberShip extends Component {
         var from = moment().format('YYYY-MM-DD')
         var d = new Date(from);
         d.setMonth(d.getMonth() + 1);
-        const { name, email, phone, memberId, memberShipType, validFrom, validTo, endDate, pauseAvailed, date, loading, reason, selectedDuration, buttonLoading } = this.state;
+        const { name, email, phone, memberId, memberShipType, validFrom, validTo, days, endDate, pauseAvailed, date, loading, reason, selectedDuration, buttonLoading } = this.state;
         return (
             <>
                 {
@@ -195,7 +196,7 @@ class MemberShip extends Component {
                                         <View style={{ flexDirection: "row", marginBottom: this.state.dropdownOpen ? "35%" : 0, justifyContent: "space-between", marginHorizontal: "5%", marginTop: '5%', alignItems: "center" }}>
                                             <View style={{ flex: 0.5 }}>
                                                 <Text style={styles.userTextStyle}>Start Date</Text>
-                                                <TouchableOpacity disabled={memberShipType == '3 Days' || memberShipType == '12 Days' ? true : false} style={styles.dateContainer} onPress={() => this.setState({ showDatePicker: true })}>
+                                                <TouchableOpacity disabled={days <= 12 ? true : false} style={styles.dateContainer} onPress={() => this.setState({ showDatePicker: true })}>
                                                     <Text style={styles.dateTextStyle} >{moment(date).format("MMM DD,YYYY")}</Text>
                                                     <Calender />
                                                 </TouchableOpacity>
@@ -236,7 +237,7 @@ class MemberShip extends Component {
                                                             }
                                                         ]}
                                                         arrowColor="#000000"
-                                                        disabled={memberShipType == '3 Days' || memberShipType == '12 Days' ? true : false}
+                                                        disabled={days <= 12 ? true : false}
                                                         placeholder="Select week"
                                                         onClose={() => this.setState({ dropdownOpen: false })}
                                                         onOpen={() => this.setState({ dropdownOpen: true })}
@@ -264,7 +265,7 @@ class MemberShip extends Component {
                                                 <Input
                                                     placeholder="Input text here"
                                                     multiline={true}
-                                                    editable={memberShipType == '3 Days' || memberShipType == '12 Days' ? false : true}
+                                                    editable={days <= 12 ? false : true}
                                                     value={reason}
                                                     containerStyle={styles.containerStyle}
                                                     placeholderTextColor={'#77777B'}
@@ -326,7 +327,11 @@ class MemberShip extends Component {
                                             </TouchableOpacity>
                                         </View>
                                         <View style={{ alignItems: 'flex-end', marginTop: '15%', marginHorizontal: "5%" }}>
-                                            <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Pause Membership ' onPress={() => this.setState({ pauseMemberShip: true })} />
+                                            <Button titleStyle={buttonStyle.colorBtnPrimaryText} buttonStyle={styles.colorBtnPrimary} title='Pause Membership ' onPress={() => this.setState({ pauseMemberShip: true }, () => {
+                                                if (days <= 12) {
+                                                    Alert.alert("Pause requests are disabled for current membership plan");
+                                                }
+                                            })} />
                                         </View>
                                     </>
                             }

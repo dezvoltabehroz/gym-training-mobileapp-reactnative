@@ -273,7 +273,7 @@ class Home extends Component {
                     {
                         item.isBreak ?
                             <View style={[styles.contentContainer, { marginBottom: "5%", alignItems: "center" }]}>
-                                <Text style={{ color: "#d3d3d3", fontSize: 25, fontFamily: "Montserrat-Medium" }}>Break</Text>
+                                <Text style={{ color: "#d3d3d3", fontSize: 25, fontFamily: "Montserrat-Medium" }}>Not Bookable</Text>
                                 <Text style={{ color: "#d3d3d3", fontSize: 16, fontFamily: "Montserrat-Medium" }}>{moment(`${time} ${item.booking_start_time}`).format("hh:mm a")} to {moment(`${time} ${item.booking_end_time}`).format("hh:mm a")}</Text>
                             </View>
                             :
